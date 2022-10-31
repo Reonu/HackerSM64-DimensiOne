@@ -275,5 +275,6 @@ Gfx *geo_render_backdrop(s32 callContext, struct GraphNode *node, UNUSED f32 b[4
 
 void init_obj_spline(void);
 void bhv_follow_spline(void);
+Gfx *geo_set_global_fog(s32 callContext, struct GraphNode *node, UNUSED Mat4 mtx);
 
 #endif // OBJECT_HELPERS_H
