@@ -73,6 +73,7 @@ enum LevelCommands {
     /*0x3E*/ LEVEL_CMD_CHANGE_AREA_SKYBOX,
     /*0x3F*/ LEVEL_CMD_PUPPYLIGHT_ENVIRONMENT,
     /*0x40*/ LEVEL_CMD_PUPPYLIGHT_NODE,
+    /*0x41*/ LEVEL_CMD_MOVING_PLATFORM,
 };
 
 enum LevelActs {
@@ -365,6 +366,17 @@ enum GoddardScene {
 
 #define OBJECT(model, posX, posY, posZ, angleX, angleY, angleZ, behParam, beh) \
     OBJECT_WITH_ACTS(model, posX, posY, posZ, angleX, angleY, angleZ, behParam, beh, 0x1F)
+
+#define MOVING_PLATFORM_WITH_ACTS(geolayout, collision, posX, posY, posZ, angleX, angleY, angleZ, behParam, beh, acts) \
+    CMD_BBBB(LEVEL_CMD_MOVING_PLATFORM, 0x20, acts, 0x00), \
+    CMD_HHHHHH(posX, posY, posZ, angleX, angleY, angleZ), \
+    CMD_W(behParam), \
+    CMD_PTR(beh), \
+    CMD_PTR(geolayout), \
+    CMD_PTR(collision)
+
+#define MOVING_PLATFORM(geolayout, collision, posX, posY, posZ, angleX, angleY, angleZ, behParam, beh) \
+    MOVING_PLATFORM_WITH_ACTS(geolayout, collision, posX, posY, posZ, angleX, angleY, angleZ, behParam, beh, 0x1F)
 
 #define MARIO(model, behArg, beh) \
     CMD_BBH(LEVEL_CMD_INIT_MARIO, 0x0C, model), \
