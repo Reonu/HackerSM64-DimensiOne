@@ -63,7 +63,7 @@ static void check_flag_conditions(void) {
         lastMarioAction = m->action;
 
         // Allow water for this; not technically ground but it's good enough.
-        if (!(lastMarioAction & ACT_FLAG_AIR)) {
+        if (lastMarioAction & ACT_FLAG_AIR) {
             hasLeftGround = TRUE;
             add_challenge_flags(CHALLENGE_FLAG_GROUND);
         } else if (hasLeftGround) {
