@@ -158,6 +158,8 @@ static void mark_goomba_as_dead(void) {
         o->parentObj->oBehParams =
             o->parentObj->oBehParams | (o->oBehParams2ndByte & GOOMBA_BP_TRIPLET_FLAG_MASK) << 6;
     }
+
+    add_challenge_flags(CHALLENGE_FLAG_GOOMBA);
 }
 
 /**

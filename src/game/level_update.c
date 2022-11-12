@@ -33,6 +33,7 @@
 #include "puppyprint.h"
 #include "puppylights.h"
 #include "level_commands.h"
+#include "one_challenges.h"
 
 #include "config.h"
 
@@ -938,6 +939,7 @@ void update_hud_values(void) {
 
                 gHudDisplay.coins++;
                 play_sound(coinSound, gMarioState->marioObj->header.gfx.cameraToObject);
+                add_challenge_flags(CHALLENGE_FLAG_COIN);
             }
         }
 

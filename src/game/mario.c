@@ -32,6 +32,7 @@
 #include "save_file.h"
 #include "sound_init.h"
 #include "rumble_init.h"
+#include "one_challenges.h"
 
 
 /**************************************************
@@ -965,6 +966,19 @@ u32 set_mario_action(struct MarioState *m, u32 action, u32 actionArg) {
     m->actionArg = actionArg;
     m->actionState = 0;
     m->actionTimer = 0;
+
+    if (
+        action == ACT_JUMP ||
+        action == ACT_DOUBLE_JUMP ||
+        action == ACT_TRIPLE_JUMP ||
+        action == ACT_STEEP_JUMP ||
+        action == ACT_BACKFLIP ||
+        action == ACT_SIDE_FLIP ||
+        action == ACT_LONG_JUMP ||
+        action == ACT_WATER_JUMP
+    ) {
+        add_challenge_flags(CHALLENGE_FLAG_JUMP);
+    }
 
     return TRUE;
 }

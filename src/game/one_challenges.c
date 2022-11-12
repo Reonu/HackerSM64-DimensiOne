@@ -1,6 +1,9 @@
 #include "sm64.h"
+#include "game_init.h"
+#include "level_update.h"
 #include "one_challenges.h"
 #include "puppyprint.h"
+#include "audio/external.h"
 
 
 // What is the current status of the challenge?
@@ -17,6 +20,10 @@ u32 sRequiredChallengeFlags = CHALLENGE_FLAG_NONE;
 
 // Which flags have been overacquired?
 u32 sFailureFlags = CHALLENGE_FLAG_NONE;
+
+
+static u32 lastMarioAction = ACT_UNINITIALIZED;
+static u8 hasLeftGround = FALSE;
 
 
 static u8 is_challenge_active(void) {
@@ -44,6 +51,38 @@ static void lose_challenge(void) {
     // ONE_TODO: more loser stuffs
 }
 
+static void check_flag_conditions(void) {
+    struct MarioState *m = gMarioState;
+
+    if (m == NULL) {
+        return;
+    }
+
+    // CHALLENGE_FLAG_GROUND
+    if (m->action != lastMarioAction) {
+        lastMarioAction = m->action;
+
+        // Allow water for this; not technically ground but it's good enough.
+        if (!(lastMarioAction & ACT_FLAG_AIR)) {
+            hasLeftGround = TRUE;
+            add_challenge_flags(CHALLENGE_FLAG_GROUND);
+        } else if (hasLeftGround) {
+            // This should cause the challenge to fail
+            add_challenge_flags(CHALLENGE_FLAG_GROUND);
+        }
+    }
+
+    // CHALLENGE_FLAG_A_PRESS
+    if (gPlayer1Controller->buttonPressed & A_BUTTON) {
+        add_challenge_flags(CHALLENGE_FLAG_A_PRESS);
+    }
+
+    // CHALLENGE_FLAG_B_PRESS
+    if (gPlayer1Controller->buttonPressed & B_BUTTON) {
+        add_challenge_flags(CHALLENGE_FLAG_B_PRESS);
+    }
+}
+
 
 // What is the current status of the challenge?
 u32 get_challenge_obtained_flags(void) {
@@ -66,16 +105,19 @@ u32 get_challenge_failure_flags(void) {
 }
 
 // Clear all obtained challenge flags
-void reset_challenge_flags(void) {
+void reset_challenge(void) {
     gChallengeStatus = CHALLENGE_STATUS_NOT_PLAYING;
 
     sObtainedChallengeFlags = CHALLENGE_FLAG_NONE;
     sFailureFlags = CHALLENGE_FLAG_NONE;
+
+    hasLeftGround = FALSE;
+    lastMarioAction = ACT_UNINITIALIZED;
 }
 
 // Set new challenge flags, ideally for a new challenge/level
 void new_challenge_flags(u32 enforcedFlags, u32 requiredFlags) {
-    reset_challenge_flags();
+    reset_challenge();
 
     sEnforcedChallengeFlags = enforcedFlags;
     sRequiredChallengeFlags = requiredFlags;
@@ -83,7 +125,7 @@ void new_challenge_flags(u32 enforcedFlags, u32 requiredFlags) {
 
 // Start up a new challenge level
 void start_challenge(void) {
-    reset_challenge_flags();
+    reset_challenge();
 
     // ONE_TODO: Warp?
 
@@ -135,4 +177,14 @@ u8 add_challenge_flags(u32 flags) {
     }
 
     return TRUE;
+}
+
+void challenge_update(void) {
+    if (gChallengeStatus == CHALLENGE_STATUS_NOT_PLAYING) {
+        return;
+    }
+
+    check_flag_conditions();
+
+    // ONE_TODO: update HUD/text elements?
 }

@@ -29,9 +29,11 @@ u32 get_challenge_enforced_flags(void);
 u32 get_challenge_required_flags(void);
 u32 get_challenge_failure_flags(void);
 
-void reset_challenge_flags(void);
+void reset_challenge(void);
 void new_challenge_flags(u32 enforcedFlags, u32 requiredFlags);
 void start_challenge(void);
 u8 add_challenge_flags(u32 flags);
+
+void challenge_update(void);
 
 #endif // ONE_CHALLENGES_H
