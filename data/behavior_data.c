@@ -6093,3 +6093,14 @@ const BehaviorScript bhvIntroScene[] = {
 };
 
 
+const BehaviorScript bhvSplinePlatform[] = {
+    BEGIN(OBJ_LIST_SURFACE),
+    OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
+    CALL_NATIVE(init_obj_spline),
+    CALL_NATIVE(load_object_collision_model),
+    BEGIN_LOOP(),
+        CALL_NATIVE(bhv_follow_spline),
+        CALL_NATIVE(load_object_collision_model),
+    END_LOOP(),
+};
+

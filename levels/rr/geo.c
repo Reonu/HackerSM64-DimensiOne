@@ -52,3 +52,8 @@
 #include "levels/rr/areas/1/geo.inc.c"
 
 #include "levels/rr/geo.inc.c"
+
+#include "levels/rr/platform1_rr/geo.inc.c"
+#include "levels/rr/platform1_001_rr/geo.inc.c"
+#include "levels/rr/platform2_rr/geo.inc.c"
+#include "levels/rr/platform3_rr_mayro/geo.inc.c"

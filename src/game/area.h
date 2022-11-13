@@ -77,6 +77,8 @@ struct Area {
 #ifdef BETTER_REVERB
     /*0x3A*/ u8 betterReverbPreset;
 #endif
+    Trajectory *splines[8];
+    u16 numSplines;
 };
 
 // All the transition data to be used in screen_transition.c

@@ -1,6 +1,3 @@
-Lights1 rr_dl_death_lights = gdSPDefLights1(
-	0x2B, 0x50, 0x4C,
-	0xBF,0x75,0xE7,0x28,0x28,0x28);
 
 Vtx rr_dl_Cube_001_mesh_layer_1_vtx_cull[8] = {
 	{{{-7732, -6967, 7732}, 0, {-16, -16}, {0x0, 0x0, 0x0, 0x0}}},
@@ -2804,7 +2801,8 @@ Gfx mat_rr_dl_death[] = {
 	gsDPPipeSync(),
 	gsDPSetCombineLERP(0, 0, 0, SHADE, 0, 0, 0, ENVIRONMENT, 0, 0, 0, SHADE, 0, 0, 0, ENVIRONMENT),
 	gsSPTexture(65535, 65535, 0, 0, 1),
-	gsSPSetLights1(rr_dl_death_lights),
+    gsSPLightColor(LIGHT_1, 0xbf75e7ff),
+    gsSPLightColor(LIGHT_2, 0x2b504cff),
 	gsSPEndDisplayList(),
 };
 

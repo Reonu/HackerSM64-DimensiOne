@@ -422,6 +422,12 @@ static void level_cmd_begin_area(void) {
         } else {
             gAreas[areaIndex].camera = NULL;
         }
+
+        for (s32 i = 0; i < ARRAY_COUNT(gAreas[areaIndex].splines); i++) {
+            gAreas[areaIndex].splines[i] = NULL;
+        }
+
+        gAreas->numSplines = 0;
     }
 
     sCurrentCmd = CMD_NEXT;
@@ -995,6 +1001,14 @@ static void level_cmd_challenge_jump_no_stack(void) {
     sCurrentCmd = segmented_to_virtual(CMD_GET(void *, 4 * (isBankObjectLoad + 1)));
 }
 
+static void level_cmd_area_spline(void) {
+    DEBUG_ASSERT(gAreas[sCurrAreaIndex].numSplines < 8);
+    gAreas[sCurrAreaIndex].splines[gAreas[sCurrAreaIndex].numSplines] = segmented_to_virtual(CMD_GET(void *, 4));
+    gAreas[sCurrAreaIndex].numSplines++;
+
+    sCurrentCmd = CMD_NEXT;
+}
+
 static void (*LevelScriptJumpTable[])(void) = {
     /*LEVEL_CMD_LOAD_AND_EXECUTE            */ level_cmd_load_and_execute,
     /*LEVEL_CMD_EXIT_AND_EXECUTE            */ level_cmd_exit_and_execute,
@@ -1064,6 +1078,7 @@ static void (*LevelScriptJumpTable[])(void) = {
     /*LEVEL_CMD_MOVING_PLATFORM             */ level_cmd_moving_platform,
     /*LEVEL_CMD_CHALLENGE_JUMP              */ level_cmd_challenge_jump,
     /*LEVEL_CMD_CHALLENGE_JUMP_NO_STACK     */ level_cmd_challenge_jump_no_stack,
+    /*LEVEL_CMD_AREA_SPLINE                */ level_cmd_area_spline,
 };
 
 struct LevelCommand *level_script_execute(struct LevelCommand *cmd) {

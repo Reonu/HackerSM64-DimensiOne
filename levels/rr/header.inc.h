@@ -9,6 +9,7 @@ extern const u8 rr_area_1_collision_rooms[];
 extern const MacroObject rr_area_1_macro_objs[];
 extern const Trajectory rr_area_1_spline_NurbsCurve[];
 extern const Trajectory rr_area_1_spline_NurbsCurve_001[];
+extern const Trajectory rr_area_1_spline_NurbsCurve_002[];
 extern Lights1 rr_dl_death_lights;
 extern Vtx rr_dl_Cube_001_mesh_layer_1_vtx_cull[8];
 extern Vtx rr_dl_Cube_001_mesh_layer_1_vtx_0[115];

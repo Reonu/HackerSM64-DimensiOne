@@ -181,6 +181,7 @@ enum LevelCommands {
     /*0x41*/ LEVEL_CMD_MOVING_PLATFORM,
     /*0x42*/ LEVEL_CMD_CHALLENGE_JUMP,
     /*0x43*/ LEVEL_CMD_CHALLENGE_JUMP_NO_STACK,
+    /*0x44*/ LEVEL_CMD_AREA_SPLINE,
 };
 
 enum BankOrObjectLoad {
@@ -604,6 +605,10 @@ enum GoddardScene {
     CMD_PTR(bankLoad), \
     CMD_PTR(geoLoad), \
     CMD_PTR(objLoad)
+
+#define AREA_SPLINE(spline) \
+    CMD_BBH(LEVEL_CMD_AREA_SPLINE, 0x08, 0x0000), \
+    CMD_PTR(spline)
 
 // unused
 #define CMD3A(unk2, unk4, unk6, unk8, unk10) \

@@ -273,4 +273,7 @@ void cur_obj_spawn_star_at_y_offset(f32 targetX, f32 targetY, f32 targetZ, f32 o
 
 Gfx *geo_render_backdrop(s32 callContext, struct GraphNode *node, UNUSED f32 b[4][4]);
 
+void init_obj_spline(void);
+void bhv_follow_spline(void);
+
 #endif // OBJECT_HELPERS_H

@@ -68,3 +68,12 @@
 #include "levels/rr/areas/1/trajectory.inc.c"
 
 #include "levels/rr/leveldata.inc.c"
+
+#include "levels/rr/platform1_rr/model.inc.c"
+#include "levels/rr/platform1_rr/collision.inc.c"
+#include "levels/rr/platform1_001_rr/model.inc.c"
+#include "levels/rr/platform1_001_rr/collision.inc.c"
+#include "levels/rr/platform2_rr/model.inc.c"
+#include "levels/rr/platform2_rr/collision.inc.c"
+#include "levels/rr/platform3_rr_mayro/model.inc.c"
+#include "levels/rr/platform3_rr_mayro/collision.inc.c"
