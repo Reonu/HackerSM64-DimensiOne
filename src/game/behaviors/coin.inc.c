@@ -6,7 +6,7 @@ struct ObjectHitbox sYellowCoinHitbox = {
     /* damageOrCoinValue: */ 1,
     /* health:            */ 0,
     /* numLootCoins:      */ 0,
-    /* radius:            */ 100,
+    /* radius:            */ 35,
     /* height:            */ 64,
     /* hurtboxRadius:     */ 0,
     /* hurtboxHeight:     */ 0,
