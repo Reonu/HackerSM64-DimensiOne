@@ -1,0 +1,127 @@
+#include <ultra64.h>
+
+#include "sm64.h"
+#include "behavior_data.h"
+#include "model_ids.h"
+#include "seq_ids.h"
+#include "dialog_ids.h"
+#include "segment_symbols.h"
+#include "level_commands.h"
+
+#include "game/level_update.h"
+
+#include "scripts.h"
+
+#include "actors/common1.h"
+
+#include "make_const_nonconst.h"
+
+#include "game/memory.h"
+
+#include "levels/menu/header.h"
+#include "levels/intro/header.h"
+
+#include "level_headers.h"
+#include "level_table.h"
+
+#include "levels/wf/header.h"
+
+
+UNUSED const LevelScript empty_banks[] = {
+    RETURN(),
+};
+UNUSED const LevelScript empty_geos[] = {
+    RETURN(),
+};
+UNUSED const LevelScript empty_objects[] = {
+    RETURN(),
+};
+
+
+// Throw banks that should always be loaded here
+const LevelScript common_banks[] = {
+    RETURN(),
+};
+
+// Throw geos that should always be loaded here
+const LevelScript common_geos[] = {
+    RETURN(),
+};
+
+// Throw objects that should always be loaded here
+const LevelScript common_objects[] = {
+    RETURN(),
+};
+
+
+// Throw banks that should be loaded for level 0 only here (except these scripts can be reused by other levels so not really)
+const LevelScript challenge_level_0_banks[] = {
+	LOAD_YAY0(0x08, _common0_yay0SegmentRomStart, _common0_yay0SegmentRomEnd),
+	LOAD_RAW(0x0F, _common0_geoSegmentRomStart, _common0_geoSegmentRomEnd),
+
+    JUMP(common_banks),
+    RETURN(),
+};
+
+// Throw geos that should be loaded for level 0 only here (except these scripts can be reused by other levels so not really)
+const LevelScript challenge_level_0_geos[] = {
+	JUMP_LINK(script_func_global_1),
+
+    JUMP(common_geos),
+    RETURN(),
+};
+
+// Throw objects that should be loaded for level 0 only here (except these scripts can be reused by other levels so not really)
+const LevelScript challenge_level_0_objects[] = {
+    CHALLENGE_OBJECT(/*model*/ MODEL_BREAKABLE_BOX, /*pos*/  0, 2500, 0, /*angle*/ 0, 0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvBreakableBox, LEVEL_CHALLENGES_0),
+    CHALLENGE_OBJECT(/*model*/ MODEL_BREAKABLE_BOX, /*pos*/  0, 5000, 0, /*angle*/ 0, 0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvBreakableBox, LEVEL_CHALLENGES_1),
+    CHALLENGE_OBJECT(/*model*/ MODEL_BREAKABLE_BOX, /*pos*/  0, 7500, 0, /*angle*/ 0, 0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvBreakableBox, LEVEL_CHALLENGES_2_PLUS),
+
+    JUMP(common_objects),
+    RETURN(),
+};
+
+
+const LevelScript sChallengeBankObjects[] = {
+    /* 0  */ CHALLENGE_JUMP_NO_STACK(challenge_level_0_banks, challenge_level_0_geos, challenge_level_0_objects),
+    /* 1  */ CHALLENGE_JUMP_NO_STACK(challenge_level_0_banks, challenge_level_0_geos, challenge_level_0_objects),
+    /* 2  */ CHALLENGE_JUMP_NO_STACK(challenge_level_0_banks, challenge_level_0_geos, challenge_level_0_objects),
+    /* 3  */ CHALLENGE_JUMP_NO_STACK(common_banks, common_geos, common_objects),
+
+    /* 4  */ CHALLENGE_JUMP_NO_STACK(common_banks, common_geos, common_objects),
+    /* 5  */ CHALLENGE_JUMP_NO_STACK(common_banks, common_geos, common_objects),
+    /* 6  */ CHALLENGE_JUMP_NO_STACK(common_banks, common_geos, common_objects),
+    /* 7  */ CHALLENGE_JUMP_NO_STACK(common_banks, common_geos, common_objects),
+
+    /* 8  */ CHALLENGE_JUMP_NO_STACK(common_banks, common_geos, common_objects),
+    /* 9  */ CHALLENGE_JUMP_NO_STACK(common_banks, common_geos, common_objects),
+    /* 10 */ CHALLENGE_JUMP_NO_STACK(common_banks, common_geos, common_objects),
+    /* 11 */ CHALLENGE_JUMP_NO_STACK(common_banks, common_geos, common_objects),
+
+    /* 12 */ CHALLENGE_JUMP_NO_STACK(common_banks, common_geos, common_objects),
+    /* 13 */ CHALLENGE_JUMP_NO_STACK(common_banks, common_geos, common_objects),
+    /* 14 */ CHALLENGE_JUMP_NO_STACK(common_banks, common_geos, common_objects),
+    /* 15 */ CHALLENGE_JUMP_NO_STACK(common_banks, common_geos, common_objects),
+
+    /* 16 */ CHALLENGE_JUMP_NO_STACK(common_banks, common_geos, common_objects),
+    /* 17 */ CHALLENGE_JUMP_NO_STACK(common_banks, common_geos, common_objects),
+    /* 18 */ CHALLENGE_JUMP_NO_STACK(common_banks, common_geos, common_objects),
+    /* 19 */ CHALLENGE_JUMP_NO_STACK(common_banks, common_geos, common_objects),
+
+    /* 20 */ CHALLENGE_JUMP_NO_STACK(common_banks, common_geos, common_objects),
+    /* 21 */ CHALLENGE_JUMP_NO_STACK(common_banks, common_geos, common_objects),
+    /* 22 */ CHALLENGE_JUMP_NO_STACK(common_banks, common_geos, common_objects),
+    /* 23 */ CHALLENGE_JUMP_NO_STACK(common_banks, common_geos, common_objects),
+
+    /* 24 */ CHALLENGE_JUMP_NO_STACK(common_banks, common_geos, common_objects),
+    /* 25 */ CHALLENGE_JUMP_NO_STACK(common_banks, common_geos, common_objects),
+    /* 26 */ CHALLENGE_JUMP_NO_STACK(common_banks, common_geos, common_objects),
+    /* 27 */ CHALLENGE_JUMP_NO_STACK(common_banks, common_geos, common_objects),
+
+    /* 28 */ CHALLENGE_JUMP_NO_STACK(common_banks, common_geos, common_objects),
+    /* 29 */ CHALLENGE_JUMP_NO_STACK(common_banks, common_geos, common_objects),
+    /* 30 */ CHALLENGE_JUMP_NO_STACK(common_banks, common_geos, common_objects),
+    /* 31 */ CHALLENGE_JUMP_NO_STACK(common_banks, common_geos, common_objects),
+
+    RETURN(),
+};

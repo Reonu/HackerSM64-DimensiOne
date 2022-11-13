@@ -22,6 +22,7 @@ enum OneChallengeFlags {
     CHALLENGE_FLAG_B_PRESS = (1 << 5),
 };
 
+extern u8 gChallengeLevel;
 extern u32 gChallengeStatus;
 
 u32 get_challenge_obtained_flags(void);

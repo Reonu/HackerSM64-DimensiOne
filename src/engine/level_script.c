@@ -29,6 +29,7 @@
 #include "game/puppycam2.h"
 #include "game/puppyprint.h"
 #include "game/puppylights.h"
+#include "game/one_challenges.h"
 
 #include "config.h"
 
@@ -67,6 +68,8 @@ static uintptr_t *sStackBase = NULL;
 static s16 sScriptStatus;
 static s32 sRegister;
 static struct LevelCommand *sCurrentCmd;
+
+static u8 isBankObjectLoad = 0;
 
 static s32 eval_script_op(s8 op, s32 arg) {
     s32 result = FALSE;
@@ -489,6 +492,18 @@ static void level_cmd_place_object(void) {
         sCurrAreaIndex != -1
         && ((CMD_GET(u8, 2) & (1 << (gCurrActNum - 1))) || (CMD_GET(u8, 2) == 0x1F))
     ) {
+        if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING) {
+            u8 level = gChallengeLevel;
+            if (level >= sizeof(u32) * 8) {
+                level = (sizeof(u32) * 8) - 1;
+            }
+
+            if (!(CMD_GET(u32, 0x1C) & (1 << level))) {
+                sCurrentCmd = CMD_NEXT;
+                return;
+            }
+        }
+
         ModelID16 model = CMD_GET(u32, 0x18);
         struct SpawnInfo *spawnInfo = alloc_only_pool_alloc(sLevelPool, sizeof(struct SpawnInfo));
 
@@ -952,6 +967,27 @@ static void level_cmd_moving_platform(void) {
     sCurrentCmd = CMD_NEXT;
 }
 
+static void level_cmd_challenge_jump(void) {
+    if (gChallengeStatus == CHALLENGE_STATUS_NOT_PLAYING) {
+        sCurrentCmd = CMD_NEXT;
+        return;
+    }
+
+    isBankObjectLoad = CMD_GET(s16, 2);
+
+    *sStackTop++ = (uintptr_t) NEXT_CMD;
+    sCurrentCmd = (void*) ((u8*) segmented_to_virtual(CMD_GET(void *, 4)) + gChallengeLevel * CHALLENGE_JUMP_NO_STACK_SIZE);
+}
+
+static void level_cmd_challenge_jump_no_stack(void) {
+    if (gChallengeStatus == CHALLENGE_STATUS_NOT_PLAYING) {
+        level_cmd_return();
+        return;
+    }
+
+    sCurrentCmd = segmented_to_virtual(CMD_GET(void *, 4 * (isBankObjectLoad + 1)));
+}
+
 static void (*LevelScriptJumpTable[])(void) = {
     /*LEVEL_CMD_LOAD_AND_EXECUTE            */ level_cmd_load_and_execute,
     /*LEVEL_CMD_EXIT_AND_EXECUTE            */ level_cmd_exit_and_execute,
@@ -1019,6 +1055,8 @@ static void (*LevelScriptJumpTable[])(void) = {
     /*LEVEL_CMD_PUPPYLIGHT_ENVIRONMENT      */ level_cmd_puppylight_environment,
     /*LEVEL_CMD_PUPPYLIGHT_NODE             */ level_cmd_puppylight_node,
     /*LEVEL_CMD_MOVING_PLATFORM             */ level_cmd_moving_platform,
+    /*LEVEL_CMD_CHALLENGE_JUMP              */ level_cmd_challenge_jump,
+    /*LEVEL_CMD_CHALLENGE_JUMP_NO_STACK     */ level_cmd_challenge_jump_no_stack,
 };
 
 struct LevelCommand *level_script_execute(struct LevelCommand *cmd) {

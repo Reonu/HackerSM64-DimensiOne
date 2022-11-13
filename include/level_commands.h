@@ -7,6 +7,78 @@
 #include "config.h"
 #include "game/puppylights.h"
 
+#define CHALLENGE_JUMP_NO_STACK_SIZE 0x10
+
+enum ChallengeLevels {
+    LEVEL_CHALLENGES_0  = (1U << 0 ),
+    LEVEL_CHALLENGES_1  = (1U << 1 ),
+    LEVEL_CHALLENGES_2  = (1U << 2 ),
+    LEVEL_CHALLENGES_3  = (1U << 3 ),
+    LEVEL_CHALLENGES_4  = (1U << 4 ),
+    LEVEL_CHALLENGES_5  = (1U << 5 ),
+    LEVEL_CHALLENGES_6  = (1U << 6 ),
+    LEVEL_CHALLENGES_7  = (1U << 7 ),
+    LEVEL_CHALLENGES_8  = (1U << 8 ),
+    LEVEL_CHALLENGES_9  = (1U << 9 ),
+    LEVEL_CHALLENGES_10 = (1U << 10),
+    LEVEL_CHALLENGES_11 = (1U << 11),
+    LEVEL_CHALLENGES_12 = (1U << 12),
+    LEVEL_CHALLENGES_13 = (1U << 13),
+    LEVEL_CHALLENGES_14 = (1U << 14),
+    LEVEL_CHALLENGES_15 = (1U << 15),
+    LEVEL_CHALLENGES_16 = (1U << 16),
+    LEVEL_CHALLENGES_17 = (1U << 17),
+    LEVEL_CHALLENGES_18 = (1U << 18),
+    LEVEL_CHALLENGES_19 = (1U << 19),
+    LEVEL_CHALLENGES_20 = (1U << 20),
+    LEVEL_CHALLENGES_21 = (1U << 21),
+    LEVEL_CHALLENGES_22 = (1U << 22),
+    LEVEL_CHALLENGES_23 = (1U << 23),
+    LEVEL_CHALLENGES_24 = (1U << 24),
+    LEVEL_CHALLENGES_25 = (1U << 25),
+    LEVEL_CHALLENGES_26 = (1U << 26),
+    LEVEL_CHALLENGES_27 = (1U << 27),
+    LEVEL_CHALLENGES_28 = (1U << 28),
+    LEVEL_CHALLENGES_29 = (1U << 29),
+    LEVEL_CHALLENGES_30 = (1U << 30),
+    LEVEL_CHALLENGES_31 = (1U << 31),
+
+    LEVEL_CHALLENGES_0_PLUS  = (-1U - (LEVEL_CHALLENGES_0  - 1)),
+    LEVEL_CHALLENGES_1_PLUS  = (-1U - (LEVEL_CHALLENGES_1  - 1)),
+    LEVEL_CHALLENGES_2_PLUS  = (-1U - (LEVEL_CHALLENGES_2  - 1)),
+    LEVEL_CHALLENGES_3_PLUS  = (-1U - (LEVEL_CHALLENGES_3  - 1)),
+    LEVEL_CHALLENGES_4_PLUS  = (-1U - (LEVEL_CHALLENGES_4  - 1)),
+    LEVEL_CHALLENGES_5_PLUS  = (-1U - (LEVEL_CHALLENGES_5  - 1)),
+    LEVEL_CHALLENGES_6_PLUS  = (-1U - (LEVEL_CHALLENGES_6  - 1)),
+    LEVEL_CHALLENGES_7_PLUS  = (-1U - (LEVEL_CHALLENGES_7  - 1)),
+    LEVEL_CHALLENGES_8_PLUS  = (-1U - (LEVEL_CHALLENGES_8  - 1)),
+    LEVEL_CHALLENGES_9_PLUS  = (-1U - (LEVEL_CHALLENGES_9  - 1)),
+    LEVEL_CHALLENGES_10_PLUS = (-1U - (LEVEL_CHALLENGES_10 - 1)),
+    LEVEL_CHALLENGES_11_PLUS = (-1U - (LEVEL_CHALLENGES_11 - 1)),
+    LEVEL_CHALLENGES_12_PLUS = (-1U - (LEVEL_CHALLENGES_12 - 1)),
+    LEVEL_CHALLENGES_13_PLUS = (-1U - (LEVEL_CHALLENGES_13 - 1)),
+    LEVEL_CHALLENGES_14_PLUS = (-1U - (LEVEL_CHALLENGES_14 - 1)),
+    LEVEL_CHALLENGES_15_PLUS = (-1U - (LEVEL_CHALLENGES_15 - 1)),
+    LEVEL_CHALLENGES_16_PLUS = (-1U - (LEVEL_CHALLENGES_16 - 1)),
+    LEVEL_CHALLENGES_17_PLUS = (-1U - (LEVEL_CHALLENGES_17 - 1)),
+    LEVEL_CHALLENGES_18_PLUS = (-1U - (LEVEL_CHALLENGES_18 - 1)),
+    LEVEL_CHALLENGES_19_PLUS = (-1U - (LEVEL_CHALLENGES_19 - 1)),
+    LEVEL_CHALLENGES_20_PLUS = (-1U - (LEVEL_CHALLENGES_20 - 1)),
+    LEVEL_CHALLENGES_21_PLUS = (-1U - (LEVEL_CHALLENGES_21 - 1)),
+    LEVEL_CHALLENGES_22_PLUS = (-1U - (LEVEL_CHALLENGES_22 - 1)),
+    LEVEL_CHALLENGES_23_PLUS = (-1U - (LEVEL_CHALLENGES_23 - 1)),
+    LEVEL_CHALLENGES_24_PLUS = (-1U - (LEVEL_CHALLENGES_24 - 1)),
+    LEVEL_CHALLENGES_25_PLUS = (-1U - (LEVEL_CHALLENGES_25 - 1)),
+    LEVEL_CHALLENGES_26_PLUS = (-1U - (LEVEL_CHALLENGES_26 - 1)),
+    LEVEL_CHALLENGES_27_PLUS = (-1U - (LEVEL_CHALLENGES_27 - 1)),
+    LEVEL_CHALLENGES_28_PLUS = (-1U - (LEVEL_CHALLENGES_28 - 1)),
+    LEVEL_CHALLENGES_29_PLUS = (-1U - (LEVEL_CHALLENGES_29 - 1)),
+    LEVEL_CHALLENGES_30_PLUS = (-1U - (LEVEL_CHALLENGES_30 - 1)),
+    LEVEL_CHALLENGES_31_PLUS = (-1U - (LEVEL_CHALLENGES_31 - 1)),
+
+    LEVEL_CHALLENGES_ALL = -1U,
+};
+
 enum LevelCommands {
     /*0x00*/ LEVEL_CMD_LOAD_AND_EXECUTE,
     /*0x01*/ LEVEL_CMD_EXIT_AND_EXECUTE,
@@ -74,6 +146,14 @@ enum LevelCommands {
     /*0x3F*/ LEVEL_CMD_PUPPYLIGHT_ENVIRONMENT,
     /*0x40*/ LEVEL_CMD_PUPPYLIGHT_NODE,
     /*0x41*/ LEVEL_CMD_MOVING_PLATFORM,
+    /*0x42*/ LEVEL_CMD_CHALLENGE_JUMP,
+    /*0x43*/ LEVEL_CMD_CHALLENGE_JUMP_NO_STACK,
+};
+
+enum BankOrObjectLoad {
+    LOAD_BANKS,
+    LOAD_GEOS,
+    LOAD_OBJECTS,
 };
 
 enum LevelActs {
@@ -357,15 +437,22 @@ enum GoddardScene {
     CMD_PTR(unk4), \
     CMD_W(unk8)
 
-#define OBJECT_WITH_ACTS(model, posX, posY, posZ, angleX, angleY, angleZ, behParam, beh, acts) \
-    CMD_BBBB(LEVEL_CMD_PLACE_OBJECT, 0x1C, acts, 0x00), \
+#define OBJECT_WITH_ACTS_CHALLENGE_LEVEL(model, posX, posY, posZ, angleX, angleY, angleZ, behParam, beh, acts, challenge_levels) \
+    CMD_BBBB(LEVEL_CMD_PLACE_OBJECT, 0x20, acts, 0x00), \
     CMD_HHHHHH(posX, posY, posZ, angleX, angleY, angleZ), \
     CMD_W(behParam), \
     CMD_PTR(beh), \
-    CMD_W(model)
+    CMD_W(model), \
+    CMD_W(challenge_levels)
+
+#define CHALLENGE_OBJECT(model, posX, posY, posZ, angleX, angleY, angleZ, behParam, beh, challenge_levels) \
+    OBJECT_WITH_ACTS_CHALLENGE_LEVEL(model, posX, posY, posZ, angleX, angleY, angleZ, behParam, beh, 0x1F, challenge_levels)
+
+#define OBJECT_WITH_ACTS(model, posX, posY, posZ, angleX, angleY, angleZ, behParam, beh, acts) \
+    OBJECT_WITH_ACTS_CHALLENGE_LEVEL(model, posX, posY, posZ, angleX, angleY, angleZ, behParam, beh, acts, LEVEL_CHALLENGES_ALL)
 
 #define OBJECT(model, posX, posY, posZ, angleX, angleY, angleZ, behParam, beh) \
-    OBJECT_WITH_ACTS(model, posX, posY, posZ, angleX, angleY, angleZ, behParam, beh, 0x1F)
+    OBJECT_WITH_ACTS_CHALLENGE_LEVEL(model, posX, posY, posZ, angleX, angleY, angleZ, behParam, beh, 0x1F, LEVEL_CHALLENGES_ALL)
 
 #define MOVING_PLATFORM_WITH_ACTS(geolayout, collision, posX, posY, posZ, angleX, angleY, angleZ, behParam, beh, acts) \
     CMD_BBBB(LEVEL_CMD_MOVING_PLATFORM, 0x20, acts, 0x00), \
@@ -473,6 +560,17 @@ enum GoddardScene {
 #define MACRO_OBJECTS(objList) \
     CMD_BBH(LEVEL_CMD_SET_MACRO_OBJECTS, 0x08, 0x0000), \
     CMD_PTR(objList)
+
+// ONE Challenge macros
+#define CHALLENGE_JUMP(bankOrObj, target) \
+    CMD_BBH(LEVEL_CMD_CHALLENGE_JUMP, 0x08, bankOrObj), \
+    CMD_PTR(target)
+
+#define CHALLENGE_JUMP_NO_STACK(bankLoad, geoLoad, objLoad) \
+    CMD_BBH(LEVEL_CMD_CHALLENGE_JUMP_NO_STACK, CHALLENGE_JUMP_NO_STACK_SIZE, 0x0000), \
+    CMD_PTR(bankLoad), \
+    CMD_PTR(geoLoad), \
+    CMD_PTR(objLoad)
 
 // unused
 #define CMD3A(unk2, unk4, unk6, unk8, unk10) \

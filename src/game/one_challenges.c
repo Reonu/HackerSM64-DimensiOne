@@ -6,8 +6,12 @@
 #include "audio/external.h"
 
 
+// What is the current level of the challenge?
+u8 gChallengeLevel = 0; // ONE_TODO: Save file support? (Also add support for incrementing this)
+
 // What is the current status of the challenge?
-u32 gChallengeStatus = CHALLENGE_STATUS_NOT_PLAYING;
+u32 gChallengeStatus = CHALLENGE_STATUS_PLAYING; // ONE_TODO: We are NOT playing! >:(
+// u32 gChallengeStatus = CHALLENGE_STATUS_NOT_PLAYING;
 
 // Flags of which challenge conditions have been met by the player
 u32 sObtainedChallengeFlags = CHALLENGE_FLAG_NONE;
@@ -102,6 +106,15 @@ u32 get_challenge_required_flags(void) {
 // Which of these challenges are required in order to beat the level? (e.g. must collect one coin, or must kill one goomba)
 u32 get_challenge_failure_flags(void) {
     return sFailureFlags;
+}
+
+// Increase the challenge level
+void next_challenge_level(void) {
+    gChallengeLevel++;
+
+    if (gChallengeLevel >= sizeof(u32) * 8) {
+        gChallengeLevel = (sizeof(u32) * 8) - 1;
+    }
 }
 
 // Clear all obtained challenge flags
