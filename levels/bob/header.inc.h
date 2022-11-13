@@ -1,0 +1,13 @@
+extern const GeoLayout bob_area_1_geo[];
+extern const GeoLayout bob_area_1[];
+extern const Collision bob_area_1_collision[];
+extern const MacroObject bob_area_1_macro_objs[];
+extern u8 bob_dl_Z2_00KEIKOKUTex_02C050_rgba16_rgba16[];
+extern u8 bob_dl_Grass_rgba16[];
+extern Vtx bob_dl_Cube_mesh_layer_1_vtx_cull[8];
+extern Vtx bob_dl_Cube_mesh_layer_1_vtx_0[435];
+extern Gfx bob_dl_Cube_mesh_layer_1_tri_0[];
+extern Gfx mat_bob_dl_sm64_material_001_layer1[];
+extern Gfx mat_revert_bob_dl_sm64_material_001_layer1[];
+extern Gfx bob_dl_Cube_mesh_layer_1[];
+extern Gfx bob_dl_material_revert_render_settings[];
