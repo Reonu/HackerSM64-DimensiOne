@@ -2358,7 +2358,7 @@ extern s16 gMatStackIndex;
 extern Mat4 gMatStack[32];
 extern Mtx *gMatStackFixed[32];
 extern u32 gMoveSpeed;
-Gfx *geo_render_backdrop(s32 callContext, struct GraphNode *node, UNUSED f32 b[4][4]) {
+Gfx *geo_render_backdrop(s32 callContext, UNUSED struct GraphNode *node, UNUSED f32 b[4][4]) {
     Mat4 mat;
     Mtx *mtx = alloc_display_list(sizeof(*mtx));
     s32 i;

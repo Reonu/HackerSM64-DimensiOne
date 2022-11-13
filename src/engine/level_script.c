@@ -505,7 +505,7 @@ static void level_cmd_place_object(void) {
             }
 
             // bparam4 overrides (1-indexed)
-            if (level != 0 && ((CMD_GET(u32, 16) & 0xFF) != (level + 1))) {
+            if (level != 0 && ((CMD_GET(u32, 16) & 0xFF) != (u32) (level + 1))) {
                 sCurrentCmd = CMD_NEXT;
                 return;
             }
