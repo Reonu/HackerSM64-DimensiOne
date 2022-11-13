@@ -498,7 +498,14 @@ static void level_cmd_place_object(void) {
                 level = (sizeof(u32) * 8) - 1;
             }
 
+            // Mario vs Wario Ware system
             if (!(CMD_GET(u32, 0x1C) & (1 << level))) {
+                sCurrentCmd = CMD_NEXT;
+                return;
+            }
+
+            // bparam4 overrides (1-indexed)
+            if (level != 0 && ((CMD_GET(u32, 16) & 0xFF) != (level + 1))) {
                 sCurrentCmd = CMD_NEXT;
                 return;
             }
