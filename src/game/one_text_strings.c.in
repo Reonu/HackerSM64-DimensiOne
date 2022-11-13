@@ -1,0 +1,109 @@
+// Yeah yeah, this is stupid, but at least it gives us the option to add to this text if we need to later for a unique description or something
+#define TEXT_CHALLENGE_0  "Challenge 1"
+#define TEXT_CHALLENGE_1  "Challenge 2"
+#define TEXT_CHALLENGE_2  "Challenge 3"
+#define TEXT_CHALLENGE_3  "Challenge 4"
+#define TEXT_CHALLENGE_4  "Challenge 5"
+#define TEXT_CHALLENGE_5  "Challenge 6"
+#define TEXT_CHALLENGE_6  "Challenge 7"
+#define TEXT_CHALLENGE_7  "Challenge 8"
+#define TEXT_CHALLENGE_8  "Challenge 9"
+#define TEXT_CHALLENGE_9  "Challenge 10"
+#define TEXT_CHALLENGE_10 "Challenge 11"
+#define TEXT_CHALLENGE_11 "Challenge 12"
+#define TEXT_CHALLENGE_12 "Challenge 13"
+#define TEXT_CHALLENGE_13 "Challenge 14"
+#define TEXT_CHALLENGE_14 "Challenge 15"
+#define TEXT_CHALLENGE_15 "Challenge 16"
+#define TEXT_CHALLENGE_16 "Challenge 17"
+#define TEXT_CHALLENGE_17 "Challenge 18"
+#define TEXT_CHALLENGE_18 "Challenge 19"
+#define TEXT_CHALLENGE_19 "Challenge 20"
+#define TEXT_CHALLENGE_20 "Challenge 21"
+#define TEXT_CHALLENGE_21 "Challenge 22"
+#define TEXT_CHALLENGE_22 "Challenge 23"
+#define TEXT_CHALLENGE_23 "Challenge 24"
+#define TEXT_CHALLENGE_24 "Challenge 25"
+#define TEXT_CHALLENGE_25 "Challenge 26"
+#define TEXT_CHALLENGE_26 "Challenge 27"
+#define TEXT_CHALLENGE_27 "Challenge 28"
+#define TEXT_CHALLENGE_28 "Challenge 29"
+#define TEXT_CHALLENGE_29 "Challenge 30"
+#define TEXT_CHALLENGE_30 "Challenge 31"
+#define TEXT_CHALLENGE_31 "Challenge 32"
+
+
+#define TEXT_CHALLENGE_TYPE_JUMP    "With" _ "jump!\0"
+#define TEXT_CHALLENGE_TYPE_COIN    "While collecting" _ "coin!\0"
+#define TEXT_CHALLENGE_TYPE_GROUND  "While touching the ground" _ "time!" // Why would you ever use AT LEAST here lol (okay actually it could be done well, huh wait that's actually kinda brilliant)
+#define TEXT_CHALLENGE_TYPE_GOOMBA  "By killing" _ "goomba!"
+#define TEXT_CHALLENGE_TYPE_A_PRESS "With" _ "A press!"
+#define TEXT_CHALLENGE_TYPE_B_PRESS "With" _ "B press!"
+
+// Increase this array whenever adding challenge types!
+#define CHALLENGE_TYPE_ARRAY \
+    TEXT_CHALLENGE_TYPE_JUMP, \
+    TEXT_CHALLENGE_TYPE_COIN, \
+    TEXT_CHALLENGE_TYPE_GROUND, \
+    TEXT_CHALLENGE_TYPE_GOOMBA, \
+    TEXT_CHALLENGE_TYPE_A_PRESS, \
+    TEXT_CHALLENGE_TYPE_B_PRESS,
+
+
+char *gChallengeHeaderText[sizeof(u32)*8] = {
+    TEXT_CHALLENGE_0,
+    TEXT_CHALLENGE_1,
+    TEXT_CHALLENGE_2,
+    TEXT_CHALLENGE_3,
+    TEXT_CHALLENGE_4,
+    TEXT_CHALLENGE_5,
+    TEXT_CHALLENGE_6,
+    TEXT_CHALLENGE_7,
+    TEXT_CHALLENGE_8,
+    TEXT_CHALLENGE_9,
+    TEXT_CHALLENGE_10,
+    TEXT_CHALLENGE_11,
+    TEXT_CHALLENGE_12,
+    TEXT_CHALLENGE_13,
+    TEXT_CHALLENGE_14,
+    TEXT_CHALLENGE_15,
+    TEXT_CHALLENGE_16,
+    TEXT_CHALLENGE_17,
+    TEXT_CHALLENGE_18,
+    TEXT_CHALLENGE_19,
+    TEXT_CHALLENGE_20,
+    TEXT_CHALLENGE_21,
+    TEXT_CHALLENGE_22,
+    TEXT_CHALLENGE_23,
+    TEXT_CHALLENGE_24,
+    TEXT_CHALLENGE_25,
+    TEXT_CHALLENGE_26,
+    TEXT_CHALLENGE_27,
+    TEXT_CHALLENGE_28,
+    TEXT_CHALLENGE_29,
+    TEXT_CHALLENGE_30,
+    TEXT_CHALLENGE_31,
+};
+
+
+#define _ "<COL_3F3FFF--> UP TO ONE <COL_-------->"
+static char *challengeTypesEnforced[] = {CHALLENGE_TYPE_ARRAY};
+#undef _
+
+#define _ "<COL_3FFF3F--> AT LEAST ONE <COL_-------->"
+static char *challengeTypesRequired[] = {CHALLENGE_TYPE_ARRAY};
+#undef _
+
+#define _ "<COL_FF3F3F--> EXACTLY ONE <COL_-------->"
+static char *challengeTypesRequiredAndEnforced[] = {CHALLENGE_TYPE_ARRAY};
+#undef _
+
+
+char **gChallengeTypesArr[] = {
+    challengeTypesEnforced, challengeTypesRequired, challengeTypesRequiredAndEnforced
+};
+
+
+STATIC_ASSERT(ARRAY_COUNT(challengeTypesEnforced) == CHALLENGE_NAME_TOTAL, "Mismatch of entries in challengeTypesEnforced array!");
+STATIC_ASSERT(ARRAY_COUNT(challengeTypesRequired) == CHALLENGE_NAME_TOTAL, "Mismatch of entries in challengeTypesRequired array!");
+STATIC_ASSERT(ARRAY_COUNT(challengeTypesRequiredAndEnforced) == CHALLENGE_NAME_TOTAL, "Mismatch of entries in challengeTypesRequiredAndEnforced array!");

@@ -999,6 +999,10 @@ void print_small_text(s32 x, s32 y, const char *str, s32 align, s32 amount, u8 f
     gSPDisplayList(gDisplayListHead++, dl_small_text_begin);
     if (align == PRINT_TEXT_ALIGN_CENTRE || align == PRINT_TEXT_ALIGN_RIGHT) {
         for (s32 i = 0; i < strLen; i++) {
+            if (str[i] == '\0') {
+                break;
+            }
+
             if (str[i] == '\n') {
                 textPos[0] = 0;
                 lines++;
@@ -1038,6 +1042,10 @@ void print_small_text(s32 x, s32 y, const char *str, s32 align, s32 amount, u8 f
     gDPLoadTextureBlock_4b(gDisplayListHead++, (*fontTex)[font], G_IM_FMT_I, 672, 12, (G_TX_NOMIRROR | G_TX_CLAMP), (G_TX_NOMIRROR | G_TX_CLAMP), 0, 0, 0, G_TX_NOLOD, G_TX_NOLOD);
     
     for (s32 i = 0, j = 0; i < textLength; i++, j++) {
+        if (str[i] == '\0') {
+            break;
+        }
+
         s32 goddamnJMeasure = str[i] == 'j' ? -1 : 0;
         if (str[i] == '\n') {
             lines++;
@@ -1132,6 +1140,10 @@ void print_small_text_light(s32 x, s32 y, const char *str, s32 align, s32 amount
     gSPDisplayList(gDisplayListHead++, dl_small_text_begin);
     if (align == PRINT_TEXT_ALIGN_CENTRE || align == PRINT_TEXT_ALIGN_RIGHT) {
         for (s32 i = 0; i < strLen; i++) {
+            if (str[i] == '\0') {
+                break;
+            }
+
             if (str[i] == '\n') {
                 textPos[0] = 0;
                 lines++;
@@ -1155,6 +1167,10 @@ void print_small_text_light(s32 x, s32 y, const char *str, s32 align, s32 amount
     gDPLoadTextureBlock_4b(gDisplayListHead++, (*fontTex)[font], G_IM_FMT_I, 672, 12, (G_TX_NOMIRROR | G_TX_CLAMP), (G_TX_NOMIRROR | G_TX_CLAMP), 0, 0, 0, G_TX_NOLOD, G_TX_NOLOD);
     
     for (s32 i = 0, j = 0; i < textLength; i++, j++) {
+        if (str[i] == '\0') {
+            break;
+        }
+
         s32 goddamnJMeasure = str[i] == 'j' ? -1 : 0;
         if (str[i] == '\n') {
             lines++;
