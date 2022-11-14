@@ -123,7 +123,12 @@ static void print_challenge_type_images(s32 x, s32 y, u8 typeIndex, u8 alphaFram
     gDPSetFillColor(gDisplayListHead++, fillColor);
     gDPFillRectangle(gDisplayListHead++, x, y, x + 24 - 1, y + 24 - 1);
 
-    typeTimerArray[typeIndex]++;
+    if (typeTimerArray[typeIndex] != -1U) {
+        typeTimerArray[typeIndex]++;
+    }
+    
+    gDPPipeSync(gDisplayListHead++);
+    gDPSetCycleType( gDisplayListHead++, G_CYC_1CYCLE);
 }
 
 
@@ -181,6 +186,15 @@ void print_challenge_types(void) {
 
         y -= lineSpacing;
     }
+
+    if (timer > FADE_IN_FRAMES) {
+        alpha = 255;
+    }
+
+    if (alpha != 0) {
+        print_set_envcolour(0xFF, 0xFF, 0xFF, alpha);
+        print_small_text(SCREEN_WIDTH / 2, 12, gChallengeHeaderText[gChallengeLevel], PRINT_TEXT_ALIGN_CENTER, PRINT_ALL, FONT_OUTLINE);
+    }
 }
 #undef FADE_IN_FRAMES
 #undef FADE_OUT_FRAMES
@@ -189,4 +203,6 @@ void print_challenge_types(void) {
 void update_last_print_vars(u32 obtained, u32 failure) {
     sObtainedChallengeFlagsLast = obtained;
     sFailureFlagsLast = failure;
+
+    challengeTypeStatusLast = gChallengeStatus;
 }

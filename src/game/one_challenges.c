@@ -6,24 +6,123 @@
 #include "puppyprint.h"
 #include "audio/external.h"
 
+// Actual data for all challenges
+static struct OneChallengeLevel sChallengeLevels[sizeof(u32)*8] = {
+    {    /*00*/
+        (CHALLENGE_FLAG_COIN | CHALLENGE_FLAG_JUMP), // Requirements (i.e. "At least one of")
+        (CHALLENGE_FLAG_COIN | CHALLENGE_FLAG_B_PRESS), // Enforcements (i.e. "No more than one of")
+    }, { /*01*/
+        (CHALLENGE_FLAG_NONE), // Requirements
+        (CHALLENGE_FLAG_NONE), // Enforcements
+    }, { /*02*/
+        (CHALLENGE_FLAG_NONE), // Requirements
+        (CHALLENGE_FLAG_NONE), // Enforcements
+    }, { /*03*/
+        (CHALLENGE_FLAG_NONE), // Requirements
+        (CHALLENGE_FLAG_NONE), // Enforcements
+    }, { /*04*/
+        (CHALLENGE_FLAG_NONE), // Requirements
+        (CHALLENGE_FLAG_NONE), // Enforcements
+    }, { /*05*/
+        (CHALLENGE_FLAG_NONE), // Requirements
+        (CHALLENGE_FLAG_NONE), // Enforcements
+    }, { /*06*/
+        (CHALLENGE_FLAG_NONE), // Requirements
+        (CHALLENGE_FLAG_NONE), // Enforcements
+    }, { /*07*/
+        (CHALLENGE_FLAG_NONE), // Requirements
+        (CHALLENGE_FLAG_NONE), // Enforcements
+    }, { /*08*/
+        (CHALLENGE_FLAG_NONE), // Requirements
+        (CHALLENGE_FLAG_NONE), // Enforcements
+    }, { /*09*/
+        (CHALLENGE_FLAG_NONE), // Requirements
+        (CHALLENGE_FLAG_NONE), // Enforcements
+    }, { /*10*/
+        (CHALLENGE_FLAG_NONE), // Requirements
+        (CHALLENGE_FLAG_NONE), // Enforcements
+    }, { /*11*/
+        (CHALLENGE_FLAG_NONE), // Requirements
+        (CHALLENGE_FLAG_NONE), // Enforcements
+    }, { /*12*/
+        (CHALLENGE_FLAG_NONE), // Requirements
+        (CHALLENGE_FLAG_NONE), // Enforcements
+    }, { /*13*/
+        (CHALLENGE_FLAG_NONE), // Requirements
+        (CHALLENGE_FLAG_NONE), // Enforcements
+    }, { /*14*/
+        (CHALLENGE_FLAG_NONE), // Requirements
+        (CHALLENGE_FLAG_NONE), // Enforcements
+    }, { /*15*/
+        (CHALLENGE_FLAG_NONE), // Requirements
+        (CHALLENGE_FLAG_NONE), // Enforcements
+    }, { /*16*/
+        (CHALLENGE_FLAG_NONE), // Requirements
+        (CHALLENGE_FLAG_NONE), // Enforcements
+    }, { /*17*/
+        (CHALLENGE_FLAG_NONE), // Requirements
+        (CHALLENGE_FLAG_NONE), // Enforcements
+    }, { /*18*/
+        (CHALLENGE_FLAG_NONE), // Requirements
+        (CHALLENGE_FLAG_NONE), // Enforcements
+    }, { /*19*/
+        (CHALLENGE_FLAG_NONE), // Requirements
+        (CHALLENGE_FLAG_NONE), // Enforcements
+    }, { /*20*/
+        (CHALLENGE_FLAG_NONE), // Requirements
+        (CHALLENGE_FLAG_NONE), // Enforcements
+    }, { /*21*/
+        (CHALLENGE_FLAG_NONE), // Requirements
+        (CHALLENGE_FLAG_NONE), // Enforcements
+    }, { /*22*/
+        (CHALLENGE_FLAG_NONE), // Requirements
+        (CHALLENGE_FLAG_NONE), // Enforcements
+    }, { /*23*/
+        (CHALLENGE_FLAG_NONE), // Requirements
+        (CHALLENGE_FLAG_NONE), // Enforcements
+    }, { /*24*/
+        (CHALLENGE_FLAG_NONE), // Requirements
+        (CHALLENGE_FLAG_NONE), // Enforcements
+    }, { /*25*/
+        (CHALLENGE_FLAG_NONE), // Requirements
+        (CHALLENGE_FLAG_NONE), // Enforcements
+    }, { /*26*/
+        (CHALLENGE_FLAG_NONE), // Requirements
+        (CHALLENGE_FLAG_NONE), // Enforcements
+    }, { /*27*/
+        (CHALLENGE_FLAG_NONE), // Requirements
+        (CHALLENGE_FLAG_NONE), // Enforcements
+    }, { /*28*/
+        (CHALLENGE_FLAG_NONE), // Requirements
+        (CHALLENGE_FLAG_NONE), // Enforcements
+    }, { /*29*/
+        (CHALLENGE_FLAG_NONE), // Requirements
+        (CHALLENGE_FLAG_NONE), // Enforcements
+    }, { /*30*/
+        (CHALLENGE_FLAG_NONE), // Requirements
+        (CHALLENGE_FLAG_NONE), // Enforcements
+    }, { /*31*/
+        (CHALLENGE_FLAG_NONE), // Requirements
+        (CHALLENGE_FLAG_NONE), // Enforcements
+    }
+};
+
 
 // What is the current level of the challenge?
-u8 gChallengeLevel = 0; // ONE_TODO: Save file support? (Also add support for incrementing this)
+u8 gChallengeLevel = (u8) -1; // ONE_TODO: Save file support?
 
 // What is the current status of the challenge?
-u32 gChallengeStatus = CHALLENGE_STATUS_PLAYING; // ONE_TODO: We are NOT playing! >:(
+u32 gChallengeStatus = CHALLENGE_STATUS_NOT_PLAYING;
 // u32 gChallengeStatus = CHALLENGE_STATUS_NOT_PLAYING;
 
 // Flags of which challenge conditions have been met by the player
 u32 sObtainedChallengeFlags = CHALLENGE_FLAG_NONE;
 
 // Which challenges are being enforced? (i.e. if one of these conditions is met more than once e.g. pressing A twice, automatically fail the challenge)
-// u32 sEnforcedChallengeFlags = CHALLENGE_FLAG_NONE;
-u32 sEnforcedChallengeFlags = CHALLENGE_FLAG_COIN | CHALLENGE_FLAG_JUMP; // ONE_TODO:
+u32 sEnforcedChallengeFlags = CHALLENGE_FLAG_NONE;
 
 // Which of these challenges are required in order to beat the level? (e.g. must collect one coin, or must kill one goomba)
-// u32 sRequiredChallengeFlags = CHALLENGE_FLAG_NONE;
-u32 sRequiredChallengeFlags = CHALLENGE_FLAG_COIN | CHALLENGE_FLAG_B_PRESS; // ONE_TODO:
+u32 sRequiredChallengeFlags = CHALLENGE_FLAG_NONE;
 
 // Which flags have been overacquired?
 u32 sFailureFlags = CHALLENGE_FLAG_NONE;
@@ -111,15 +210,6 @@ u32 get_challenge_failure_flags(void) {
     return sFailureFlags;
 }
 
-// Increase the challenge level
-void next_challenge_level(void) {
-    gChallengeLevel++;
-
-    if (gChallengeLevel >= sizeof(u32) * 8) {
-        gChallengeLevel = (sizeof(u32) * 8) - 1;
-    }
-}
-
 // Clear all obtained challenge flags
 void reset_challenge(void) {
     gChallengeStatus = CHALLENGE_STATUS_NOT_PLAYING;
@@ -127,20 +217,33 @@ void reset_challenge(void) {
     sObtainedChallengeFlags = CHALLENGE_FLAG_NONE;
     sFailureFlags = CHALLENGE_FLAG_NONE;
 
+    sRequiredChallengeFlags = sChallengeLevels[gChallengeLevel].requiredFlags;
+    sEnforcedChallengeFlags = sChallengeLevels[gChallengeLevel].enforcedFlags;
+
     hasLeftGround = FALSE;
     lastMarioAction = ACT_UNINITIALIZED;
+
+    update_last_print_vars(sObtainedChallengeFlags, sFailureFlags);
 }
 
-// Set new challenge flags, ideally for a new challenge/level
-void new_challenge_flags(u32 enforcedFlags, u32 requiredFlags) {
-    reset_challenge();
+// Increase the challenge level and start next challenge
+void start_next_challenge_level(void) {
+    gChallengeLevel++;
 
-    sEnforcedChallengeFlags = enforcedFlags;
-    sRequiredChallengeFlags = requiredFlags;
+    if (gChallengeLevel >= sizeof(u32) * 8) {
+        gChallengeLevel = (sizeof(u32) * 8) - 1;
+    }
+
+    start_challenge();
 }
 
 // Start up a new challenge level
 void start_challenge(void) {
+    if (gChallengeLevel == 0xFF) {
+        start_next_challenge_level();
+        return;
+    }
+
     reset_challenge();
 
     // ONE_TODO: Warp?
@@ -196,8 +299,24 @@ u8 add_challenge_flags(u32 flags) {
 }
 
 void challenge_update(void) {
+    // ONE_TODO: Delete this
+    if (gChallengeLevel == 0xFF) {
+        print_set_envcolour(0xFF, 0xFF, 0xFF, 0xFF);
+        print_small_text(16, SCREEN_HEIGHT - 24, "Press L to display/reset challenge 1!", PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_OUTLINE);
+    }
+
+    if (gPlayer1Controller->buttonPressed & L_TRIG) {
+        if (
+            // ONE_TODO: future conditions
+            // gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING &&
+            gChallengeStatus != CHALLENGE_STATUS_WIN
+        ) {
+            start_challenge();
+        }
+    }
+
     if (gChallengeStatus == CHALLENGE_STATUS_NOT_PLAYING) {
-        print_challenge_types();
+        update_last_print_vars(sObtainedChallengeFlags, sFailureFlags);
         return;
     }
 

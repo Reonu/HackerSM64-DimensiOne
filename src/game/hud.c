@@ -17,6 +17,7 @@
 #include "engine/math_util.h"
 #include "puppycam2.h"
 #include "puppyprint.h"
+#include "one_challenges.h"
 
 #include "config.h"
 
@@ -526,6 +527,10 @@ extern int gPointLightCompatibilityMode;
  */
 void render_hud(void) {
     s16 hudDisplayFlags = gHudDisplay.flags;
+
+    if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING) {
+        return;
+    }
 
     if (hudDisplayFlags == HUD_DISPLAY_NONE) {
         sPowerMeterHUD.animation = POWER_METER_HIDDEN;
