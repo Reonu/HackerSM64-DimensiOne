@@ -19,11 +19,11 @@ u32 sObtainedChallengeFlags = CHALLENGE_FLAG_NONE;
 
 // Which challenges are being enforced? (i.e. if one of these conditions is met more than once e.g. pressing A twice, automatically fail the challenge)
 // u32 sEnforcedChallengeFlags = CHALLENGE_FLAG_NONE;
-u32 sEnforcedChallengeFlags = 0x00000005; // ONE_TODO:
+u32 sEnforcedChallengeFlags = CHALLENGE_FLAG_COIN | CHALLENGE_FLAG_JUMP; // ONE_TODO:
 
 // Which of these challenges are required in order to beat the level? (e.g. must collect one coin, or must kill one goomba)
 // u32 sRequiredChallengeFlags = CHALLENGE_FLAG_NONE;
-u32 sRequiredChallengeFlags = 0x00000006; // ONE_TODO:
+u32 sRequiredChallengeFlags = CHALLENGE_FLAG_COIN | CHALLENGE_FLAG_B_PRESS; // ONE_TODO:
 
 // Which flags have been overacquired?
 u32 sFailureFlags = CHALLENGE_FLAG_NONE;
@@ -206,4 +206,6 @@ void challenge_update(void) {
     // ONE_TODO: update HUD/text elements?
 
     print_challenge_types();
+
+    update_last_print_vars(sObtainedChallengeFlags, sFailureFlags);
 }
