@@ -1000,8 +1000,8 @@ void handle_lighting(void)  {
         lightPos[0] = 0;
         lightPos[1] = 102;
         lightPos[2] = -74;
-            set_directional_light(lightPos, 10, 10, 10);
-            set_ambient_light(10/3, 10/3, 10/3);
+        set_directional_light(lightPos, 10, 10, 10);
+        set_ambient_light(10/3, 10/3, 10/3);
     }
 }
 
