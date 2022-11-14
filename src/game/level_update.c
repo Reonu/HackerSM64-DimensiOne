@@ -992,7 +992,21 @@ void basic_update(void) {
     }
 }
 
+void handle_lighting(void)  {
+    Vec3f lightPos;
+    switch (gChallengeLevel) {
+        case 0x01:
+        default:
+        lightPos[0] = 0;
+        lightPos[1] = 102;
+        lightPos[2] = -74;
+            set_directional_light(lightPos, 10, 10, 10);
+            set_ambient_light(10/3, 10/3, 10/3);
+    }
+}
+
 s32 play_mode_normal(void) {
+
 #ifndef DISABLE_DEMO
     if (gCurrDemoInput != NULL) {
         print_intro_text();
@@ -1022,6 +1036,7 @@ s32 play_mode_normal(void) {
     area_update_objects();
 #endif
     update_hud_values();
+    handle_lighting();
 #ifdef PUPPYLIGHTS
     delete_lights();
 #endif
