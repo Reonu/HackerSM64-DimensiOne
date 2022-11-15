@@ -24,6 +24,7 @@
 #include "sound_init.h"
 #include "rumble_init.h"
 #include "config.h"
+#include "one_challenges.h"
 
 u8  sDelayInvincTimer;
 s16 sInvulnerable;
@@ -839,6 +840,11 @@ u32 interact_star_or_key(struct MarioState *m, UNUSED u32 interactType, struct O
 
         play_sound(SOUND_MENU_STAR_SOUND, m->marioObj->header.gfx.cameraToObject);
         update_mario_sound_and_camera(m);
+
+        // if (is_challenge_active()) { // Eh, give the player the benefit of the doubt in a frame-perfect tie-breaker or something (if that's even possible)
+        if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING) {
+            gChallengeStatus = CHALLENGE_STATUS_WIN;
+        }
 
         if (grandStar) {
             return set_mario_action(m, ACT_JUMBO_STAR_CUTSCENE, 0);

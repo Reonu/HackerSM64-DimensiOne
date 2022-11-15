@@ -33,18 +33,24 @@ enum OneChallengeFlags {
     CHALLENGE_FLAG_B_PRESS = (1U << CHALLENGE_NAME_B_PRESS),
 };
 
+struct OneChallengeLevel {
+    u32 requiredFlags;
+    u32 enforcedFlags;
+};
+
 extern u8 gChallengeLevel;
 extern u32 gChallengeStatus;
 
+u8 is_challenge_active(void);
 u32 get_challenge_obtained_flags(void);
 u32 get_challenge_enforced_flags(void);
 u32 get_challenge_required_flags(void);
 u32 get_challenge_failure_flags(void);
 
 void reset_challenge(void);
-void new_challenge_flags(u32 enforcedFlags, u32 requiredFlags);
+void start_next_challenge_level(void);
 void start_challenge(void);
-u8 add_challenge_flags(u32 flags);
+void add_challenge_flags(u32 flags);
 
 void challenge_update(void);
 

@@ -6,6 +6,8 @@
 #include "macros.h"
 #include "types.h"
 
+#define MARIO_MAX_HEALTH ((gChallengeStatus == CHALLENGE_STATUS_NOT_PLAYING) ? 0x880 : 0x100)
+
 s32 is_anim_at_end(struct MarioState *m);
 s32 is_anim_past_end(struct MarioState *m);
 s16 set_mario_animation(struct MarioState *m, s32 targetAnimID);
