@@ -274,6 +274,10 @@ void reset_challenge(void) {
     gChallengeStatus = CHALLENGE_STATUS_NOT_PLAYING;
     update_last_print_vars(sObtainedChallengeFlags, sFailureFlags);
     gChallengeStatus = CHALLENGE_STATUS_PLAYING;
+
+    if (sRequiredChallengeFlags == CHALLENGE_FLAG_NONE) {
+        gChallengeStatus = CHALLENGE_STATUS_CAN_WIN;
+    }
 }
 
 // Increase the challenge level and start next challenge
