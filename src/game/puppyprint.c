@@ -1029,21 +1029,64 @@ void print_small_text(s32 x, s32 y, const char *str, s32 align, s32 amount, u8 f
     shakeTablePos = gGlobalTimer % sizeof(sTextShakeTable);
 
     gDPPipeSync(gDisplayListHead++);
-    gDPSetCycleType(gDisplayListHead++, G_CYC_1CYCLE);
+
+    u32 cycle = G_CYC_1CYCLE;
+    gDPSetCycleType(gDisplayListHead++, cycle);
     gDPSetTexturePersp(gDisplayListHead++, G_TP_NONE);
     gDPSetTextureFilter(gDisplayListHead++, G_TF_POINT);
     gDPSetTextureLUT(gDisplayListHead++, G_TT_NONE);
-    if (gCurrEnvCol[3] == 255) {
-        gDPSetRenderMode(gDisplayListHead++, G_RM_TEX_EDGE, G_RM_TEX_EDGE2);
-        gDPSetCombineMode(gDisplayListHead++, G_CC_TEXT, G_CC_TEXT);
+
+    if (cycle == G_CYC_1CYCLE) {
+        gDPSetRenderMode(gDisplayListHead++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
+        gDPSetCombineLERP(
+            gDisplayListHead++,
+            0, 0, 0, ENVIRONMENT,
+            TEXEL0, 0, ENVIRONMENT, 0,
+            0, 0, 0, ENVIRONMENT,
+            TEXEL0, 0, ENVIRONMENT, 0
+        );
     } else {
-        gDPSetRenderMode(gDisplayListHead++, G_RM_XLU_SURF, G_RM_XLU_SURF);
-        gDPSetCombineMode(gDisplayListHead++, G_CC_FADEA, G_CC_FADEA);
+        gDPSetRenderMode(gDisplayListHead++, G_RM_PASS, G_RM_XLU_SURF2);
+        gDPSetPrimColor(gDisplayListHead++, 0, (255/4)-1, 50, 50, 50, 0);
+        gDPSetCombineLERP(
+            gDisplayListHead++,
+            TEXEL1, 0, PRIMITIVE, TEXEL0,
+            TEXEL1, 0, PRIM_LOD_FRAC, TEXEL0,
+            COMBINED, 0, ENVIRONMENT, 0,
+            COMBINED, 0, ENVIRONMENT, 0
+        );
     }
+
     if (font == FONT_OUTLINE || font == FONT_PLAIN || font == FONT_VANILLA) { // (i.e. not FONT_DEFAULT)
-        gDPLoadTextureBlock_4b(gDisplayListHead++, (*fontTex)[font], G_IM_FMT_IA, 672, 12, 0, G_TX_MIRROR | G_TX_WRAP, G_TX_MIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gDPLoadTextureBlock_4b(gDisplayListHead++, (*fontTex)[font], G_IM_FMT_IA, 672, 12, 0, (G_TX_MIRROR | G_TX_WRAP), G_TX_MIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
     } else {
-        gDPLoadTextureBlock_4b(gDisplayListHead++, (*fontTex)[font], G_IM_FMT_I, 672, 12, (G_TX_NOMIRROR | G_TX_CLAMP), (G_TX_NOMIRROR | G_TX_CLAMP), 0, 0, 0, G_TX_NOLOD, G_TX_NOLOD);
+        gDPLoadTextureBlock_4b(
+            gDisplayListHead++,
+            (*fontTex)[font], G_IM_FMT_I,  672, 12,
+            0,
+            (G_TX_NOMIRROR | G_TX_CLAMP), (G_TX_NOMIRROR | G_TX_CLAMP),
+            0, 0,
+            G_TX_NOLOD, G_TX_NOLOD);
+        if (cycle == G_CYC_2CYCLE) {
+            gDPPipeSync(gDisplayListHead++);
+            gDPSetTile(
+                gDisplayListHead++,
+                G_IM_FMT_I, G_IM_SIZ_4b,
+                ((((672)>>1)+7)>>3), // line
+                0, // tmem
+                G_TX_RENDERTILE + 1, // tile
+                0,
+                (G_TX_NOMIRROR | G_TX_CLAMP), 0, 0,
+                (G_TX_NOMIRROR | G_TX_CLAMP), 0, 0
+            );
+            gDPSetTileSize(
+                gDisplayListHead++,
+                1,
+                qs105(4), qs105(4), // s/t offset
+                ((672)-1) << G_TEXTURE_IMAGE_FRAC,
+                ((12)-1) << G_TEXTURE_IMAGE_FRAC
+            )
+        }
     }
 
     gDPPipeSync(gDisplayListHead++);
@@ -1099,11 +1142,17 @@ void print_small_text(s32 x, s32 y, const char *str, s32 align, s32 amount, u8 f
 
         get_char_from_byte(str[i], &textX, &spaceX, &offsetY, font);
 
-        gSPScisTextureRectangle(gDisplayListHead++, (x + textPos[0] + (s16)(shakePos[0])) << 2,
-                                                    (y + textPos[1] + (s16)((shakePos[1] + offsetY + wavePos))) << 2,
-                                                    (x + textPos[0] + (s16)((shakePos[0] + textOffsets[0]))) << 2,
-                                                    (y + textPos[1] + (s16)((wavePos + offsetY + shakePos[1] + textOffsets[1]))) << 2,
-                                                    G_TX_RENDERTILE, (textX << 6) + goddamnJMeasure, 0, textTempScale, textTempScale);
+        if (str[i] != ' ') {
+            gSPScisTextureRectangle(gDisplayListHead++, (x + textPos[0] + (s16)(shakePos[0])) << 2,
+                                                        (y + textPos[1] + (s16)((shakePos[1] + offsetY + wavePos))) << 2,
+                                                        (x + textPos[0] + (s16)((shakePos[0] + spaceX))) << 2,
+                                                        (y + textPos[1] + (s16)((wavePos + offsetY + shakePos[1] + textOffsets[1]))) << 2,
+                                                        G_TX_RENDERTILE,
+                                                        qs105(textX) + goddamnJMeasure,
+                                                        0,
+                                                        textTempScale,
+                                                        textTempScale);
+        }
         textPos[0] += (spaceX + 1) * textSizeTotal;
     }
 
@@ -1167,13 +1216,14 @@ void print_small_text_light(s32 x, s32 y, const char *str, s32 align, s32 amount
     gDPSetTexturePersp(gDisplayListHead++, G_TP_NONE);
     gDPSetTextureFilter(gDisplayListHead++, G_TF_POINT);
     gDPSetTextureLUT(gDisplayListHead++, G_TT_NONE);
-    if (gCurrEnvCol[3] == 255) {
-        gDPSetRenderMode(gDisplayListHead++, G_RM_TEX_EDGE, G_RM_TEX_EDGE2);
-        gDPSetCombineMode(gDisplayListHead++, G_CC_TEXT, G_CC_TEXT);
-    } else {
-        gDPSetRenderMode(gDisplayListHead++, G_RM_XLU_SURF, G_RM_XLU_SURF);
-        gDPSetCombineMode(gDisplayListHead++, G_CC_FADEA, G_CC_FADEA);
-    }
+    // if (gCurrEnvCol[3] == 255) {
+    //     gDPSetRenderMode(gDisplayListHead++, G_RM_TEX_EDGE, G_RM_TEX_EDGE2);
+    //     gDPSetCombineMode(gDisplayListHead++, G_CC_TEXT, G_CC_TEXT);
+    // } else {
+    // }
+    gDPSetRenderMode(gDisplayListHead++, G_RM_XLU_SURF, G_RM_XLU_SURF);
+    gDPSetCombineMode(gDisplayListHead++, G_CC_FADEA, G_CC_FADEA);
+
     if (font == FONT_OUTLINE || font == FONT_PLAIN || font == FONT_VANILLA) { // (i.e. not FONT_DEFAULT)
         gDPLoadTextureBlock_4b(gDisplayListHead++, (*fontTex)[font], G_IM_FMT_IA, 672, 12, 0, G_TX_MIRROR | G_TX_WRAP, G_TX_MIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
     } else {
@@ -1328,10 +1378,10 @@ void font_offsets(s8 *offsetY, s32 font, u8 letter) {
         case FONT_DEFAULT:
             switch (letter) {
                 // This is for the letters that sit differently on the line. It just moves them down a bit.
-                case 'g': *offsetY = 1 * textSizeTotal; break;
-                case 'q': *offsetY = 1 * textSizeTotal; break;
-                case 'p': *offsetY = 1 * textSizeTotal; break;
-                case 'y': *offsetY = 1 * textSizeTotal; break;
+                case 'g': *offsetY = 2 * textSizeTotal; break;
+                case 'q': *offsetY = 2 * textSizeTotal; break;
+                case 'p': *offsetY = 2 * textSizeTotal; break;
+                case 'y': *offsetY = 2 * textSizeTotal; break;
             }
         break;
         case FONT_PLAIN:
@@ -1360,21 +1410,11 @@ void get_char_from_byte(u8 letter, s32 *textX, u8 *spaceX, s8 *offsetY, u8 font)
     u32 let = letter - '!';
     u8 **textKern = segmented_to_virtual(puppyprint_kerning_lut);
     u8 *textLen = segmented_to_virtual(textKern[font]);
+    u16 **textOffsetTable = segmented_to_virtual(puppyprint_offset_lut);
+    u16 *textXOffsets = segmented_to_virtual(textOffsetTable[font]);
 
     if (letter != ' ') {
-        if (letter > 'z') {
-            let -= (3 + 2 + 3 + 1 + 3);
-        } else if (letter > '^') {
-            let -= (2 + 3 + 1 + 3);
-        } else if (letter > 'Z') {
-            let -= (3 + 1 + 3);
-        } else if (letter > '?') {
-            let -= (1 + 3);
-        } else if (letter > ';') {
-            let -= (3);
-        }
-
-        *textX = (let) * 4;
+        *textX = textXOffsets[let];
         *spaceX = textLen[let];
 
         if (font != FONT_OUTLINE) {

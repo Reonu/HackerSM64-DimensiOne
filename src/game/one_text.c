@@ -181,7 +181,7 @@ void print_challenge_types(void) {
 
         if (alpha != 0) {
             print_set_envcolour(0xFF, 0xFF, 0xFF, alpha);
-            print_small_text(x, y, str, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_OUTLINE);
+            print_small_text(x, y, str, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_DEFAULT);
         }
 
         y -= lineSpacing;
@@ -193,7 +193,7 @@ void print_challenge_types(void) {
 
     if (alpha != 0) {
         print_set_envcolour(0xFF, 0xFF, 0xFF, alpha);
-        print_small_text(SCREEN_WIDTH / 2, 12, gChallengeHeaderText[gChallengeLevel], PRINT_TEXT_ALIGN_CENTER, PRINT_ALL, FONT_OUTLINE);
+        print_small_text(SCREEN_WIDTH / 2, 12, gChallengeHeaderText[gChallengeLevel], PRINT_TEXT_ALIGN_CENTER, PRINT_ALL, FONT_DEFAULT);
     }
 }
 #undef FADE_IN_FRAMES

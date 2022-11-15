@@ -5,7 +5,8 @@
 #include <PR/gbi.h>
 
 extern void *puppyprint_font_lut[];
-extern void *puppyprint_kerning_lut[][82];
+extern void *puppyprint_kerning_lut[][94];
+extern void *puppyprint_offset_lut[][94];
 
 extern u8 seg2_course_name_table[];
 extern u8 seg2_act_name_table[];

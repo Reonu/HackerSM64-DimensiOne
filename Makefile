@@ -508,7 +508,7 @@ else
   RSPASM              := $(TOOLS_DIR)/armips
 endif
 ENDIAN_BITWIDTH       := $(BUILD_DIR)/endian-and-bitwidth
-EMULATOR = mupen64plus
+EMULATOR = wslview
 EMU_FLAGS =
 
 ifneq (,$(call find-command,wslview))
