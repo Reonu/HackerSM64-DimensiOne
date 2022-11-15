@@ -41,6 +41,7 @@ struct OneChallengeLevel {
 extern u8 gChallengeLevel;
 extern u32 gChallengeStatus;
 
+u8 is_challenge_active(void);
 u32 get_challenge_obtained_flags(void);
 u32 get_challenge_enforced_flags(void);
 u32 get_challenge_required_flags(void);
@@ -49,7 +50,7 @@ u32 get_challenge_failure_flags(void);
 void reset_challenge(void);
 void start_next_challenge_level(void);
 void start_challenge(void);
-u8 add_challenge_flags(u32 flags);
+void add_challenge_flags(u32 flags);
 
 void challenge_update(void);
 

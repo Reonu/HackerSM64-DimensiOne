@@ -498,6 +498,7 @@ static void level_cmd_place_object(void) {
         sCurrAreaIndex != -1
         && ((CMD_GET(u8, 2) & (1 << (gCurrActNum - 1))) || (CMD_GET(u8, 2) == 0x1F))
     ) {
+        u32 bparams = CMD_GET(u32, 16);
         if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING) {
             u8 level = gChallengeLevel;
             if (level >= sizeof(u32) * 8) {
@@ -511,7 +512,7 @@ static void level_cmd_place_object(void) {
             }
 
             // bparam4 overrides (1-indexed)
-            if (level != 0 && ((CMD_GET(u32, 16) & 0xFF) != (u32) (level + 1))) {
+            if ((bparams & 0xFF) != 0 && (bparams & 0xFF) != (u32) (level + 1)) {
                 sCurrentCmd = CMD_NEXT;
                 return;
             }
@@ -531,7 +532,7 @@ static void level_cmd_place_object(void) {
         spawnInfo->areaIndex = sCurrAreaIndex;
         spawnInfo->activeAreaIndex = sCurrAreaIndex;
 
-        spawnInfo->behaviorArg = CMD_GET(u32, 16);
+        spawnInfo->behaviorArg = bparams;
         spawnInfo->behaviorScript = CMD_GET(void *, 20);
         spawnInfo->model = gLoadedGraphNodes[model];
         spawnInfo->next = gAreas[sCurrAreaIndex].objectSpawnInfos;

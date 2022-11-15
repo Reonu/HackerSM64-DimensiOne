@@ -104,6 +104,8 @@ const char *credits18[] = { "3SPECIAL THANKS TO", "EAD STAFF", "ALL NINTENDO PER
 const char *credits19[] = { "1PRODUCER", "SHIGERU MIYAMOTO" };
 const char *credits20[] = { "1EXECUTIVE PRODUCER", "HIROSHI YAMAUCHI" };
 
+static s32 tmpChallengeWarpID = -1;
+
 
 struct CreditsEntry sCreditsSequence[] = {
     { LEVEL_CASTLE_GROUNDS, 1, 1, -128, { 0, 8000, 0 }, NULL },
@@ -330,7 +332,7 @@ void set_mario_initial_action(struct MarioState *m, u32 spawnType, u32 actionArg
 
 #ifdef PREVENT_DEATH_LOOP
     if (m->isDead) {
-        m->health = 0x880;
+        m->health = MARIO_MAX_HEALTH;
         m->isDead = FALSE;
     }
 #endif
@@ -428,11 +430,11 @@ void init_mario_after_warp(void) {
         }
 #endif
 #ifndef DISABLE_EXIT_COURSE
-       if (sWarpDest.levelNum == EXIT_COURSE_LEVEL && sWarpDest.areaIdx == EXIT_COURSE_AREA
-            && sWarpDest.nodeId == EXIT_COURSE_NODE
-        ) {
-            play_sound(SOUND_MENU_MARIO_CASTLE_WARP, gGlobalSoundSource);
-        }
+    //    if (sWarpDest.levelNum == EXIT_COURSE_LEVEL && sWarpDest.areaIdx == EXIT_COURSE_AREA
+    //         && sWarpDest.nodeId == EXIT_COURSE_NODE
+    //     ) {
+    //         play_sound(SOUND_MENU_MARIO_CASTLE_WARP, gGlobalSoundSource);
+    //     }
 #endif
     }
 #ifdef PUPPYPRINT_DEBUG
@@ -610,10 +612,25 @@ void initiate_warp(s16 destLevel, s16 destArea, s16 destWarpNode, s32 warpFlags)
         sWarpDest.type = WARP_TYPE_CHANGE_LEVEL;
     } else if (destLevel != gCurrLevelNum) {
         sWarpDest.type = WARP_TYPE_CHANGE_LEVEL;
+    } else if (tmpChallengeWarpID == -2) { // Exit course
+        sWarpDest.type = WARP_TYPE_CHANGE_LEVEL;
     } else if (destArea != gCurrentArea->index) {
         sWarpDest.type = WARP_TYPE_CHANGE_AREA;
     } else {
         sWarpDest.type = WARP_TYPE_SAME_AREA;
+    }
+    
+    if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING && (
+        sWarpDest.type != WARP_TYPE_SAME_AREA ||
+        tmpChallengeWarpID >= WARP_NODE_DEFAULT ||
+        tmpChallengeWarpID == -2 // Exit Course
+    )) {
+        sWarpDest.type = WARP_TYPE_CHANGE_LEVEL;
+        if (gChallengeStatus == CHALLENGE_STATUS_WIN) {
+            start_next_challenge_level();
+        } else {
+            start_challenge();
+        }
     }
 
     sWarpDest.levelNum = destLevel;
@@ -762,6 +779,7 @@ s16 level_trigger_warp(struct MarioState *m, s32 warpOp) {
                 break;
 
             case WARP_OP_WARP_FLOOR:
+            case WARP_OP_START_CHALLENGES:
                 if ((m->floor) && (m->floor->force & 0xFF)) {
                     sSourceWarpNodeId = m->floor->force & 0xFF;
                 } else {
@@ -777,6 +795,10 @@ s16 level_trigger_warp(struct MarioState *m, s32 warpOp) {
                         sSourceWarpNodeId = WARP_NODE_DEATH;
 #endif
                     }                    
+                }
+
+                if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING) {
+                    sDelayedWarpArg = WARP_OP_WARP_FLOOR;
                 }
 
                 sDelayedWarpTimer = 20;
@@ -904,7 +926,22 @@ void initiate_delayed_warp(void) {
                     break;
 
                 default:
+                    tmpChallengeWarpID = sSourceWarpNodeId;
                     warpNode = area_get_warp_node(sSourceWarpNodeId);
+
+                    if (sDelayedWarpOp == WARP_OP_START_CHALLENGES) {
+                        start_challenge();
+                    }
+
+                    if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING) {
+                        if (sSourceWarpNodeId == WARP_NODE_DEFAULT) {
+                            // 1-Indexed
+                            warpNode = area_get_warp_node(gChallengeLevel + 2);
+                        } else if (sSourceWarpNodeId == WARP_NODE_DEATH || sSourceWarpNodeId == WARP_NODE_WARP_FLOOR) {
+                            // 1-Indexed
+                            warpNode = area_get_warp_node(gChallengeLevel + 1);
+                        }
+                    }
 
                     initiate_warp(warpNode->node.destLevel & 0x7F, warpNode->node.destArea,
                                   warpNode->node.destNode, sDelayedWarpArg);
@@ -913,6 +950,8 @@ void initiate_delayed_warp(void) {
                     if (sWarpDest.type != WARP_TYPE_CHANGE_LEVEL) {
                         level_set_transition(2, NULL);
                     }
+
+                    tmpChallengeWarpID = -1;
                     break;
             }
         }
@@ -1084,7 +1123,17 @@ s32 play_mode_paused(void) {
         if (gDebugLevelSelect) {
             fade_into_special_warp(WARP_SPECIAL_LEVEL_SELECT, 1);
         } else {
+            if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING) {
+                gChallengeLevel = EXIT_COURSE_NODE - 1;
+                if (gChallengeStatus == CHALLENGE_STATUS_WIN) {
+                    gChallengeStatus = CHALLENGE_STATUS_PLAYING;
+                }
+            }
+
+            tmpChallengeWarpID = -2; // Dumb hardcoded case for exit course level warps
             initiate_warp(EXIT_COURSE_LEVEL, EXIT_COURSE_AREA, EXIT_COURSE_NODE, WARP_FLAGS_NONE);
+            tmpChallengeWarpID = -1;
+
             fade_into_special_warp(WARP_SPECIAL_NONE, 0);
             gSavedCourseNum = COURSE_NONE;
         }
