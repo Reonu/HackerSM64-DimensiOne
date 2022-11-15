@@ -47,6 +47,7 @@ const LevelScript level_rr_entry[] = {
 		MOVING_PLATFORM_WITH_ACTS(platform1_001_rr_geo, platform1_001_rr_collision, 186, 770, 3138, 0, 0, 0, (SPLINE_OBJECT_BHV_AUTO << 24) | (SPLINE_OBJECT_MOVE_BACK_AND_FORTH_REVERSED << 16) | (10 << 8), bhvSplinePlatform, 31),
 		MOVING_PLATFORM_WITH_ACTS(platform2_rr_geo, platform2_rr_collision, 2296, 72, 182, 0, 0, 0, (SPLINE_OBJECT_BHV_AUTO << 24) | (SPLINE_OBJECT_MOVE_FORWARD << 16) | (10 << 8), bhvSplinePlatform, 31),
 		MOVING_PLATFORM_WITH_ACTS(platform3_rr_mayro_geo, platform3_rr_mayro_collision, 2198, -52, 527, 0, 0, 0, (SPLINE_OBJECT_BHV_MARIO_ACTIVATES << 24) | (SPLINE_OBJECT_MOVE_FORWARD << 16) | (24 << 8), bhvSplinePlatform, 31),
+		MOVING_PLATFORM_WITH_ACTS(platform_inverted_geo, platform_inverted_collision, -24, -84, -396, 0, 0, 0, (SPLINE_OBJECT_BHV_AUTO << 24) | (SPLINE_OBJECT_MOVE_FORWARD << 16) | (10 << 8), bhvSplinePlatform, 31),
 		MARIO_POS(0x01, 0, 0, 100, 0),
 		OBJECT(MODEL_NONE, 0, 100, 0, 0, 0, 0, 0x000A0000, bhvSpinAirborneWarp),
 		TERRAIN(rr_area_1_collision),
@@ -57,6 +58,7 @@ const LevelScript level_rr_entry[] = {
 		AREA_SPLINE(rr_area_1_spline_NurbsCurve),
 		AREA_SPLINE(rr_area_1_spline_NurbsCurve_001),
 		AREA_SPLINE(rr_area_1_spline_NurbsCurve_002),
+		AREA_SPLINE(rr_area_1_spline_NurbsCurve_003),
 		/* Fast64 begin persistent block [area commands] */
 		/* Fast64 end persistent block [area commands] */
 	END_AREA(),

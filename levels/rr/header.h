@@ -129,4 +129,8 @@ extern const LevelScript level_rr_entry[];
 
 #include "levels/rr/platform3_rr_mayro/collision_header.h"
 
+#include "levels/rr/platform_inverted/geo_header.h"
+
+#include "levels/rr/platform_inverted/collision_header.h"
+
 #endif

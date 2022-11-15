@@ -77,3 +77,5 @@
 #include "levels/rr/platform2_rr/collision.inc.c"
 #include "levels/rr/platform3_rr_mayro/model.inc.c"
 #include "levels/rr/platform3_rr_mayro/collision.inc.c"
+#include "levels/rr/platform_inverted/model.inc.c"
+#include "levels/rr/platform_inverted/collision.inc.c"

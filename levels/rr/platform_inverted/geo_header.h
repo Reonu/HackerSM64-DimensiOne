@@ -1,0 +1,12 @@
+extern const GeoLayout platform_inverted_geo[];
+extern Vtx platform_inverted_platform_inverted_mesh_layer_0_vtx_cull[8];
+extern Vtx platform_inverted_platform_inverted_mesh_layer_0_vtx_0[16];
+extern Gfx platform_inverted_platform_inverted_mesh_layer_0_tri_0[];
+extern Vtx platform_inverted_platform_inverted_mesh_layer_0_vtx_1[4];
+extern Gfx platform_inverted_platform_inverted_mesh_layer_0_tri_1[];
+extern Gfx mat_platform_inverted_sm64_material_001_layer0[];
+extern Gfx mat_revert_platform_inverted_sm64_material_001_layer0[];
+extern Gfx mat_platform_inverted_writeZ_layer0[];
+extern Gfx mat_revert_platform_inverted_writeZ_layer0[];
+extern Gfx platform_inverted_platform_inverted_mesh_layer_0[];
+extern Gfx platform_inverted_material_revert_render_settings[];

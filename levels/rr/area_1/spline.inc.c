@@ -19,3 +19,11 @@ const Trajectory rr_area_1_spline_NurbsCurve_002[] = {
 	TRAJECTORY_POS( 3, 1767, 1647, -1063),
 	TRAJECTORY_END(),
 };
+const Trajectory rr_area_1_spline_NurbsCurve_003[] = {
+	TRAJECTORY_POS( 0, -24, -84, -396),
+	TRAJECTORY_POS( 1, 462, -84, 36),
+	TRAJECTORY_POS( 2, 900, -84, -489),
+	TRAJECTORY_POS( 3, 376, -84, -757),
+	TRAJECTORY_POS( 4, -24, -84, -396),
+	TRAJECTORY_END(),
+};
