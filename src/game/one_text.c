@@ -13,17 +13,11 @@
 u32 typeTimerArray[CHALLENGE_NAME_TOTAL] = {0};
 
 u32 challengeTypeDisplayTimer = -1U;
-u32 challengeTypeStatusLast = CHALLENGE_STATUS_NOT_PLAYING;
 
 static u32 sObtainedChallengeFlagsLast = CHALLENGE_FLAG_NONE;
 static u32 sFailureFlagsLast = CHALLENGE_FLAG_NONE;
+static u32 sChallengesPrintTimer = -1U;
 
-
-static void clear_timer_arrays() {
-    bzero(typeTimerArray, sizeof(typeTimerArray));
-    sObtainedChallengeFlagsLast = get_challenge_obtained_flags();
-    sFailureFlagsLast = get_challenge_failure_flags();
-}
 
 static char* get_challenge_type_text_entry(u8 typeIndex) {
     s32 arrayVal = 0;
@@ -68,8 +62,8 @@ static void print_challenge_type_images(s32 x, s32 y, u8 typeIndex, u8 alphaFram
         }
 
         color[0] = 0xFF;
-        color[1] = 0x1F;
-        color[2] = 0x1F;
+        color[1] = 0x00;
+        color[2] = 0x00;
         color[3] = color[3] * 1.0f;
 
         if (typeTimerArray[typeIndex] < 14) {
@@ -80,21 +74,20 @@ static void print_challenge_type_images(s32 x, s32 y, u8 typeIndex, u8 alphaFram
             typeTimerArray[typeIndex] = 0;
         }
 
-        if (requiredFlags & typeFlag) {
-            color[0] = 0x00;
-            color[1] = 0xFF;
-            color[2] = 0x00;
-            color[3] = color[3] * 1.0f;
-
-            if (typeTimerArray[typeIndex] < 6) {
-                y += 0.5f + 2.0f * sins(0x8000 + ((0x8000 * typeTimerArray[typeIndex]) / 6)); // Acquire an objective, animate it if required
-            }
-        } 
         if (enforcedFlags & typeFlag) {
             color[0] = 0xDF;
             color[1] = 0xDF;
             color[2] = 0x00;
             color[3] = color[3] * 1.0f;
+        } else if (requiredFlags & typeFlag) {
+            color[0] = 0x00;
+            color[1] = 0xFF;
+            color[2] = 0x00;
+            color[3] = color[3] * 1.0f;
+        } 
+
+        if (typeTimerArray[typeIndex] < 6) {
+            y += 0.5f + 2.0f * sins(0x8000 + ((0x8000 * typeTimerArray[typeIndex]) / 6)); // Acquire an objective, animate it if required
         }
     } else if (requiredFlags & typeFlag) {
         color[0] = 0x2F;
@@ -132,44 +125,42 @@ static void print_challenge_type_images(s32 x, s32 y, u8 typeIndex, u8 alphaFram
 }
 
 
+void clear_challenge_print_timers(void) {
+    bzero(typeTimerArray, sizeof(typeTimerArray));
+    sObtainedChallengeFlagsLast = get_challenge_obtained_flags();
+    sFailureFlagsLast = get_challenge_failure_flags();
+
+    sChallengesPrintTimer = 0;
+}
+
 #define FADE_IN_FRAMES 30
 #define FADE_OUT_FRAMES 30
 #define FADE_OUT_AFTER_FRAMES (FADE_IN_FRAMES + 150)
 void print_challenge_types(void) {
-    static u32 timer = -1U;
-
-    if (gChallengeStatus != challengeTypeStatusLast) {
-        challengeTypeStatusLast = gChallengeStatus;
-        if (gChallengeStatus == CHALLENGE_STATUS_PLAYING) {
-            timer = 0;
-            clear_timer_arrays();
-        }
-    }
-
     if (gChallengeStatus == CHALLENGE_STATUS_NOT_PLAYING) {
         return;
     }
 
     u8 alpha = 0;
-    if (timer < FADE_OUT_AFTER_FRAMES + FADE_OUT_FRAMES) {
+    if (sChallengesPrintTimer < FADE_OUT_AFTER_FRAMES + FADE_OUT_FRAMES) {
         alpha = 255;
 
-        if (timer < FADE_IN_FRAMES) {
-            alpha = 255.0f * (timer / (f32) FADE_IN_FRAMES);
-        } else if (timer > FADE_OUT_AFTER_FRAMES) {
-            alpha = 255.0f * (((FADE_OUT_AFTER_FRAMES + FADE_OUT_FRAMES) - timer) / (f32) FADE_OUT_FRAMES);
+        if (sChallengesPrintTimer < FADE_IN_FRAMES) {
+            alpha = 255.0f * (sChallengesPrintTimer / (f32) FADE_IN_FRAMES);
+        } else if (sChallengesPrintTimer > FADE_OUT_AFTER_FRAMES) {
+            alpha = 255.0f * (((FADE_OUT_AFTER_FRAMES + FADE_OUT_FRAMES) - sChallengesPrintTimer) / (f32) FADE_OUT_FRAMES);
         }
     }
 
-    if (timer != -1U) {
-        timer++;
+    if (sChallengesPrintTimer != -1U) {
+        sChallengesPrintTimer++;
     }
 
     // Actual display stuff yay
     const s32 lineSpacing = 32;
 
     const s32 x = 24 + 8 + (4*2); // Image width + 8px border + 4px border on both sides of image
-    s32 y = SCREEN_HEIGHT - 12 - (24 / 2) - 8 - 4; // screen height - puppyprint text height - half of image height - 8px border - 4px bottom margin
+    s32 y = SCREEN_HEIGHT - 12 - (24 / 2) - 8; // screen height - puppyprint text height - half of image height - 8px border
 
     for (s32 i = 0; i < CHALLENGE_NAME_TOTAL; i++) {
         char *str = get_challenge_type_text_entry(i);
@@ -187,7 +178,7 @@ void print_challenge_types(void) {
         y -= lineSpacing;
     }
 
-    if (timer > FADE_IN_FRAMES) {
+    if (sChallengesPrintTimer > FADE_IN_FRAMES) {
         alpha = 255;
     }
 
@@ -203,6 +194,4 @@ void print_challenge_types(void) {
 void update_last_print_vars(u32 obtained, u32 failure) {
     sObtainedChallengeFlagsLast = obtained;
     sFailureFlagsLast = failure;
-
-    challengeTypeStatusLast = gChallengeStatus;
 }

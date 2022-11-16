@@ -12,7 +12,7 @@ static struct OneChallengeLevel sChallengeLevels[sizeof(u32)*8] = {
         (CHALLENGE_FLAG_COIN), // Requirements (i.e. "At least one of")
         (CHALLENGE_FLAG_COIN), // Enforcements (i.e. "No more than one of")
     }, { /*01*/
-        (CHALLENGE_FLAG_COIN), // Requirements
+        (CHALLENGE_FLAG_NONE), // Requirements
         (CHALLENGE_FLAG_COIN), // Enforcements
     }, { /*02*/
         (CHALLENGE_FLAG_JUMP | CHALLENGE_FLAG_GOOMBA | CHALLENGE_FLAG_GROUND), // Requirements
@@ -113,7 +113,6 @@ u8 gChallengeLevel = (u8) -1; // ONE_TODO: Save file support?
 
 // What is the current status of the challenge?
 u32 gChallengeStatus = CHALLENGE_STATUS_NOT_PLAYING;
-// u32 gChallengeStatus = CHALLENGE_STATUS_NOT_PLAYING;
 
 // Flags of which challenge conditions have been met by the player
 u32 sObtainedChallengeFlags = CHALLENGE_FLAG_NONE;
@@ -149,6 +148,10 @@ static void lose_challenge(void) {
     }
 
     gChallengeStatus = CHALLENGE_STATUS_LOSE;
+
+    // NOTE: Race conditions can happen with collecting the star on the same frame as losing.
+    // Star collect gets priority, so be careful with any cutscene effects here; maybe delay execution by a frame with a status check?
+
     // ONE_TODO: more loser stuffs
 }
 
@@ -160,10 +163,9 @@ static void check_flag_conditions(void) {
     }
 
     // CHALLENGE_FLAG_GROUND
-    // Allow water for this; not technically ground but it's good enough.
-    if (m->action & ACT_FLAG_AIR) {
+    if (m->action & (ACT_FLAG_AIR | ACT_FLAG_ON_POLE | ACT_FLAG_HANGING | ACT_FLAG_SWIMMING | ACT_FLAG_RIDING_SHELL)) { // Shell debatable here
         freshlyTouchedGround = TRUE;
-    } else if (freshlyTouchedGround) {
+    } else if (freshlyTouchedGround && m->action != ACT_DEBUG_FREE_MOVE) {
         freshlyTouchedGround = FALSE;
         add_challenge_flags(CHALLENGE_FLAG_GROUND);
     }
@@ -278,6 +280,8 @@ void reset_challenge(void) {
     if (sRequiredChallengeFlags == CHALLENGE_FLAG_NONE) {
         gChallengeStatus = CHALLENGE_STATUS_CAN_WIN;
     }
+    
+    clear_challenge_print_timers();
 }
 
 // Increase the challenge level and start next challenge

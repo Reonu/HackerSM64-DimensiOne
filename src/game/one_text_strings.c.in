@@ -33,8 +33,8 @@
 #define TEXT_CHALLENGE_31 "Challenge 32"
 
 
-#define TEXT_CHALLENGE_TYPE_JUMP    "With" _ "jump!\0"
-#define TEXT_CHALLENGE_TYPE_COIN    "While collecting" _ "coin!\0"
+#define TEXT_CHALLENGE_TYPE_JUMP    "With" _ "jump!"
+#define TEXT_CHALLENGE_TYPE_COIN    "While collecting" _ "coin!"
 #define TEXT_CHALLENGE_TYPE_GROUND  "While touching the ground" _ "time!" // Why would you ever use AT LEAST here lol (okay actually it could be done well, huh wait that's actually kinda brilliant)
 #define TEXT_CHALLENGE_TYPE_GOOMBA  "By killing" _ "goomba!"
 #define TEXT_CHALLENGE_TYPE_A_PRESS "With" _ "A press!"
@@ -86,15 +86,15 @@ char *gChallengeHeaderText[sizeof(u32)*8] = {
 };
 
 
-#define _ PP_COL("3F3FFF--") " UP TO ONE " PP_COL_RESET
+#define _ " " PP_COL("FF5F5F--") PP_WAVE "AT MOST" PP_WAVE " ONE" PP_COL_RESET " "
 static char *challengeTypesEnforced[] = {CHALLENGE_TYPE_ARRAY};
 #undef _
 
-#define _ PP_COL("3FFF3F--") " AT LEAST " PP_COL_RESET
+#define _ " " PP_COL("3FFF3F--") PP_WAVE "AT LEAST" PP_WAVE " ONE" PP_COL_RESET " "
 static char *challengeTypesRequired[] = {CHALLENGE_TYPE_ARRAY};
 #undef _
 
-#define _ PP_COL("FF3F3F--") " EXACTLY ONE " PP_COL_RESET
+#define _ " " PP_COL("5F5FFF--") PP_WAVE "EXACTLY" PP_WAVE " ONE" PP_COL_RESET " "
 static char *challengeTypesRequiredAndEnforced[] = {CHALLENGE_TYPE_ARRAY};
 #undef _
 
