@@ -427,7 +427,7 @@ static void level_cmd_begin_area(void) {
             gAreas[areaIndex].splines[i] = NULL;
         }
 
-        gAreas->numSplines = 0;
+        gAreas[areaIndex].numSplines = 0;
     }
 
     sCurrentCmd = CMD_NEXT;
