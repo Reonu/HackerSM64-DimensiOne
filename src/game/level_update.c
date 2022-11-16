@@ -1037,11 +1037,19 @@ void handle_lighting(void)  {
     switch (gChallengeLevel) {
         case 0x01:
         default:
-        lightPos[0] = 0;
-        lightPos[1] = 102;
-        lightPos[2] = -74;
-        set_directional_light(lightPos, 10, 10, 10);
-        set_ambient_light(10/3, 10/3, 10/3);
+            lightPos[0] = 0.f;
+            lightPos[1] = 0.9f;
+            lightPos[2] = 0.f;
+            set_directional_light(lightPos, 255, 255, 150);
+            set_ambient_light(255/3, 255/3, 150/3);
+            break;
+        case 0x04:
+            lightPos[0] = 0.f;
+            lightPos[1] = 0.9f;
+            lightPos[2] = 0.f;
+            set_directional_light(lightPos, 150, 150, 255);
+            set_ambient_light(150/3, 150/3, 255/3);
+            break;
     }
 }
 
