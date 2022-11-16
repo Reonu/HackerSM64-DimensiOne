@@ -85,3 +85,8 @@
  * Forces a crash when the game starts. Useful for debugging the crash screen.
  */
 // #define DEBUG_FORCE_CRASH_ON_BOOT
+
+/**
+ * BoB music really is the best, isn't it?
+ */
+#define MUTE_MUSIC_PLAYERS

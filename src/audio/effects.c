@@ -4,6 +4,7 @@
 #include "load.h"
 #include "data.h"
 #include "seqplayer.h"
+#include "external.h"
 #include "game/main.h"
 #include "engine/math_util.h"
 
@@ -59,6 +60,15 @@ static void sequence_channel_process_sound(struct SequenceChannel *seqChannel) {
     if (seqChannel->seqPlayer->muted && (seqChannel->muteBehavior & MUTE_BEHAVIOR_SOFTEN) != 0) {
         channelVolume *= seqChannel->seqPlayer->muteVolumeScale;
     }
+
+#ifdef MUTE_MUSIC_PLAYERS
+    if (
+        seqChannel->seqPlayer == &gSequencePlayers[SEQ_PLAYER_LEVEL] ||
+        seqChannel->seqPlayer == &gSequencePlayers[SEQ_PLAYER_ENV]
+    ) {
+        channelVolume = 0;
+    }
+#endif
 
     f32 panFromChannel = seqChannel->pan * seqChannel->panChannelWeight;
     f32 panLayerWeight = 1.0f - seqChannel->panChannelWeight;
