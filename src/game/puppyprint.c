@@ -1301,18 +1301,16 @@ s32 text_iterate_command(const char *str, s32 i, s32 runCMD) {
     len++;
 
     // Ignores runCMD, because it's important this is ALWAYS ran.
-    // if (len == 10 && strncmp((newStr), "<SIZE_xxx>", 6) == 0) { // Set the text size here. 100 is scale 1.0, with 001 being scale 0.01. this caps at 999. Going lower than 001
-    if (len == 10 && strncmp((newStr), PP_SIZE("xxx"), 6) == 0) { // Set the text size here. 100 is scale 1.0, with 001 being scale 0.01. this caps at 999. Going lower than 001
-        // Will make the text unreadable on console, so only do it,
+    if (len == 10 && strncmp((newStr), PP_SIZE("xxx"), 6) == 0) { // Set the text size here.
+        // 100 is scale 1.0, with 001 being scale 0.01. this caps at 999. Going lower than 100 will make the text unintelligible on console and some graphics plugins, so use carefully.
         textSizeTemp = (newStr[6] - '0');
         textSizeTemp += (newStr[7] - '0')/10.0f;
         textSizeTemp += (newStr[8] - '0')/100.0f;
         textSizeTemp = CLAMP(textSizeTemp, 0.01f, 10.0f);
         set_text_size_params();
-    // } else if (len == 14 && strncmp((newStr), "<COL_xxxxxxxx>", 5) == 0) { // Simple text colour effect. goes up to FF for each, so FF0000FF is red.
     } else if (len == 14 && strncmp((newStr), PP_COL("xxxxxxxx"), 5) == 0) { // Simple text colour effect. goes up to FF for each, so FF0000FF is red.
         // Each value is taken from the string. The first is shifted left 4 bits, because it's a larger significant value, then it adds the next digit onto it.
-        // Reverting to envcoluor can be achieved by passing something like <COL_-------->, or it could be combined with real colors for just partial reversion like <COL_FF00FF--> for instance.
+        // Reverting to envcoluor can be achieved by passing something like PP_COL("--------"), or it could be combined with real colors for just partial reversion like PP_COL("FF00FF--") for instance.
         if (!runCMD)
             return len;
 

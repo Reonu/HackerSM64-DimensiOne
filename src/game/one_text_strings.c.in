@@ -86,15 +86,15 @@ char *gChallengeHeaderText[sizeof(u32)*8] = {
 };
 
 
-#define _ "<COL_3F3FFF--> UP TO ONE <COL_-------->"
+#define _ PP_COL("3F3FFF--") " UP TO ONE " PP_COL_RESET
 static char *challengeTypesEnforced[] = {CHALLENGE_TYPE_ARRAY};
 #undef _
 
-#define _ "<COL_3FFF3F--> AT LEAST ONE <COL_-------->"
+#define _ PP_COL("3FFF3F--") " AT LEAST " PP_COL_RESET
 static char *challengeTypesRequired[] = {CHALLENGE_TYPE_ARRAY};
 #undef _
 
-#define _ "<COL_FF3F3F--> EXACTLY ONE <COL_-------->"
+#define _ PP_COL("FF3F3F--") " EXACTLY ONE " PP_COL_RESET
 static char *challengeTypesRequiredAndEnforced[] = {CHALLENGE_TYPE_ARRAY};
 #undef _
 
