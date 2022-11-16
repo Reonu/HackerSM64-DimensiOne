@@ -4,7 +4,7 @@ const GeoLayout bob_area_2_geo[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_ASM(0x00, geo_render_backdrop),
-		GEO_TRANSLATE_ROTATE_WITH_DL(LAYER_OPAQUE, -804, 0, 7687, 0, -180, 0, bob_dl_Cube_mesh_layer_1),
+		GEO_TRANSLATE_ROTATE_WITH_DL(LAYER_OPAQUE, -804, 0, 7687, -90, 0, 0, bob_dl_Cube_mesh_layer_1),
 		GEO_OPEN_NODE(),
 			GEO_DISPLAY_LIST(LAYER_TRANSPARENT, bob_dl_Cube_mesh_layer_5),
 		GEO_CLOSE_NODE(),
