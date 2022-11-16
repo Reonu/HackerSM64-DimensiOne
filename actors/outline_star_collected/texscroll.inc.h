@@ -1,0 +1,2 @@
+extern void scroll_sts_mat_outline_star_collected_f3dlite_material_layer7();
+extern void scroll_actor_geo_outline_star_collected();

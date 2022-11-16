@@ -87,3 +87,6 @@ UNUSED static const u64 binid_21 = 21;
 
 #include "tree/model.inc.c"
 UNUSED static const u64 binid_22 = 22;
+
+#include "outline_star/model.inc.c"
+#include "outline_star_collected/model.inc.c"
