@@ -36,4 +36,8 @@ extern const LevelScript level_bob_entry[];
 
 #include "levels/bob/sunset_background/header.h"
 
+#include "levels/bob/moving_platform_geo/geo_header.h"
+
+#include "levels/bob/moving_platform_geo/collision_header.h"
+
 #endif

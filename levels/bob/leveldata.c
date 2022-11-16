@@ -29,3 +29,5 @@
 #include "levels/bob/leveldata.inc.c"
 
 #include "levels/bob/sunset_background/model.inc.c"
+#include "levels/bob/moving_platform_geo/model.inc.c"
+#include "levels/bob/moving_platform_geo/collision.inc.c"

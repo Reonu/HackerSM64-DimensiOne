@@ -165,6 +165,7 @@ const LevelScript level_bob_entry[] = {
 		WARP_NODE(0xF1, LEVEL_BOB, 0x01, 0x0A, WARP_NO_CHECKPOINT),
 		WARP_NODE(0x05, LEVEL_BOB, 0x05, 0x05, WARP_NO_CHECKPOINT),
 		WARP_NODE(0x06, LEVEL_BOB, 0x05, 0x06, WARP_NO_CHECKPOINT),
+		WARP_NODE(0x07, LEVEL_BOB, 0x06, 0x07, WARP_NO_CHECKPOINT),
 		OBJECT(MODEL_BLACK_BOBOMB, -1235, -368, -182, 0, 0, 0, (0x05), bhvBobomb),
 		OBJECT(MODEL_BLACK_BOBOMB, -1140, -368, 151, 0, 0, 0, (0x05), bhvBobomb),
 		OBJECT(MODEL_BLACK_BOBOMB, -1459, -368, 167, 0, 0, 0, (0x05), bhvBobomb),
@@ -208,6 +209,21 @@ const LevelScript level_bob_entry[] = {
 		MACRO_OBJECTS(bob_area_5_macro_objs),
 		SET_BACKGROUND_MUSIC(0x00, SEQ_LEVEL_GRASS),
 		TERRAIN_TYPE(TERRAIN_GRASS),
+		/* Fast64 begin persistent block [area commands] */
+		/* Fast64 end persistent block [area commands] */
+	END_AREA(),
+
+	AREA(6, bob_area_6),
+		WARP_NODE(0xF0, LEVEL_BOB, 0x01, 0x0A, WARP_NO_CHECKPOINT),
+		WARP_NODE(0xF1, LEVEL_BOB, 0x01, 0x0A, WARP_NO_CHECKPOINT),
+		WARP_NODE(0x07, LEVEL_BOB, 0x06, 0x07, WARP_NO_CHECKPOINT),
+		MOVING_PLATFORM_WITH_ACTS(moving_platform_geo_geo, moving_platform_geo_collision, 0, 0, 0, 0, 0, 0, (SPLINE_OBJECT_BHV_AUTO << 24) | (SPLINE_OBJECT_MOVE_FORWARD << 16), bhvSplinePlatform, 31),
+		OBJECT(MODEL_NONE, 0, -106, 0, 0, 0, 0, (0x07 << 16), bhvInstantActiveWarp),
+		TERRAIN(bob_area_6_collision),
+		MACRO_OBJECTS(bob_area_6_macro_objs),
+		SET_BACKGROUND_MUSIC(0x00, SEQ_LEVEL_GRASS),
+		TERRAIN_TYPE(TERRAIN_GRASS),
+		AREA_SPLINE(bob_area_6_spline_NurbsCurve),
 		/* Fast64 begin persistent block [area commands] */
 		/* Fast64 end persistent block [area commands] */
 	END_AREA(),
