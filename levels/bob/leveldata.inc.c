@@ -10,4 +10,7 @@
 #include "levels/bob/area_4/collision.inc.c"
 #include "levels/bob/area_4/macro.inc.c"
 #include "levels/bob/area_4/spline.inc.c"
+#include "levels/bob/area_5/collision.inc.c"
+#include "levels/bob/area_5/macro.inc.c"
+#include "levels/bob/area_5/spline.inc.c"
 #include "levels/bob/model.inc.c"
