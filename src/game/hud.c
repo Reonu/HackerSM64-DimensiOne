@@ -69,7 +69,7 @@ void print_fps(s32 x, s32 y) {
 
     sprintf(text, "FPS %2.2f", fps);
 #ifdef PUPPYPRINT
-    print_small_text(x, y, text, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_OUTLINE);
+    print_small_text(x, y, text, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_DEFAULT);
 #else
     print_text(x, y, text);
 #endif

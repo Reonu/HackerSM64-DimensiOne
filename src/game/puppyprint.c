@@ -330,7 +330,7 @@ void print_audio_ram_overview(void) {
         print_set_envcolour(colourChart[i][0],
                             colourChart[i][1],
                             colourChart[i][2], 255);
-        print_small_text_light(x, y, textBytes, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_OUTLINE);
+        print_small_text_light(x, y, textBytes, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_DEFAULT);
 
         y += 12;
 
@@ -358,7 +358,7 @@ void print_audio_ram_overview(void) {
     print_set_envcolour(colourChart[30][0],
                         colourChart[30][1],
                         colourChart[30][2], 255);
-    print_small_text_light(x, tmpY, textBytes, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_OUTLINE);
+    print_small_text_light(x, tmpY, textBytes, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_DEFAULT);
 }
 
 char consoleLogTable[LOG_BUFFER_SIZE][255];
@@ -415,15 +415,15 @@ void puppyprint_render_collision(void) {
     DYNAMIC_SURFACE_POOL_SIZE,
     (uintptr_t)gDynamicSurfacePoolEnd - (uintptr_t)gDynamicSurfacePool,
     gSurfacesAllocated, gSurfaceNodesAllocated);
-    print_small_text_light(SCREEN_WIDTH-16, 60, textBytes, PRINT_TEXT_ALIGN_RIGHT, PRINT_ALL, 1);
+    print_small_text_light(SCREEN_WIDTH-16, 60, textBytes, PRINT_TEXT_ALIGN_RIGHT, PRINT_ALL, FONT_DEFAULT);
 
 #ifdef VISUAL_DEBUG
-    print_small_text_light(160, (SCREEN_HEIGHT - 42), "Use the dpad to toggle visual collision modes", PRINT_TEXT_ALIGN_CENTRE, PRINT_ALL, FONT_OUTLINE);
+    print_small_text_light(160, (SCREEN_HEIGHT - 42), "Use the dpad to toggle visual collision modes", PRINT_TEXT_ALIGN_CENTRE, PRINT_ALL, FONT_DEFAULT);
     switch (viewCycle) {
-        case 0: print_small_text_light(160, (SCREEN_HEIGHT - 32), "Current view: None",                  PRINT_TEXT_ALIGN_CENTRE, PRINT_ALL, FONT_OUTLINE); break;
-        case 1: print_small_text_light(160, (SCREEN_HEIGHT - 32), "Current view: Hitboxes",              PRINT_TEXT_ALIGN_CENTRE, PRINT_ALL, FONT_OUTLINE); break;
-        case 2: print_small_text_light(160, (SCREEN_HEIGHT - 32), "Current view: Surfaces",              PRINT_TEXT_ALIGN_CENTRE, PRINT_ALL, FONT_OUTLINE); break;
-        case 3: print_small_text_light(160, (SCREEN_HEIGHT - 32), "Current view: Hitboxes and Surfaces", PRINT_TEXT_ALIGN_CENTRE, PRINT_ALL, FONT_OUTLINE); break;
+        case 0: print_small_text_light(160, (SCREEN_HEIGHT - 32), "Current view: None",                  PRINT_TEXT_ALIGN_CENTRE, PRINT_ALL, FONT_DEFAULT); break;
+        case 1: print_small_text_light(160, (SCREEN_HEIGHT - 32), "Current view: Hitboxes",              PRINT_TEXT_ALIGN_CENTRE, PRINT_ALL, FONT_DEFAULT); break;
+        case 2: print_small_text_light(160, (SCREEN_HEIGHT - 32), "Current view: Surfaces",              PRINT_TEXT_ALIGN_CENTRE, PRINT_ALL, FONT_DEFAULT); break;
+        case 3: print_small_text_light(160, (SCREEN_HEIGHT - 32), "Current view: Hitboxes and Surfaces", PRINT_TEXT_ALIGN_CENTRE, PRINT_ALL, FONT_DEFAULT); break;
     }
 
     hitboxView  = ((viewCycle == 1) || (viewCycle == 3));
@@ -443,7 +443,7 @@ void print_basic_profiling(void) {
             cpuTime, (cpuTime / 333),
             rspTime, (rspTime / 333),
             rdpTime, (rdpTime / 333));
-    print_small_text_light(16, 52, textBytes, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_OUTLINE);
+    print_small_text_light(16, 52, textBytes, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_DEFAULT);
 }
 
 void puppyprint_render_standard(void) {
@@ -457,7 +457,7 @@ void puppyprint_render_standard(void) {
             gPuppyCallCounter.collision_water,
             gPuppyCallCounter.collision_raycast
     );
-    print_small_text_light(SCREEN_WIDTH-16, 32, textBytes, PRINT_TEXT_ALIGN_RIGHT, PRINT_ALL, FONT_OUTLINE);
+    print_small_text_light(SCREEN_WIDTH-16, 32, textBytes, PRINT_TEXT_ALIGN_RIGHT, PRINT_ALL, FONT_DEFAULT);
 }
 
 void puppyprint_render_minimal(void) {
@@ -483,7 +483,7 @@ void puppycamera_debug_view(void) {
             (s32)(gMarioState->pos[2]),
             (u16)(gMarioState->faceAngle[1]),
             (u32)(gMarioState->action & ACT_ID_MASK));
-        print_small_text_light(16, 140, textBytes, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_OUTLINE);
+        print_small_text_light(16, 140, textBytes, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_DEFAULT);
     }
     // Same for the camera, especially so because this will crash otherwise.
     if (gCamera) {
@@ -492,7 +492,7 @@ void puppycamera_debug_view(void) {
             (s32)(gCamera->pos[1]),
             (s32)(gCamera->pos[2]),
             (u16)(gCamera->yaw));
-        print_small_text_light((SCREEN_WIDTH - 16), 140, textBytes, PRINT_TEXT_ALIGN_RIGHT, PRINT_ALL, FONT_OUTLINE);
+        print_small_text_light((SCREEN_WIDTH - 16), 140, textBytes, PRINT_TEXT_ALIGN_RIGHT, PRINT_ALL, FONT_DEFAULT);
     }
 }
 
@@ -518,7 +518,7 @@ void puppyprint_level_select_menu(void) {
     render_blank_box_rounded((SCREEN_WIDTH/2) - 80, (SCREEN_HEIGHT/2) - 60, (SCREEN_WIDTH/2) + 80, (SCREEN_HEIGHT/2) + 60, 0, 0, 0, 160);
     finish_blank_box();
     print_small_text_light(SCREEN_WIDTH/2, (SCREEN_HEIGHT/2) - 58, "Pick a level", PRINT_TEXT_ALIGN_CENTRE, PRINT_ALL, FONT_DEFAULT);
-    print_small_text_light(SCREEN_WIDTH/2, (SCREEN_HEIGHT/2) + 64, "(Area must have warp node of 0x0A)\nDpad Left/Right: Area / A: Warp\nYellow is current level.", PRINT_TEXT_ALIGN_CENTRE, PRINT_ALL, FONT_OUTLINE);
+    print_small_text_light(SCREEN_WIDTH/2, (SCREEN_HEIGHT/2) + 64, "(Area must have warp node of 0x0A)\nDpad Left/Right: Area / A: Warp\nYellow is current level.", PRINT_TEXT_ALIGN_CENTRE, PRINT_ALL, FONT_DEFAULT);
     for (u32 i = 0; i < sizeof(sLevelNames) / 32; i++) {
         s32 yOffset = sLevelSelectOption > 8 ? sLevelSelectOption-8 : 0;
         posY = ((renderedText-yOffset) * 10);
@@ -571,7 +571,7 @@ void puppyprint_render_general_vars(void) {
             objParams,
             gLastWarpID
     );
-    print_small_text_light(SCREEN_WIDTH - 16, 36, textBytes, PRINT_TEXT_ALIGN_RIGHT, PRINT_ALL, FONT_OUTLINE);
+    print_small_text_light(SCREEN_WIDTH - 16, 36, textBytes, PRINT_TEXT_ALIGN_RIGHT, PRINT_ALL, FONT_DEFAULT);
 
 #ifndef ENABLE_CREDITS_BENCHMARK
     // Very little point printing useless info if Mario doesn't even exist.
@@ -588,9 +588,9 @@ void puppyprint_render_general_vars(void) {
             (u32)(floorType),
             (s32)(gMarioState->waterLevel)
             );
-        print_small_text_light(16, 36, textBytes, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_OUTLINE);
+        print_small_text_light(16, 36, textBytes, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_DEFAULT);
         sprintf(textBytes, "Gfx Pool: %d / %d", ((u32)gDisplayListHead - ((u32)gGfxPool->buffer)) / 4, GFX_POOL_SIZE);
-        print_small_text_light(SCREEN_WIDTH/2, SCREEN_HEIGHT-16, textBytes, PRINT_TEXT_ALIGN_CENTRE, PRINT_ALL, FONT_OUTLINE);
+        print_small_text_light(SCREEN_WIDTH/2, SCREEN_HEIGHT-16, textBytes, PRINT_TEXT_ALIGN_CENTRE, PRINT_ALL, FONT_DEFAULT);
     }
 #endif
 }
@@ -1222,12 +1222,18 @@ void print_small_text_light(s32 x, s32 y, const char *str, s32 align, s32 amount
     // } else {
     // }
     gDPSetRenderMode(gDisplayListHead++, G_RM_XLU_SURF, G_RM_XLU_SURF);
-    gDPSetCombineMode(gDisplayListHead++, G_CC_FADEA, G_CC_FADEA);
+    gDPSetCombineLERP(
+        gDisplayListHead++,
+        0, 0, 0, ENVIRONMENT,
+        TEXEL0, 0, ENVIRONMENT, 0,
+        0, 0, 0, ENVIRONMENT,
+        TEXEL0, 0, ENVIRONMENT, 0
+    );
 
     if (font == FONT_OUTLINE || font == FONT_PLAIN || font == FONT_VANILLA) { // (i.e. not FONT_DEFAULT)
         gDPLoadTextureBlock_4b(gDisplayListHead++, (*fontTex)[font], G_IM_FMT_IA, 672, 12, 0, G_TX_MIRROR | G_TX_WRAP, G_TX_MIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
     } else {
-        gDPLoadTextureBlock_4b(gDisplayListHead++, (*fontTex)[font], G_IM_FMT_I, 672, 12, (G_TX_NOMIRROR | G_TX_CLAMP), (G_TX_NOMIRROR | G_TX_CLAMP), 0, 0, 0, G_TX_NOLOD, G_TX_NOLOD);
+        gDPLoadTextureBlock_4b(gDisplayListHead++, (*fontTex)[font], G_IM_FMT_I, 672, 12, 0, (G_TX_NOMIRROR | G_TX_CLAMP), (G_TX_NOMIRROR | G_TX_CLAMP), 0, 0, G_TX_NOLOD, G_TX_NOLOD);
     }
 
     gDPPipeSync(gDisplayListHead++);
@@ -1251,11 +1257,13 @@ void print_small_text_light(s32 x, s32 y, const char *str, s32 align, s32 amount
 
         get_char_from_byte(str[i], &textX, &spaceX, &offsetY, font);
 
-        gSPScisTextureRectangle(gDisplayListHead++, (x + textPos[0]) << 2,
-                                                    (y + textPos[1] + offsetY) << 2,
-                                                    (x + textPos[0] + 8) << 2,
-                                                    (y + textPos[1] + offsetY + 12) << 2,
-                                                    G_TX_RENDERTILE, (textX << 6) + goddamnJMeasure, 0, 1024, 1024);
+        if (str[i] != ' ') {
+            gSPScisTextureRectangle(gDisplayListHead++, (x + textPos[0]) << 2,
+                                                        (y + textPos[1] + offsetY) << 2,
+                                                        (x + textPos[0] + spaceX) << 2,
+                                                        (y + textPos[1] + offsetY + 12) << 2,
+                                                        G_TX_RENDERTILE, qs105(textX) + goddamnJMeasure, 0, 1024, 1024);
+        }
         textPos[0] += (spaceX + 1);
     }
 
@@ -1477,7 +1485,7 @@ void puppyprint_print_deferred(void) {
         u8 length = sPuppyprintTextBuffer[i + 8];
         char *text = mem_pool_alloc(gEffectsMemoryPool, length);
         if (text == NULL) {
-            print_small_text_light(160, 80, "gEffectsMemoryPool is full.", PRINT_TEXT_ALIGN_CENTRE, PRINT_ALL, FONT_OUTLINE);
+            print_small_text_light(160, 80, "gEffectsMemoryPool is full.", PRINT_TEXT_ALIGN_CENTRE, PRINT_ALL, FONT_DEFAULT);
             return;
         }
         s32 x = ((sPuppyprintTextBuffer[i] & 0xFF) << 8);
