@@ -307,12 +307,13 @@ void add_challenge_flags(u32 flags) {
 }
 
 #define ALL_LETTERS "!\"#$%&'()*+,-./\n0123456789:;<=>?@\nABCDEFGHIJKLMNOPQRSTUVWXYZ\n[\\]^_`\nabcdefghijklmnopqrstuvwxyz{|}~"
+#define PRESS_L_TO_RESTART "Press " PP_COL_TMP("FF00FF--", "L") PP_WAVE " to start or reset the challenges!"
 
 void challenge_update(void) {
     // ONE_TODO: Delete this
     if (gChallengeLevel == 0xFF) {
         print_set_envcolour(0xFF, 0xFF, 0xFF, 0xFF);
-        print_small_text(16, SCREEN_HEIGHT - 24, "Press L to start or reset the challenges!", PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_DEFAULT);
+        print_small_text(16, SCREEN_HEIGHT - 24, PRESS_L_TO_RESTART, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_DEFAULT);
         // print_small_text(16, SCREEN_HEIGHT - 64, ALL_LETTERS, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_DEFAULT);
     }
 

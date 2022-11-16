@@ -897,7 +897,7 @@ s32 get_text_width(const char *str, s32 font) {
             textPos = 0;
             continue;
         }
-        while (i < strLen && str[i] == '<') {
+        while (i < strLen && str[i] == PP_CMD_START) {
             commandOffset = text_iterate_command(str, i, FALSE);
             if (commandOffset == 0)
                 break;
@@ -932,7 +932,7 @@ s32 get_text_height(const char *str) {
             topLineHeight = 12 * textSizeTotal;
             continue;
         }
-        while (i < strLen && str[i] == '<') {
+        while (i < strLen && str[i] == PP_CMD_START) {
             commandOffset = text_iterate_command(str, i, FALSE);
             if (commandOffset == 0)
                 break;
@@ -997,7 +997,7 @@ void print_small_text(s32 x, s32 y, const char *str, s32 align, s32 amount, u8 f
                 wideX[lines] = 0;
                 continue;
             }
-            while (i < strLen && str[i] == '<') {
+            while (i < strLen && str[i] == PP_CMD_START) {
                 commandOffset = text_iterate_command(str, i, FALSE);
                 if (commandOffset == 0)
                     break;
@@ -1109,7 +1109,7 @@ void print_small_text(s32 x, s32 y, const char *str, s32 align, s32 amount, u8 f
             continue;
         }
 
-        while (i < textLength && str[i] == '<') {
+        while (i < textLength && str[i] == PP_CMD_START) {
             commandOffset = text_iterate_command(str, i, TRUE);
             if (commandOffset == 0)
                 break;
@@ -1294,21 +1294,23 @@ s32 text_iterate_command(const char *str, s32 i, s32 runCMD) {
     const char *newStr = &str[i];
     s32 lastCharIndex = (signed)strlen(newStr) - 1;
 
-    while ((newStr[len] != '>') && (len < lastCharIndex)) len++;
-    if (newStr[len] != '>')
+    while ((newStr[len] != PP_CMD_END) && (len < lastCharIndex)) len++;
+    if (newStr[len] != PP_CMD_END)
         return 0;
 
     len++;
 
     // Ignores runCMD, because it's important this is ALWAYS ran.
-    if (len == 10 && strncmp((newStr), "<SIZE_xxx>", 6) == 0) { // Set the text size here. 100 is scale 1.0, with 001 being scale 0.01. this caps at 999. Going lower than 001
+    // if (len == 10 && strncmp((newStr), "<SIZE_xxx>", 6) == 0) { // Set the text size here. 100 is scale 1.0, with 001 being scale 0.01. this caps at 999. Going lower than 001
+    if (len == 10 && strncmp((newStr), PP_SIZE("xxx"), 6) == 0) { // Set the text size here. 100 is scale 1.0, with 001 being scale 0.01. this caps at 999. Going lower than 001
         // Will make the text unreadable on console, so only do it,
         textSizeTemp = (newStr[6] - '0');
         textSizeTemp += (newStr[7] - '0')/10.0f;
         textSizeTemp += (newStr[8] - '0')/100.0f;
         textSizeTemp = CLAMP(textSizeTemp, 0.01f, 10.0f);
         set_text_size_params();
-    } else if (len == 14 && strncmp((newStr), "<COL_xxxxxxxx>", 5) == 0) { // Simple text colour effect. goes up to FF for each, so FF0000FF is red.
+    // } else if (len == 14 && strncmp((newStr), "<COL_xxxxxxxx>", 5) == 0) { // Simple text colour effect. goes up to FF for each, so FF0000FF is red.
+    } else if (len == 14 && strncmp((newStr), PP_COL("xxxxxxxx"), 5) == 0) { // Simple text colour effect. goes up to FF for each, so FF0000FF is red.
         // Each value is taken from the string. The first is shifted left 4 bits, because it's a larger significant value, then it adds the next digit onto it.
         // Reverting to envcoluor can be achieved by passing something like <COL_-------->, or it could be combined with real colors for just partial reversion like <COL_FF00FF--> for instance.
         if (!runCMD)
@@ -1321,8 +1323,9 @@ s32 text_iterate_command(const char *str, s32 i, s32 runCMD) {
         }
 
         rainbowToggle = 0;
+        gDPPipeSync(gDisplayListHead++);
         gDPSetEnvColor(gDisplayListHead++, (Color) rgba[0], (Color) rgba[1], (Color) rgba[2], (Color) rgba[3]); // Don't use print_set_envcolour here
-    } else if (len == 27 && strncmp((newStr), "<FADE_xxxxxxxx,xxxxxxxx,xx>", 6) == 0) { // Same as above, except it fades between two colours. The third set of numbers is the speed it fades.
+    } else if (len == 27 && strncmp((newStr), PP_FADE("xxxxxxxx,xxxxxxxx,xx"), 6) == 0) { // Same as above, except it fades between two colours. The third set of numbers is the speed it fades.
         if (!runCMD)
             return len;
 
@@ -1343,7 +1346,7 @@ s32 text_iterate_command(const char *str, s32 i, s32 runCMD) {
 
         rainbowToggle = 0;
         gDPSetEnvColor(gDisplayListHead++, (Color) rgba[0], (Color) rgba[1], (Color) rgba[2], (Color) rgba[3]); // Don't use print_set_envcolour here
-    } else if (len == 9 && strncmp((newStr), "<RAINBOW>", 9) == 0) { // Toggles the happy colours :o) Do it again to disable it.
+    } else if (len == 9 && strncmp((newStr), PP_RAINBOW, 9) == 0) { // Toggles the happy colours :o) Do it again to disable it.
         if (!runCMD)
             return len;
 
@@ -1356,12 +1359,12 @@ s32 text_iterate_command(const char *str, s32 i, s32 runCMD) {
         } else {
             gDPSetEnvColor(gDisplayListHead++, (Color) gCurrEnvCol[0], (Color) gCurrEnvCol[1], (Color) gCurrEnvCol[2], (Color) gCurrEnvCol[3]); // Reset text to envcolor
         }
-    } else if (len == 7 && strncmp((newStr), "<SHAKE>", 7) == 0) { // Toggles text that shakes on the spot. Do it again to disable it.
+    } else if (len == 7 && strncmp((newStr), PP_SHAKE, 7) == 0) { // Toggles text that shakes on the spot. Do it again to disable it.
         if (!runCMD)
             return len;
 
         shakeToggle ^= 1;
-    } else if (len == 6 && strncmp((newStr), "<WAVE>",  6) == 0) { // Toggles text that waves around. Do it again to disable it.
+    } else if (len == 6 && strncmp((newStr), PP_WAVE,  6) == 0) { // Toggles text that waves around. Do it again to disable it.
         if (!runCMD)
             return len;
 

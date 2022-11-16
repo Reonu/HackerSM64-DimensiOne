@@ -20,6 +20,35 @@
 #define PUPPYPRINT_GET_SNAPSHOT_TYPE(type)
 #endif
 
+
+#define PP_CMD_START '\x1'
+#define PP_CMD_END '\x2'
+// these are needed for preprocessor concatenation
+#define PP_CMD_START_ "\x1"
+#define PP_CMD_END_ "\x2"
+
+#define PP_CMD_COL "COL_"
+#define PP_CMD_SIZE "SIZE_"
+#define PP_CMD_FADE "FADE_"
+#define PP_CMD_RAINBOW "RAINBOW"
+#define PP_CMD_SHAKE "SHAKE"
+#define PP_CMD_WAVE "WAVE"
+
+#define PP_CMD_V(cmd , val) PP_CMD_START_ cmd val PP_CMD_END_
+#define PP_CMD(cmd) PP_CMD_START_ cmd PP_CMD_END_
+
+#define PP_COL(col) PP_CMD_V(PP_CMD_COL, col)
+#define PP_COL_RESET PP_COL("--------")
+#define PP_COL_TMP(col, str) PP_COL(col) str PP_COL_RESET
+
+#define PP_SIZE(size) PP_CMD_V(PP_CMD_SIZE, size)
+
+#define PP_FADE(col_col_time) PP_CMD_V(PP_CMD_FADE, col_col_time)
+
+#define PP_RAINBOW  PP_CMD("RAINBOW")
+#define PP_SHAKE    PP_CMD("SHAKE")
+#define PP_WAVE     PP_CMD("WAVE")
+
 struct CallCounter {
     u16 collision_floor;
     u16 collision_wall;
