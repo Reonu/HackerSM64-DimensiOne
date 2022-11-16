@@ -19,3 +19,5 @@
 #include "levels/bob/areas/1/geo.inc.c"
 
 #include "levels/bob/geo.inc.c"
+
+#include "levels/bob/moving_platform_geo/geo.inc.c"
