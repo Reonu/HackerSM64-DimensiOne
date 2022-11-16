@@ -76,4 +76,6 @@ extern Gfx dl_billboard_num_E[];
 extern Gfx dl_billboard_num_F[];
 #endif
 
+extern u16 youre_emu[];
+
 #endif // SEGMENT2_H
