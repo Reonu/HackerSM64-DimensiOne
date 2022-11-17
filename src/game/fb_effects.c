@@ -16,8 +16,14 @@ extern u8 gFBE;
 
 s32 sCurBlur = 0;
 s32 sGoalBlur = 0;
-u32 sFBEType = FBE_EFFECT_BRIGHTEN;
 
+FBEffects sFBEffects = {
+    .r = 255,
+    .g = 255,
+    .b = 255,
+    .a = 255,
+    .type = FBE_EFFECT_MULT,
+};
 
 #define FUNNY_FBE_COLOR 0xFF00
 #define MOTION_BLUR_APP_RATE 8
@@ -47,6 +53,21 @@ s32 check_fbe(void) {
 
 void run_motion_blur(s32 goalAmount) {
     sGoalBlur = goalAmount;
+}
+
+void set_motion_blur(s32 goalAmount) {
+    sGoalBlur = goalAmount;
+    sFBEffects.a = CLAMP_U8(goalAmount);
+}
+
+void set_fb_effect_type(u32 type) {
+    sFBEffects.type = type;
+}
+
+void set_fb_effect_col(u8 r, u8 g, u8 b) {
+    sFBEffects.r = r;
+    sFBEffects.g = g;
+    sFBEffects.b = b;
 }
 
 void render_tiled_screen_effect(Texture *image, s32 width, s32 height, s32 mode) {
@@ -87,10 +108,6 @@ void render_tiled_screen_effect(Texture *image, s32 width, s32 height, s32 mode)
         }
         num *= 2;
         maskW++;
-        if (maskW == 9) {
-            print_text(32, 32, "WIDTH MASK FAILURE");
-            return;
-        }
     }
     num = 2;
     // Find the height mask
@@ -100,10 +117,6 @@ void render_tiled_screen_effect(Texture *image, s32 width, s32 height, s32 mode)
         }
         num *= 2;
         maskH++;
-        if (maskH == 9) {
-            print_text(32, 32, "HEIGHT MASK FAILURE");
-            return;
-        }
     }
     num = height;
     // Find the height remainder
@@ -190,8 +203,8 @@ void render_tiled_screen_effect(Texture *image, s32 width, s32 height, s32 mode)
 
 
 
-void render_motion_blur(s32 amount) {
-    if (sFBEType == FBE_EFFECT_BRIGHTEN) {
+void render_motion_blur(void) {
+    if (sFBEffects.type == FBE_EFFECT_BRIGHTEN) {
         gDPSetCombineLERP(gDisplayListHead++,
             1, TEXEL0, ENVIRONMENT, TEXEL0,
             0, 0, 0, ENVIRONMENT,
@@ -207,7 +220,7 @@ void render_motion_blur(s32 amount) {
         );
     }
 
-    gDPSetEnvColor(gDisplayListHead++, 0, 100, 150, amount);
+    gDPSetEnvColor(gDisplayListHead++, sFBEffects.r, sFBEffects.g, sFBEffects.b, sFBEffects.a);
     gDPPipeSync(gDisplayListHead++);
     gDPSetTextureFilter(gDisplayListHead++, G_TF_BILERP);
     gDPSetColorDither(gDisplayListHead++, G_CD_NOISE);
@@ -232,14 +245,13 @@ void render_fb_effects(void) {
     // }
 
     if (sGoalBlur > 200) {
-        sCurBlur = approach_s32_symmetric(sCurBlur, sGoalBlur, MOTION_BLUR_APP_RATE);
-        sCurBlur = approach_s16_asymptotic(sCurBlur, sGoalBlur, 10);
+        sFBEffects.a = approach_s16_asymptotic(sFBEffects.a, sGoalBlur, 18);
     } else {
-        sCurBlur = approach_s32_symmetric(sCurBlur, sGoalBlur, MOTION_BLUR_APP_RATE);
+        sFBEffects.a = approach_s32_symmetric(sFBEffects.a, sGoalBlur, MOTION_BLUR_APP_RATE);
     }
     
-    if (sCurBlur > 0) {
-        render_motion_blur(sCurBlur);
+    if (sFBEffects.a > 0) {
+        render_motion_blur();
     }
     sGoalBlur = 0;
 }

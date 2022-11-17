@@ -12,6 +12,7 @@
 #include "screen_transition.h"
 #include "segment2.h"
 #include "sm64.h"
+#include "fb_effects.h"
 
 u8 sTransitionColorFadeCount[4] = { 0 };
 u16 sTransitionTextureFadeCount[2] = { 0 };
@@ -80,8 +81,11 @@ s32 render_fade_transition_from_color(s8 fadeTimer, u8 transTime, struct WarpTra
 
 s32 render_fade_transition_into_color(s8 fadeTimer, u8 transTime, struct WarpTransitionData *transData) {
     u8 alpha = set_transition_color_fade_alpha(COLOR_TRANS_FADE_INTO_COLOR, fadeTimer, transTime);
+    set_motion_blur(alpha);
+    set_fb_effect_col(transData->red, transData->green, transData->blue);
 
-    return dl_transition_color(fadeTimer, transTime, transData, alpha);
+    // return dl_transition_color(fadeTimer, transTime, transData, alpha);
+    return set_and_reset_transition_fade_timer(fadeTimer, transTime);
 }
 
 s16 calc_tex_transition_radius(s8 fadeTimer, s8 transTime, struct WarpTransitionData *transData) {
