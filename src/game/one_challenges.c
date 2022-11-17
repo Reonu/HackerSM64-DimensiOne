@@ -15,26 +15,26 @@ static struct OneChallengeLevel sChallengeLevels[sizeof(u32)*8] = {
         (CHALLENGE_FLAG_NONE), // Requirements
         (CHALLENGE_FLAG_COIN), // Enforcements
     }, { /*02*/
-        (CHALLENGE_FLAG_JUMP | CHALLENGE_FLAG_GOOMBA | CHALLENGE_FLAG_GROUND), // Requirements
-        (CHALLENGE_FLAG_JUMP | CHALLENGE_FLAG_GOOMBA | CHALLENGE_FLAG_GROUND), // Enforcements
+        (CHALLENGE_FLAG_JUMP | CHALLENGE_FLAG_KILL_GOOMBA | CHALLENGE_FLAG_GROUND), // Requirements
+        (CHALLENGE_FLAG_JUMP | CHALLENGE_FLAG_KILL_GOOMBA | CHALLENGE_FLAG_GROUND), // Enforcements
     }, { /*03*/
-        (CHALLENGE_FLAG_A_PRESS), // Requirements
-        (CHALLENGE_FLAG_NONE), // Enforcements
+        (CHALLENGE_FLAG_KILL_GOOMBA | CHALLENGE_FLAG_GROUND), // Requirements
+        (CHALLENGE_FLAG_KILL_GOOMBA | CHALLENGE_FLAG_GROUND), // Enforcements
     }, { /*04*/
-        (CHALLENGE_FLAG_NONE), // Requirements
-        (CHALLENGE_FLAG_NONE), // Enforcements
+        (CHALLENGE_FLAG_KILL_BOMB), // Requirements
+        (CHALLENGE_FLAG_KILL_BOMB), // Enforcements
     }, { /*05*/
-        (CHALLENGE_FLAG_NONE), // Requirements
-        (CHALLENGE_FLAG_NONE), // Enforcements
+        (CHALLENGE_FLAG_KILL_ALL_BOMBS), // Requirements
+        (CHALLENGE_FLAG_KILL_ALL_BOMBS), // Enforcements
     }, { /*06*/
-        (CHALLENGE_FLAG_NONE), // Requirements
-        (CHALLENGE_FLAG_NONE), // Enforcements
+        (CHALLENGE_FLAG_WALLKICK | CHALLENGE_FLAG_GROUND), // Requirements
+        (CHALLENGE_FLAG_WALLKICK | CHALLENGE_FLAG_GROUND), // Enforcements
     }, { /*07*/
-        (CHALLENGE_FLAG_NONE), // Requirements
-        (CHALLENGE_FLAG_NONE), // Enforcements
+        (CHALLENGE_FLAG_KILL_GOOMBA_WITH_BOMB), // Requirements
+        (CHALLENGE_FLAG_KILL_GOOMBA_WITH_BOMB), // Enforcements
     }, { /*08*/
-        (CHALLENGE_FLAG_NONE), // Requirements
-        (CHALLENGE_FLAG_NONE), // Enforcements
+        (CHALLENGE_FLAG_KNOCKED_KOOPA), // Requirements // TODO: for this challenge only, add on timer flag after meeting knocked Koopa condition
+        (CHALLENGE_FLAG_KNOCKED_KOOPA), // Enforcements
     }, { /*09*/
         (CHALLENGE_FLAG_NONE), // Requirements
         (CHALLENGE_FLAG_NONE), // Enforcements

@@ -893,10 +893,6 @@ s32 get_text_width(const char *str, s32 font) {
     textSizeTotal = textSizeTemp * textSize;
 
     for (i = 0; i < strLen; i++) {
-        if (str[i] == '\n') {
-            textPos = 0;
-            continue;
-        }
         while (i < strLen && str[i] == PP_CMD_START) {
             commandOffset = text_iterate_command(str, i, FALSE);
             if (commandOffset == 0)
@@ -907,6 +903,11 @@ s32 get_text_width(const char *str, s32 font) {
 
         if (i >= strLen)
             break;
+
+        if (str[i] == '\n') {
+            textPos = 0;
+            continue;
+        }
 
         get_char_from_byte(str[i], &textX, &spaceX, &offsetY, font);
         textPos += (spaceX + 1) * textSizeTotal;
@@ -927,17 +928,21 @@ s32 get_text_height(const char *str) {
     textPos = topLineHeight;
 
     for (i = 0; i < strLen; i++) {
-        if (str[i] == '\n') {
-            textPos += topLineHeight;
-            topLineHeight = 12 * textSizeTotal;
-            continue;
-        }
         while (i < strLen && str[i] == PP_CMD_START) {
             commandOffset = text_iterate_command(str, i, FALSE);
             if (commandOffset == 0)
                 break;
 
             i += commandOffset;
+        }
+
+        if (i >= strLen)
+            break;
+
+        if (str[i] == '\n') {
+            textPos += topLineHeight;
+            topLineHeight = 12 * textSizeTotal;
+            continue;
         }
     }
 
@@ -987,16 +992,6 @@ void print_small_text(s32 x, s32 y, const char *str, s32 align, s32 amount, u8 f
     // Calculate the text width for centre and right aligned text.
     if (align == PRINT_TEXT_ALIGN_CENTRE || align == PRINT_TEXT_ALIGN_RIGHT) {
         for (s32 i = 0; i < strLen; i++) {
-            if (str[i] == '\0') {
-                break;
-            }
-
-            if (str[i] == '\n') {
-                textPos[0] = 0;
-                lines++;
-                wideX[lines] = 0;
-                continue;
-            }
             while (i < strLen && str[i] == PP_CMD_START) {
                 commandOffset = text_iterate_command(str, i, FALSE);
                 if (commandOffset == 0)
@@ -1007,6 +1002,17 @@ void print_small_text(s32 x, s32 y, const char *str, s32 align, s32 amount, u8 f
 
             if (i >= strLen)
                 break;
+
+            if (str[i] == '\0') {
+                break;
+            }
+
+            if (str[i] == '\n') {
+                textPos[0] = 0;
+                lines++;
+                wideX[lines] = 0;
+                continue;
+            }
 
             get_char_from_byte(str[i], &textX, &spaceX, &offsetY, font);
             textPos[0] += (spaceX + 1) * textSizeTotal;
@@ -1092,23 +1098,6 @@ void print_small_text(s32 x, s32 y, const char *str, s32 align, s32 amount, u8 f
     gDPPipeSync(gDisplayListHead++);
     
     for (s32 i = 0, j = 0; i < textLength; i++, j++) {
-        if (str[i] == '\0') {
-            break;
-        }
-
-        s32 goddamnJMeasure = str[i] == 'j' ? -1 : 0;
-        if (str[i] == '\n') {
-            lines++;
-            if (align == PRINT_TEXT_ALIGN_RIGHT) {
-                textPos[0] = -(wideX[lines]);
-            } else {
-                textPos[0] = -(wideX[lines] / 2);
-            }
-            textPos[1] += topLineHeight;
-            topLineHeight = 12.0f * textSizeTotal;
-            continue;
-        }
-
         while (i < textLength && str[i] == PP_CMD_START) {
             commandOffset = text_iterate_command(str, i, TRUE);
             if (commandOffset == 0)
@@ -1120,6 +1109,22 @@ void print_small_text(s32 x, s32 y, const char *str, s32 align, s32 amount, u8 f
 
         if (i >= textLength)
             break;
+
+        if (str[i] == '\0') {
+            break;
+        }
+
+        if (str[i] == '\n') {
+            lines++;
+            if (align == PRINT_TEXT_ALIGN_RIGHT) {
+                textPos[0] = -(wideX[lines]);
+            } else {
+                textPos[0] = -(wideX[lines] / 2);
+            }
+            textPos[1] += topLineHeight;
+            topLineHeight = 12.0f * textSizeTotal;
+            continue;
+        }
 
         if (shakeToggle) {
             shakePos[0] = (sTextShakeTable[shakeTablePos++] * textSizeTotal);
@@ -1141,6 +1146,7 @@ void print_small_text(s32 x, s32 y, const char *str, s32 align, s32 amount, u8 f
         }
 
         get_char_from_byte(str[i], &textX, &spaceX, &offsetY, font);
+        s32 goddamnJMeasure = str[i] == 'j' ? -1 : 0;
 
         if (str[i] != ' ') {
             gSPScisTextureRectangle(gDisplayListHead++, (x + textPos[0] + (s16)(shakePos[0])) << 2,

@@ -980,6 +980,17 @@ u32 set_mario_action(struct MarioState *m, u32 action, u32 actionArg) {
         add_challenge_flags(CHALLENGE_FLAG_JUMP);
     }
 
+    if (action == ACT_WALL_KICK_AIR) {
+        add_challenge_flags(CHALLENGE_FLAG_WALLKICK);
+    }
+
+    if (
+        action == ACT_TRIPLE_JUMP ||
+        action == ACT_FLYING_TRIPLE_JUMP
+    ) {
+        add_challenge_flags(CHALLENGE_FLAG_TRIPLE_JUMP);
+    }
+
     return TRUE;
 }
 

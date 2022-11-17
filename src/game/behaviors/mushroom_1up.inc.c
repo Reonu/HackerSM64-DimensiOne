@@ -16,6 +16,7 @@ void bhv_1up_interact(void) {
 #if ENABLE_RUMBLE
         queue_rumble_data(5, 80);
 #endif
+        add_challenge_flags(CHALLENGE_FLAG_COLLECT_LIFE);
     }
 }
 
