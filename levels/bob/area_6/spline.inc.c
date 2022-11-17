@@ -5,3 +5,8 @@ const Trajectory bob_area_6_spline_AAAAAAAAAA[] = {
 	TRAJECTORY_POS( 3, -1485, 156, 255),
 	TRAJECTORY_END(),
 };
+const Trajectory bob_area_6_spline_AAAAAAAAAA_001[] = {
+	TRAJECTORY_POS( 0, 767, 156, 4372),
+	TRAJECTORY_POS( 1, 767, 156, 2585),
+	TRAJECTORY_END(),
+};

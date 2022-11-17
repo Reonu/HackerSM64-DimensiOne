@@ -23,6 +23,7 @@ extern const GeoLayout bob_area_6[];
 extern const Collision bob_area_6_collision[];
 extern const MacroObject bob_area_6_macro_objs[];
 extern const Trajectory bob_area_6_spline_AAAAAAAAAA[];
+extern const Trajectory bob_area_6_spline_AAAAAAAAAA_001[];
 extern u8 bob_dl_Z2_00KEIKOKUTex_02C050_rgba16_rgba16[];
 extern u8 bob_dl_Grass_rgba16[];
 extern u8 bob_dl_LightWall_64x64_ci4_ci4[];
