@@ -46,7 +46,7 @@
 #define TEXT_CHALLENGE_TYPE_COLLECT_LIFE          "While collecting" _ "1-Up mushroom!"
 #define TEXT_CHALLENGE_TYPE_TIMER                 TIMER_EXCEPTION
 #define TEXT_CHALLENGE_TYPE_KNOCKED_KOOPA         "After being bumped by" _ "Koopa!"
-#define TEXT_CHALLENGE_TYPE_SLEEPING_PIRANHAS     "After waking" _ "Piranha Plant!"
+#define TEXT_CHALLENGE_TYPE_SLEEPING_PIRANHA     "After disturbing" _ "Piranha Plant!"
 #define TEXT_CHALLENGE_TYPE_KILL_GOOMBA           "By killing" _ "Goomba!"
 #define TEXT_CHALLENGE_TYPE_KILL_KOOPA            "By killing" _ "Koopa!"
 #define TEXT_CHALLENGE_TYPE_KILL_PENGUIN          "By killing" _ "Penguin!" // TODO: Implementation depends on challenge structure
@@ -67,7 +67,7 @@
     TEXT_CHALLENGE_TYPE_COLLECT_LIFE, \
     TEXT_CHALLENGE_TYPE_TIMER, \
     TEXT_CHALLENGE_TYPE_KNOCKED_KOOPA, \
-    TEXT_CHALLENGE_TYPE_SLEEPING_PIRANHAS, \
+    TEXT_CHALLENGE_TYPE_SLEEPING_PIRANHA, \
     TEXT_CHALLENGE_TYPE_KILL_GOOMBA, \
     TEXT_CHALLENGE_TYPE_KILL_KOOPA, \
     TEXT_CHALLENGE_TYPE_KILL_PENGUIN, \

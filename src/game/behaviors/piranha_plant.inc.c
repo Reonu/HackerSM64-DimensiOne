@@ -309,6 +309,11 @@ ObjActionFunc TablePiranhaPlantActions[] = {
  * Main loop for bhvPiranhaPlant.
  */
 void bhv_piranha_plant_loop(void) {
+    u8 isSleeping = FALSE;
+    if (o->oAction == PIRANHA_PLANT_ACT_SLEEPING) {
+        isSleeping = TRUE;
+    }
+
     cur_obj_call_action_function(TablePiranhaPlantActions);
 #ifdef ENABLE_VANILLA_LEVEL_SPECIFIC_CHECKS
     // In WF, hide all Piranha Plants once high enough up.
@@ -317,5 +322,9 @@ void bhv_piranha_plant_loop(void) {
     }
 
 #endif
+    if (isSleeping == TRUE && o->oAction != PIRANHA_PLANT_ACT_SLEEPING) {
+        add_challenge_flags(CHALLENGE_FLAG_SLEEPING_PIRANHA);
+    }
+
     o->oInteractStatus = INT_STATUS_NONE;
 }
