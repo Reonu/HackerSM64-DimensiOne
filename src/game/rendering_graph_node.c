@@ -278,6 +278,28 @@ const Gfx sSplineLineGfx[] = {
     gsSPEndDisplayList(),
 };
 
+const Gfx sResetSplineLineGfx[] = {
+    gsDPPipeSync(),
+    gsDPSetScissor(G_SC_NON_INTERLACE, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT),
+    gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
+
+    gsDPSetTextureLOD(G_TL_TILE),
+    gsDPSetTextureLUT(G_TT_NONE),
+    gsDPSetTextureDetail( G_TD_CLAMP),
+    gsDPSetTexturePersp(G_TP_PERSP),
+    gsDPSetTextureFilter( G_TF_BILERP),
+    gsDPSetTextureConvert(G_TC_FILT),
+
+    gsDPSetCombineKey(G_CK_NONE),
+    gsDPSetAlphaCompare(G_AC_NONE),
+    gsDPSetRenderMode(G_RM_OPA_SURF, G_RM_OPA_SURF2),
+    gsDPSetColorDither(G_CD_MAGICSQ),
+    gsDPSetCycleType(G_CYC_1CYCLE),
+
+    gsDPSetAlphaDither(G_AD_PATTERN),
+    gsSPEndDisplayList(),
+};
+
 
 void switch_ucode(s32 ucode) {
     // Set the ucode and RCP settings
@@ -285,10 +307,10 @@ void switch_ucode(s32 ucode) {
         default: // GRAPH_NODE_UCODE_DEFAULT
         case GRAPH_NODE_UCODE_DEFAULT:
             gSPLoadUcodeL(gDisplayListHead++, gspF3DZEX2_NoN_PosLight_fifo); // F3DZEX2_PosLight
-            // Reload the default RDP settings
-            gSPDisplayList(gDisplayListHead++, init_rdp);
             // Reload the necessary RSP settings
             gSPDisplayList(gDisplayListHead++, init_rsp);
+            // Reload some RDP settings
+            gSPDisplayList(gDisplayListHead++, sResetSplineLineGfx);
             break;
         case GRAPH_NODE_UCODE_LINE:
             gSPLoadUcodeL(gDisplayListHead++, gspL3DZEX2_PosLight_fifo);
@@ -368,6 +390,7 @@ void render_splines(void) {
         thisWaypoint = (struct Waypoint *)gCurrentArea->splines[i];
 
         Vtx *verts = alloc_display_list(sizeof(Vtx) * numVerts);
+        if (verts == NULL) return;
         while (thisWaypoint->flags != WAYPOINT_FLAGS_END) {
             make_vertex(
                 verts,
@@ -396,6 +419,7 @@ void render_splines(void) {
     gDPPipeSync(gDisplayListHead++);
 
     switch_ucode(GRAPH_NODE_UCODE_DEFAULT);
+    gDPPipeSync(gDisplayListHead++);
 }
 
 
