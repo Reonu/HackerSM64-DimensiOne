@@ -409,6 +409,8 @@ endif
 
 LIBRARIES := nustd hvqm2 z goddard
 
+DEFINES += L3DZEX_GBI=1
+
 # Text engine
 ifeq ($(TEXT_ENGINE), s2dex_text_engine)
   DEFINES += S2DEX_GBI_2=1 S2DEX_TEXT_ENGINE=1

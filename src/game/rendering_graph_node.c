@@ -19,6 +19,8 @@
 #include "color_presets.h"
 #include "object_list_processor.h"
 #include "render_fog.h"
+#include "geo_misc.h"
+#include "segment2.h"
 
 #include "config.h"
 #include "config/config_world.h"
@@ -252,32 +254,47 @@ static struct RenderPhase sRenderPhases[] = {
 };
 
 extern const Gfx init_rsp[];
+extern const Gfx init_rdp[];
 
-#ifdef OBJECTS_REJ
+const Gfx sSplineLineGfx[] = {
+    gsDPPipeSync(),
+    gsSPClipRatio(FRUSTRATIO_1),
+    gsDPSetPrimColor(0, 0, 255, 255, 255, 255),
+    gsSPClearGeometryMode(G_CULL_BACK | G_CULL_FRONT | G_LIGHTING | G_TEXTURE_GEN | G_TEXTURE_GEN_LINEAR | G_LOD),
+    gsSPSetGeometryMode(G_ZBUFFER | G_FOG | G_SHADE),
+    gsDPSetCombineLERP(
+        0, 0, 0, PRIMITIVE,
+        1, SHADE, TEXEL0, 0,
+        0, 0, 0, COMBINED,
+        COMBINED, 0, TEXEL0, 0
+    ),
+    gsDPSetAlphaDither(G_AD_NOISE),
+    gsDPSetColorDither(G_CD_NOISE),
+    gsDPSetCycleType(G_CYC_2CYCLE),
+    gsDPSetScissor(G_SC_NON_INTERLACE, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT),
+    gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_XLU_LINE2),
+    gsDPSetTexturePersp(G_TP_NONE),
+    gsDPSetTextureFilter(G_TF_BILERP),
+    gsSPEndDisplayList(),
+};
+
+
 void switch_ucode(s32 ucode) {
     // Set the ucode and RCP settings
     switch (ucode) {
         default: // GRAPH_NODE_UCODE_DEFAULT
         case GRAPH_NODE_UCODE_DEFAULT:
             gSPLoadUcodeL(gDisplayListHead++, gspF3DZEX2_NoN_PosLight_fifo); // F3DZEX2_PosLight
+            // Reload the default RDP settings
+            gSPDisplayList(gDisplayListHead++, init_rdp);
             // Reload the necessary RSP settings
             gSPDisplayList(gDisplayListHead++, init_rsp);
             break;
-        case GRAPH_NODE_UCODE_REJ:
-            // Use .rej Microcode, skip sub-pixel processing on console
-            if (gIsConsole) {
-                gSPLoadUcodeL(gDisplayListHead++, gspF3DLX2_Rej_fifo); // F3DLX2_Rej
-            } else {
-                gSPLoadUcodeL(gDisplayListHead++, gspF3DEX2_Rej_fifo); // F3DEX2_Rej
-            }
-            // Reload the necessary RSP settings
-            gSPDisplayList(gDisplayListHead++, init_rsp);
-            // Set the clip ratio (see init_rsp)
-            gSPClipRatio(gDisplayListHead++, FRUSTRATIO_2);
+        case GRAPH_NODE_UCODE_LINE:
+            gSPLoadUcodeL(gDisplayListHead++, gspL3DZEX2_PosLight_fifo);
             break;
     }
 }
-#endif
 
 #define UPPER_FIXED(x) ((int)((unsigned int)((x) * 0x10000) >> 16))
 #define LOWER_FIXED(x) ((int)((unsigned int)((x) * 0x10000) & 0xFFFF))
@@ -293,6 +310,95 @@ Mtx identityMatrixWorldScale = {{
     {0x00000000,                            LOWER_FIXED(1.0f / WORLD_SCALE) << 16,
      0x00000000,                            LOWER_FIXED(1.0f)               <<  0}
 }};
+
+void render_splines(void) {
+    switch_ucode(GRAPH_NODE_UCODE_LINE);
+    u8 *splineTex = segmented_to_virtual(tiny_gradient);
+    gDPPipeSync(gDisplayListHead++);
+    gSPMatrix(gDisplayListHead++, &identityMatrixWorldScale, G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
+    gSPDisplayList(gDisplayListHead++, sSplineLineGfx);
+    gDPSetFogColor(gDisplayListHead++, gGlobalFog.r, gGlobalFog.g, gGlobalFog.b, gGlobalFog.a);
+    gSPFogPosition(gDisplayListHead++, gGlobalFog.low, gGlobalFog.high);
+    s16 sOffset = ((s16)gGlobalTimer)*1.5f;
+    gDPLoadTextureBlock_4b_l(
+        gDisplayListHead++,
+        splineTex,
+        G_IM_FMT_I,
+        8, // width
+        4, // height
+        0,
+        G_TX_NOMIRROR | G_TX_WRAP,
+        G_TX_NOMIRROR | G_TX_WRAP,
+        3, // mask s
+        2, // mask t
+        -2, // shift s
+        0,  // shift t
+        sOffset, // sl
+        0  // tl
+    );
+    gDPSetTile(
+        gDisplayListHead++,
+        G_IM_FMT_I, G_IM_SIZ_4b,
+        ((((8)>>1)+7)>>3), // line
+        0, // tmem
+        G_TX_RENDERTILE + 1, // tile
+        0,
+        (G_TX_NOMIRROR | G_TX_WRAP), 2, 0, // T settings, mask, shift
+        (G_TX_NOMIRROR | G_TX_WRAP), 3, -2 // S settings, mask, shift
+    );
+    gDPSetTileSize(
+        gDisplayListHead++,
+        G_TX_RENDERTILE + 1,
+        0-sOffset, 0, // s/t offset
+        (8-1) << G_TEXTURE_IMAGE_FRAC,
+        (4-1) << G_TEXTURE_IMAGE_FRAC
+    )
+    gSPTexture(gDisplayListHead++, 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON);
+
+    for (int i = 0; i < gCurrentArea->numSplines; i++) {
+        int vtxIndex = 0;
+        int numVerts = 0;
+
+        struct Waypoint *thisWaypoint = (struct Waypoint *)gCurrentArea->splines[i];
+        // get num points
+        while (thisWaypoint->flags != WAYPOINT_FLAGS_END) {
+            numVerts++;
+            thisWaypoint++;
+        }
+        thisWaypoint = (struct Waypoint *)gCurrentArea->splines[i];
+
+        Vtx *verts = alloc_display_list(sizeof(Vtx) * numVerts);
+        while (thisWaypoint->flags != WAYPOINT_FLAGS_END) {
+            make_vertex(
+                verts,
+                vtxIndex,
+                thisWaypoint->pos[0],
+                thisWaypoint->pos[1],
+                thisWaypoint->pos[2],
+                qs105((vtxIndex-2)*0x10), // s
+                qs105(0), // t
+                0, 0, 0, 255
+            );
+
+            vtxIndex++;
+            thisWaypoint++;
+        }
+
+        // load verts
+        gSPVertex(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(verts), numVerts, 0);
+
+        // draw lines
+        for (int v = 1; v < numVerts; v++) {
+            gSPLine3D(gDisplayListHead++, v-1, v, 0);
+        }
+    }
+    gSPTexture(gDisplayListHead++, 0, 0, 0, G_TX_RENDERTILE, G_OFF);
+    gDPPipeSync(gDisplayListHead++);
+
+    switch_ucode(GRAPH_NODE_UCODE_DEFAULT);
+}
+
+
 
 /**
  * Process a master list node. This has been modified, so now it runs twice, for each microcode.
@@ -379,11 +485,16 @@ void geo_process_master_list_sub(struct GraphNodeMasterList *node) {
         }
     }
 
+    if (gCurrentArea && gCurrentArea->numSplines) {
+        render_splines();
+    }
+
     if (enableZBuffer) {
         // Disable z buffer.
         gDPPipeSync(gDisplayListHead++);
         gSPClearGeometryMode(gDisplayListHead++, G_ZBUFFER);
     }
+
 #ifdef OBJECTS_REJ
  #if defined(F3DEX_GBI_2) && defined(VISUAL_DEBUG)
     if (hitboxView) render_debug_boxes(DEBUG_UCODE_REJ);

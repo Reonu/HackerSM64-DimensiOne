@@ -77,5 +77,6 @@ extern Gfx dl_billboard_num_F[];
 #endif
 
 extern u16 youre_emu[];
+extern u8 tiny_gradient[];
 
 #endif // SEGMENT2_H

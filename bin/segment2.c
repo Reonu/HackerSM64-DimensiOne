@@ -3503,3 +3503,7 @@ const s16 seg2_painting_mesh_neighbor_tris[] = {
 };
 
 #include "youre_emu.inc.in"
+
+u8 tiny_gradient[] = {
+#include "textures/segment2/tiny_gradient.i4.inc.c"
+};

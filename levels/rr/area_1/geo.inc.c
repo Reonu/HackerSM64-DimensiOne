@@ -3,7 +3,6 @@
 const GeoLayout rr_area_1_geo[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
-		GEO_DISPLAY_LIST(LAYER_FORCE, rr_dl_Cube_001_mesh_layer_0),
 		GEO_SWITCH_CASE(5, geo_switch_area),
 		GEO_OPEN_NODE(),
 			GEO_BRANCH(1, rr_dl_Room1_geo),
@@ -17,6 +16,7 @@ const GeoLayout rr_area_1_geo[] = {
 const GeoLayout rr_dl_Room1_geo[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
+		GEO_DISPLAY_LIST(LAYER_FORCE, rr_dl_BackgroundCubo_mesh_layer_0),
 		GEO_DISPLAY_LIST(LAYER_FORCE, rr_dl_Room1Platform_mesh_layer_0),
 		GEO_DISPLAY_LIST(LAYER_FORCE, rr_dl_Room1Platform_001_mesh_layer_0),
 		GEO_DISPLAY_LIST(LAYER_FORCE, rr_dl_Room2Platform_mesh_layer_0),
@@ -27,10 +27,12 @@ const GeoLayout rr_dl_Room1_geo[] = {
 const GeoLayout rr_dl_Room2_geo[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
+		GEO_DISPLAY_LIST(LAYER_FORCE, rr_dl_BackgroundCubo_mesh_layer_0),
 		GEO_DISPLAY_LIST(LAYER_FORCE, rr_dl_Room2Platform_mesh_layer_0),
 		GEO_TRANSLATE_NODE_WITH_DL(LAYER_FORCE, 156, 1030, 4692, rr_dl_Suzanne_mesh_layer_0),
 		GEO_BILLBOARD_WITH_PARAMS_AND_DL(LAYER_FORCE, 512, 1234, 4225, rr_dl_Suzanne_001_mesh_layer_0),
 		GEO_BILLBOARD_WITH_PARAMS_AND_DL(LAYER_FORCE, -200, 1234, 4225, rr_dl_Suzanne_002_mesh_layer_0),
+		GEO_DISPLAY_LIST(LAYER_FORCE, rr_dl_BackgroundCubo_mesh_layer_0),
 		GEO_DISPLAY_LIST(LAYER_FORCE, rr_dl_Room1Platform_mesh_layer_0),
 		GEO_DISPLAY_LIST(LAYER_FORCE, rr_dl_Room1Platform_001_mesh_layer_0),
 		GEO_DISPLAY_LIST(LAYER_FORCE, rr_dl_Room3PlatformTransitionFrom1To4_mesh_layer_0),
@@ -40,8 +42,10 @@ const GeoLayout rr_dl_Room2_geo[] = {
 const GeoLayout rr_dl_Room3_geo[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
+		GEO_DISPLAY_LIST(LAYER_FORCE, rr_dl_BackgroundCubo_mesh_layer_0),
 		GEO_DISPLAY_LIST(LAYER_FORCE, rr_dl_Room3PlatformTransitionFrom1To4_mesh_layer_0),
 		GEO_DISPLAY_LIST(LAYER_FORCE, rr_dl_Torus_mesh_layer_0),
+		GEO_DISPLAY_LIST(LAYER_FORCE, rr_dl_BackgroundCubo_mesh_layer_0),
 		GEO_DISPLAY_LIST(LAYER_FORCE, rr_dl_Room1Platform_mesh_layer_0),
 		GEO_DISPLAY_LIST(LAYER_FORCE, rr_dl_Room1Platform_001_mesh_layer_0),
 		GEO_DISPLAY_LIST(LAYER_FORCE, rr_dl_Room4Platform_mesh_layer_0),
@@ -51,6 +55,7 @@ const GeoLayout rr_dl_Room3_geo[] = {
 const GeoLayout rr_dl_Room4_geo[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
+		GEO_DISPLAY_LIST(LAYER_FORCE, rr_dl_BackgroundCubo_mesh_layer_0),
 		GEO_DISPLAY_LIST(LAYER_FORCE, rr_dl_Room4Platform_mesh_layer_0),
 		GEO_DISPLAY_LIST(LAYER_FORCE, rr_dl_Room3PlatformTransitionFrom1To4_mesh_layer_0),
 	GEO_CLOSE_NODE(),
@@ -65,8 +70,8 @@ const GeoLayout rr_area_1[] = {
 			GEO_OPEN_NODE(),
 				GEO_CAMERA(CAMERA_MODE_8_DIRECTIONS, 0, 0, 0, 0, -100, 0, geo_camera_main),
 				GEO_OPEN_NODE(),
-					GEO_RENDER_OBJ(),
 					GEO_BRANCH(1, rr_area_1_geo),
+					GEO_RENDER_OBJ(),
 					GEO_ASM(ENVFX_MODE_NONE, geo_envfx_main),
 				GEO_CLOSE_NODE(),
 			GEO_CLOSE_NODE(),

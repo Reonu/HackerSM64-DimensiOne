@@ -1583,3 +1583,7 @@ void closest_point_on_line_segment(Vec3f pA, Vec3f pB, Vec3f point, Vec3f res)
     vec3f_add(dAB, pA);
     vec3f_copy(res, dAB);
 }
+
+f32 remap(f32 x, f32 fromA, f32 toA, f32 fromB, f32 toB) {
+    return (x - fromA) / (toA - fromA) * (toB - fromB) + fromB;
+}
