@@ -7,6 +7,7 @@
 #include "puppyprint.h"
 #include "audio/external.h"
 #include "engine/math_util.h"
+#include "segment2.h"
 
 #include "one_text_strings.c.in"
 
@@ -101,27 +102,24 @@ static void print_challenge_type_images(s32 x, s32 y, u8 typeIndex, u8 alphaFram
         color[3] = color[3] * 1.0f;
     }
 
-    u32 fillColor = 0;
-    fillColor |= ((color[0] / (1 << 3)) << 11);
-    fillColor |= ((color[1] / (1 << 3)) << 6);
-    fillColor |= ((color[2] / (1 << 3)) << 1);
-    fillColor |= (color[3] >> 7);
-
-    fillColor |= (fillColor << 16);
-
-    // Display a square
-    gDPSetCycleType( gDisplayListHead++, G_CYC_FILL);
-    gDPSetRenderMode(gDisplayListHead++, G_RM_NOOP, G_RM_NOOP);
-    gDPPipeSync(gDisplayListHead++);
-    gDPSetFillColor(gDisplayListHead++, fillColor);
-    gDPFillRectangle(gDisplayListHead++, x, y, x + 24 - 1, y + 24 - 1);
+    Gfx *circle = segmented_to_virtual(circle_init_dl);
+    gDPSetPrimColor(gDisplayListHead++, 0, 0, color[0], color[1], color[2], color[3]);
+    gSPDisplayList(gDisplayListHead++, circle);
+    gSPScisTextureRectangle(
+        gDisplayListHead++,
+        qs102(x), qs102(y),
+        qs102(x + 24), qs102(y + 24),
+        G_TX_RENDERTILE,
+        0, 0, // s/t low
+        qs510(1), qs510(1) 
+    );
 
     if (typeTimerArray[typeIndex] != -1U) {
         typeTimerArray[typeIndex]++;
     }
     
+    gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
     gDPPipeSync(gDisplayListHead++);
-    gDPSetCycleType( gDisplayListHead++, G_CYC_1CYCLE);
 }
 
 

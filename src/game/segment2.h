@@ -78,5 +78,7 @@ extern Gfx dl_billboard_num_F[];
 
 extern u16 youre_emu[];
 extern u8 tiny_gradient[];
+extern u8 xlu_circle_downscaled[];
+extern Gfx circle_init_dl[];
 
 #endif // SEGMENT2_H

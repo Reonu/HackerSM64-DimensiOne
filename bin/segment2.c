@@ -3507,3 +3507,32 @@ const s16 seg2_painting_mesh_neighbor_tris[] = {
 u8 tiny_gradient[] = {
 #include "textures/segment2/tiny_gradient.i4.inc.c"
 };
+
+u8 xlu_circle_downscaled[] = {
+    #include "textures/segment2/xlu_circle_downscaled.i4.inc.c"
+};
+
+Gfx circle_init_dl[] = {
+    gsDPPipeSync(),
+    gsDPSetCycleType(G_CYC_1CYCLE),
+    gsDPSetTexturePersp(G_TP_NONE),
+    gsDPSetTextureFilter(G_TF_POINT),
+    gsDPSetTextureLUT(G_TT_NONE),
+    gsDPSetRenderMode(G_RM_XLU_SURF, G_RM_XLU_SURF2),
+    gsDPSetCombineLERP(
+        0, 0, 0, PRIMITIVE,
+        TEXEL0, 0, PRIMITIVE, 0,
+        0, 0, 0, PRIMITIVE,
+        TEXEL0, 0, PRIMITIVE, 0
+    ),
+    gsDPLoadTextureTile_4b(
+        xlu_circle_downscaled, G_IM_FMT_I,
+        24, 24, // w/h
+        0, 0, // uls,ult
+        24, 24, // lrs,lrt
+        0,
+        (G_TX_NOMIRROR | G_TX_CLAMP), (G_TX_NOMIRROR | G_TX_CLAMP),
+        0, 0,
+        G_TX_NOLOD, G_TX_NOLOD),
+    gsSPEndDisplayList()
+};
