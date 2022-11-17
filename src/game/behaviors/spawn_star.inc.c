@@ -51,15 +51,15 @@ void bhv_collect_star_init(void) {
 }
 
 void bhv_collect_star_loop(void) {
-    u8 intensity = 240;
-    Vec3f pos = {o->oPosX, o->oPosY + 100, o->oPosZ};
+    //u8 intensity = 240;
+    //Vec3f pos = {o->oPosX, o->oPosY + 100, o->oPosZ};
     if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING) {
         update_challenge_star_model();
         if (o->header.gfx.sharedChild == gLoadedGraphNodes[MODEL_TRANSPARENT_STAR]) {
             o->oFaceAngleYaw += 0x200;
         } else {
             o->oFaceAngleYaw += 0x800;
-            emit_light(pos, intensity, intensity, 0, 4, 50, 8);
+            //emit_light(pos, intensity, intensity, 0, 4, 50, 8);
         }
     } else {
         o->oFaceAngleYaw += 0x800;
