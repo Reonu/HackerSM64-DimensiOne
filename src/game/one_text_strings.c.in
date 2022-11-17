@@ -48,6 +48,7 @@
 #define TEXT_CHALLENGE_TYPE_KNOCKED_KOOPA         "After being bumped by" _ "Koopa!"
 #define TEXT_CHALLENGE_TYPE_SLEEPING_PIRANHAS     "After waking" _ "Piranha Plant!"
 #define TEXT_CHALLENGE_TYPE_KILL_GOOMBA           "By killing" _ "Goomba!"
+#define TEXT_CHALLENGE_TYPE_KILL_KOOPA            "By killing" _ "Koopa!"
 #define TEXT_CHALLENGE_TYPE_KILL_PENGUIN          "By killing" _ "Penguin!" // TODO: Implementation depends on challenge structure
 #define TEXT_CHALLENGE_TYPE_KILL_BOMB             "By killing" _ "Bob-omb!"
 #define TEXT_CHALLENGE_TYPE_KILL_ALL_BOMBS        "By killing all but" _ "Bob-omb!"
@@ -68,6 +69,7 @@
     TEXT_CHALLENGE_TYPE_KNOCKED_KOOPA, \
     TEXT_CHALLENGE_TYPE_SLEEPING_PIRANHAS, \
     TEXT_CHALLENGE_TYPE_KILL_GOOMBA, \
+    TEXT_CHALLENGE_TYPE_KILL_KOOPA, \
     TEXT_CHALLENGE_TYPE_KILL_PENGUIN, \
     TEXT_CHALLENGE_TYPE_KILL_BOMB, \
     TEXT_CHALLENGE_TYPE_KILL_ALL_BOMBS, \

@@ -58,6 +58,8 @@ Color gWarpTransBlue = 0;
 s16 gCurrSaveFileNum = 1;
 s16 gCurrLevelNum = LEVEL_MIN;
 
+u8 debugChallengeTransition = FALSE;
+
 /*
  * The following two tables are used in get_mario_spawn_type() to determine spawn type
  * from warp behavior.
@@ -321,6 +323,11 @@ void area_update_objects(void) {
  * transition type, time in frames, and the RGB color that will fill the screen.
  */
 void play_transition(s16 transType, s16 time, Color red, Color green, Color blue) {
+    if (debugChallengeTransition) {
+        time = 1;
+        debugChallengeTransition = FALSE;
+    }
+
 #ifndef L3DEX2_ALONE
     gWarpTransition.isActive = TRUE;
     gWarpTransition.type = transType;

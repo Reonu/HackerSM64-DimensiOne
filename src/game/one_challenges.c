@@ -1,4 +1,5 @@
 #include "sm64.h"
+#include "area.h"
 #include "game_init.h"
 #include "level_update.h"
 #include "one_challenges.h"
@@ -33,8 +34,8 @@ static struct OneChallengeLevel sChallengeLevels[sizeof(u32)*8] = {
         (CHALLENGE_FLAG_KILL_GOOMBA_WITH_BOMB), // Requirements
         (CHALLENGE_FLAG_KILL_GOOMBA_WITH_BOMB), // Enforcements
     }, { /*08*/
-        (CHALLENGE_FLAG_KNOCKED_KOOPA), // Requirements // TODO: for this challenge only, add on timer flag after meeting knocked Koopa condition
-        (CHALLENGE_FLAG_KNOCKED_KOOPA), // Enforcements
+        (CHALLENGE_FLAG_KNOCKED_KOOPA | CHALLENGE_FLAG_GROUND), // Requirements  TODO: for this challenge only, add on timer flag after meeting knocked Koopa condition
+        (CHALLENGE_FLAG_KNOCKED_KOOPA | CHALLENGE_FLAG_GROUND | CHALLENGE_FLAG_KILL_KOOPA), // Enforcements
     }, { /*09*/
         (CHALLENGE_FLAG_NONE), // Requirements
         (CHALLENGE_FLAG_NONE), // Enforcements
@@ -329,21 +330,25 @@ void challenge_update(void) {
         if (
             // ONE_TODO: future conditions
             // gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING &&
-            gChallengeStatus != CHALLENGE_STATUS_WIN
+            gChallengeStatus != CHALLENGE_STATUS_WIN &&
+            !gWarpTransition.isActive
         ) {
             level_trigger_warp(gMarioState, WARP_OP_START_CHALLENGES); // reset level
         }
     }
 
 #ifdef ENABLE_DEBUG_FREE_MOVE
-    if ((gPlayer1Controller->buttonDown & (Z_TRIG | R_TRIG)) == (Z_TRIG | R_TRIG)) {
-
+    if (
+        (gPlayer1Controller->buttonDown & (Z_TRIG | R_TRIG)) == (Z_TRIG | R_TRIG) &&
+        (gPlayer1Controller->buttonPressed & (Z_TRIG | R_TRIG))
+    ) {
         if (
             gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING &&
-            gChallengeStatus != CHALLENGE_STATUS_WIN
+            sDelayedWarpOp == WARP_OP_NONE &&
+            !gWarpTransition.isActive
         ) {
             gChallengeStatus = CHALLENGE_STATUS_WIN;
-            level_trigger_warp(gMarioState, WARP_OP_STAR_EXIT); // warp to next challenge
+            level_trigger_warp(gMarioState, WARP_OP_DEBUG_CHALLENGE_SKIP); // warp to next challenge
         }
     }
 #endif
