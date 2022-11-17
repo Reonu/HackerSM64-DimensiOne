@@ -27,6 +27,7 @@
 #include "sram.h"
 #endif
 #include "puppyprint.h"
+#include "fb_effects.h"
 #include <prevent_bss_reordering.h>
 
 #include <point_lights.h>
