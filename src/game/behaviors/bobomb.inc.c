@@ -81,6 +81,14 @@ void bobomb_act_patrol(void) {
         o->oAction = BOBOMB_ACT_CHASE_MARIO;
     }
 
+    if (
+        ((get_challenge_obtained_flags() & get_challenge_enforced_flags()) & CHALLENGE_FLAG_KILL_ALL_BOMBS) &&
+        gChallengeStatus == CHALLENGE_STATUS_CAN_WIN
+    ) {
+        o->oBobombFuseLit = TRUE;
+        o->oAction = BOBOMB_ACT_CHASE_MARIO;
+    }
+
     obj_check_floor_death(collisionFlags, sObjFloor);
 }
 

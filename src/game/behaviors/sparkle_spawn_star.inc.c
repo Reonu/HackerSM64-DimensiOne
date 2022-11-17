@@ -12,6 +12,28 @@ struct ObjectHitbox sSparkleSpawnStarHitbox = {
     /* hurtboxHeight:     */ 0,
 };
 
+static void update_challenge_star_model(void) {
+    if (gChallengeStatus == CHALLENGE_STATUS_NOT_PLAYING) {
+        return;
+    }
+
+    if (gChallengeStatus == CHALLENGE_STATUS_CAN_WIN) {
+        if (o->header.gfx.sharedChild == gLoadedGraphNodes[MODEL_OUTLINE_STAR]) {
+            o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_STAR];
+        } else if (o->header.gfx.sharedChild == gLoadedGraphNodes[MODEL_OUTLINE_STAR_COLLECTED]) {
+            o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_TRANSPARENT_STAR];
+        }
+        cur_obj_become_tangible();
+    } else {
+        if (o->header.gfx.sharedChild == gLoadedGraphNodes[MODEL_STAR]) {
+            o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_OUTLINE_STAR];
+        } else if (o->header.gfx.sharedChild == gLoadedGraphNodes[MODEL_TRANSPARENT_STAR]) {
+            o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_OUTLINE_STAR_COLLECTED];
+        }
+        cur_obj_become_intangible();
+    }
+}
+
 void bhv_spawned_star_init(void) {
     if (!(o->oInteractionSubtype & INT_SUBTYPE_NO_EXIT)) {
         o->oBehParams = o->parentObj->oBehParams;
@@ -23,6 +45,15 @@ void bhv_spawned_star_init(void) {
     if ((1 << param) & save_file_get_star_flags((gCurrSaveFileNum - 1), COURSE_NUM_TO_INDEX(gCurrCourseNum))) {
 #endif
         cur_obj_set_model(MODEL_TRANSPARENT_STAR);
+    }
+
+    if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING) {
+        if (o->header.gfx.sharedChild == gLoadedGraphNodes[MODEL_STAR]) {
+            o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_OUTLINE_STAR];
+        } else if (o->header.gfx.sharedChild == gLoadedGraphNodes[MODEL_TRANSPARENT_STAR]) {
+            o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_OUTLINE_STAR_COLLECTED];
+        }
+        cur_obj_become_intangible();
     }
 
     cur_obj_play_sound_2(SOUND_GENERAL2_STAR_APPEARS);
@@ -53,12 +84,23 @@ void set_y_home_to_pos(void) {
 }
 
 void slow_star_rotation(void) {
-    if (o->oAngleVelYaw > 0x400) {
-        o->oAngleVelYaw -= 0x40;
+    if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING) {
+        if (o->oIntangibleTimer == 0) {
+            o->oAngleVelYaw = 0x800;
+            //emit_light(pos, intensity, intensity, 0, 4, 50, 8);
+        } else {
+            o->oAngleVelYaw = 0x200;
+        }
+    } else {
+        if (o->oAngleVelYaw > 0x400) {
+            o->oAngleVelYaw -= 0x40;
+        }
     }
 }
 
 void bhv_spawned_star_loop(void) {
+    update_challenge_star_model();
+
     if (o->oAction == SPAWN_STAR_POS_CUTSCENE_ACT_START) {
         if (o->oTimer == 0) {
             cutscene_object(CUTSCENE_STAR_SPAWN, o);
