@@ -2521,7 +2521,6 @@ void bhv_follow_spline(void) {
 }
 
 Gfx *geo_set_global_fog(s32 callContext, struct GraphNode *node, UNUSED Mat4 mtx) {
-    static u32 curUpdateFrame = 0;
     struct GraphNodeGenerated *currentGraphNode;
     Gfx *dlStart, *dlHead;
     dlStart = NULL;

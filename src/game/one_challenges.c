@@ -1,4 +1,5 @@
 #include "sm64.h"
+#include "area.h"
 #include "game_init.h"
 #include "level_update.h"
 #include "one_challenges.h"
@@ -15,26 +16,26 @@ static struct OneChallengeLevel sChallengeLevels[sizeof(u32)*8] = {
         (CHALLENGE_FLAG_NONE), // Requirements
         (CHALLENGE_FLAG_COIN), // Enforcements
     }, { /*02*/
-        (CHALLENGE_FLAG_JUMP | CHALLENGE_FLAG_GOOMBA | CHALLENGE_FLAG_GROUND), // Requirements
-        (CHALLENGE_FLAG_JUMP | CHALLENGE_FLAG_GOOMBA | CHALLENGE_FLAG_GROUND), // Enforcements
+        (CHALLENGE_FLAG_JUMP | CHALLENGE_FLAG_KILL_GOOMBA | CHALLENGE_FLAG_GROUND), // Requirements
+        (CHALLENGE_FLAG_JUMP | CHALLENGE_FLAG_KILL_GOOMBA | CHALLENGE_FLAG_GROUND), // Enforcements
     }, { /*03*/
-        (CHALLENGE_FLAG_A_PRESS), // Requirements
-        (CHALLENGE_FLAG_NONE), // Enforcements
+        (CHALLENGE_FLAG_NONE), // Requirements
+        (CHALLENGE_FLAG_GROUND | CHALLENGE_FLAG_KILL_GOOMBA), // Enforcements
     }, { /*04*/
-        (CHALLENGE_FLAG_NONE), // Requirements
-        (CHALLENGE_FLAG_NONE), // Enforcements
+        (CHALLENGE_FLAG_KILL_BOMB), // Requirements
+        (CHALLENGE_FLAG_KILL_BOMB), // Enforcements
     }, { /*05*/
-        (CHALLENGE_FLAG_NONE), // Requirements
-        (CHALLENGE_FLAG_NONE), // Enforcements
+        (CHALLENGE_FLAG_KILL_ALL_BOMBS), // Requirements
+        (CHALLENGE_FLAG_KILL_ALL_BOMBS), // Enforcements
     }, { /*06*/
-        (CHALLENGE_FLAG_NONE), // Requirements
-        (CHALLENGE_FLAG_NONE), // Enforcements
+        (CHALLENGE_FLAG_WALLKICK), // Requirements
+        (CHALLENGE_FLAG_WALLKICK | CHALLENGE_FLAG_GROUND), // Enforcements
     }, { /*07*/
-        (CHALLENGE_FLAG_NONE), // Requirements
-        (CHALLENGE_FLAG_NONE), // Enforcements
+        (CHALLENGE_FLAG_KILL_GOOMBA_WITH_BOMB), // Requirements
+        (CHALLENGE_FLAG_KILL_GOOMBA_WITH_BOMB), // Enforcements
     }, { /*08*/
-        (CHALLENGE_FLAG_NONE), // Requirements
-        (CHALLENGE_FLAG_NONE), // Enforcements
+        (CHALLENGE_FLAG_KNOCKED_KOOPA), // Requirements  TODO: for this challenge only, add on timer flag after meeting knocked Koopa condition
+        (CHALLENGE_FLAG_KNOCKED_KOOPA | CHALLENGE_FLAG_GROUND | CHALLENGE_FLAG_KILL_KOOPA), // Enforcements
     }, { /*09*/
         (CHALLENGE_FLAG_NONE), // Requirements
         (CHALLENGE_FLAG_NONE), // Enforcements
@@ -114,6 +115,9 @@ u8 gChallengeLevel = (u8) -1; // ONE_TODO: Save file support?
 // What is the current status of the challenge?
 u32 gChallengeStatus = CHALLENGE_STATUS_NOT_PLAYING;
 
+// How many Bob-ombs have been spawned into the level?
+u16 gBombsSpawned = 0xFFFF;
+
 // Flags of which challenge conditions have been met by the player
 u32 sObtainedChallengeFlags = CHALLENGE_FLAG_NONE;
 
@@ -131,6 +135,7 @@ u32 internalFlagsForFrame = CHALLENGE_FLAG_NONE;
 
 
 static u8 freshlyTouchedGround = FALSE;
+static u16 sBombsSpawnedLast = 0;
 
 
 static void can_win_challenge(void) {
@@ -178,6 +183,27 @@ static void check_flag_conditions(void) {
     // CHALLENGE_FLAG_B_PRESS
     if (gPlayer1Controller->buttonPressed & B_BUTTON) {
         add_challenge_flags(CHALLENGE_FLAG_B_PRESS);
+    }
+
+    // CHALLENGE_FLAG_KILL_ALL_BOMBS
+    if (gBombsSpawned >= (u16) -3) {
+        gBombsSpawned--; // Process 3 frames later instead, just in case the bombs haven't spawned in yet (hacky but oh well)
+    } else if (gBombsSpawned & 0x8000) {
+        if (gBombsSpawned >= 0xFFF0) { // No bombs were spawned
+            gBombsSpawned = 0;
+            sBombsSpawnedLast = 2; // Trigger 2 bomb spawn flags
+        } else {
+            gBombsSpawned &= ~0x8000;
+            sBombsSpawnedLast = gBombsSpawned;
+        }
+    }
+    if (sBombsSpawnedLast < gBombsSpawned) {
+        sBombsSpawnedLast = gBombsSpawned;
+    } else if (sBombsSpawnedLast > gBombsSpawned) {
+        sBombsSpawnedLast--;
+        if (sBombsSpawnedLast <= 1) {
+            add_challenge_flags(CHALLENGE_FLAG_KILL_ALL_BOMBS);
+        }
     }
 }
 
@@ -272,6 +298,8 @@ void reset_challenge(void) {
     internalFlagsForFrame = CHALLENGE_FLAG_NONE;
 
     freshlyTouchedGround = TRUE;
+    gBombsSpawned = 0xFFFF;
+    sBombsSpawnedLast = 0;
 
     gChallengeStatus = CHALLENGE_STATUS_NOT_PLAYING;
     update_last_print_vars(sObtainedChallengeFlags, sFailureFlags);
@@ -329,21 +357,25 @@ void challenge_update(void) {
         if (
             // ONE_TODO: future conditions
             // gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING &&
-            gChallengeStatus != CHALLENGE_STATUS_WIN
+            gChallengeStatus != CHALLENGE_STATUS_WIN &&
+            !gWarpTransition.isActive
         ) {
             level_trigger_warp(gMarioState, WARP_OP_START_CHALLENGES); // reset level
         }
     }
 
 #ifdef ENABLE_DEBUG_FREE_MOVE
-    if ((gPlayer1Controller->buttonDown & (Z_TRIG | R_TRIG)) == (Z_TRIG | R_TRIG)) {
-
+    if (
+        (gPlayer1Controller->buttonDown & (Z_TRIG | R_TRIG)) == (Z_TRIG | R_TRIG) &&
+        (gPlayer1Controller->buttonPressed & (Z_TRIG | R_TRIG))
+    ) {
         if (
             gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING &&
-            gChallengeStatus != CHALLENGE_STATUS_WIN
+            sDelayedWarpOp == WARP_OP_NONE &&
+            !gWarpTransition.isActive
         ) {
             gChallengeStatus = CHALLENGE_STATUS_WIN;
-            level_trigger_warp(gMarioState, WARP_OP_STAR_EXIT); // warp to next challenge
+            level_trigger_warp(gMarioState, WARP_OP_DEBUG_CHALLENGE_SKIP); // warp to next challenge
         }
     }
 #endif

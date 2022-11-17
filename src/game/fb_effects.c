@@ -9,6 +9,7 @@
 #include "puppyprint.h"
 #include "engine/math_util.h"
 #include "segment2.h"
+#include "print.h"
 
 
 extern u16 sRenderedFramebuffer;

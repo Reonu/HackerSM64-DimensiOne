@@ -1352,7 +1352,7 @@ u32 interact_hit_from_below(struct MarioState *m, UNUSED u32 interactType, struc
     return FALSE;
 }
 
-u32 interact_bounce_top(struct MarioState *m, UNUSED u32 interactType, struct Object *obj) {
+u32 interact_bounce_top(struct MarioState *m, u32 interactType, struct Object *obj) {
     u32 interaction;
     if (m->flags & MARIO_METAL_CAP) {
         interaction = INT_FAST_ATTACK_OR_SHELL;
@@ -1378,6 +1378,13 @@ u32 interact_bounce_top(struct MarioState *m, UNUSED u32 interactType, struct Ob
             }
         }
     } else if (take_damage_and_knock_back(m, obj)) {
+        if (interactType == INTERACT_KOOPA) {
+            add_challenge_flags(CHALLENGE_FLAG_KNOCKED_KOOPA);
+            if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING && (get_challenge_enforced_flags() & CHALLENGE_FLAG_KNOCKED_KOOPA)) {
+                m->actionArg = -1; // Invincibility timer
+            }
+        }
+
         return TRUE;
     }
 

@@ -17,6 +17,13 @@ void bhv_bobomb_init(void) {
     o->oFriction = 0.8f;
     o->oBuoyancy = 1.3f;
     o->oInteractionSubtype = INT_SUBTYPE_KICKABLE;
+
+    if (gBombsSpawned >= 0xFFF0) {
+        gBombsSpawned = 0;
+    }
+
+    gBombsSpawned |= 0x8000;
+    gBombsSpawned++;
 }
 
 void bobomb_spawn_coin(void) {
@@ -70,6 +77,14 @@ void bobomb_act_patrol(void) {
     s16 collisionFlags = object_step();
     if (obj_return_home_if_safe(o, o->oHomeX, o->oHomeY, o->oHomeZ, 400)
      && obj_check_if_facing_toward_angle(o->oMoveAngleYaw, o->oAngleToMario, 0x2000)) {
+        o->oBobombFuseLit = TRUE;
+        o->oAction = BOBOMB_ACT_CHASE_MARIO;
+    }
+
+    if (
+        ((get_challenge_obtained_flags() & get_challenge_enforced_flags()) & CHALLENGE_FLAG_KILL_ALL_BOMBS) &&
+        gChallengeStatus == CHALLENGE_STATUS_CAN_WIN
+    ) {
         o->oBobombFuseLit = TRUE;
         o->oAction = BOBOMB_ACT_CHASE_MARIO;
     }
@@ -272,6 +287,11 @@ void bhv_bobomb_loop(void) {
 
             o->oBobombFuseTimer++;
         }
+    }    
+
+    if (o->activeFlags == ACTIVE_FLAG_DEACTIVATED) {
+        gBombsSpawned--;
+        add_challenge_flags(CHALLENGE_FLAG_KILL_BOMB);
     }
 }
 

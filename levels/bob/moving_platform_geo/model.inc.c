@@ -1,39 +1,39 @@
 Vtx moving_platform_geo_moving_platform_geo_mesh_layer_1_vtx_cull[8] = {
-	{{{-6, -57, -62}, 0, {-16, -16}, {0x0, 0x0, 0x0, 0x0}}},
-	{{{-6, -57, 53}, 0, {-16, -16}, {0x0, 0x0, 0x0, 0x0}}},
-	{{{-6, 57, 53}, 0, {-16, -16}, {0x0, 0x0, 0x0, 0x0}}},
-	{{{-6, 57, -62}, 0, {-16, -16}, {0x0, 0x0, 0x0, 0x0}}},
-	{{{10, -57, -62}, 0, {-16, -16}, {0x0, 0x0, 0x0, 0x0}}},
-	{{{10, -57, 53}, 0, {-16, -16}, {0x0, 0x0, 0x0, 0x0}}},
-	{{{10, 57, 53}, 0, {-16, -16}, {0x0, 0x0, 0x0, 0x0}}},
-	{{{10, 57, -62}, 0, {-16, -16}, {0x0, 0x0, 0x0, 0x0}}},
+	{{{-53, -397, -397}, 0, {-16, -16}, {0x0, 0x0, 0x0, 0x0}}},
+	{{{-53, -397, 397}, 0, {-16, -16}, {0x0, 0x0, 0x0, 0x0}}},
+	{{{-53, 397, 397}, 0, {-16, -16}, {0x0, 0x0, 0x0, 0x0}}},
+	{{{-53, 397, -397}, 0, {-16, -16}, {0x0, 0x0, 0x0, 0x0}}},
+	{{{53, -397, -397}, 0, {-16, -16}, {0x0, 0x0, 0x0, 0x0}}},
+	{{{53, -397, 397}, 0, {-16, -16}, {0x0, 0x0, 0x0, 0x0}}},
+	{{{53, 397, 397}, 0, {-16, -16}, {0x0, 0x0, 0x0, 0x0}}},
+	{{{53, 397, -397}, 0, {-16, -16}, {0x0, 0x0, 0x0, 0x0}}},
 };
 
 Vtx moving_platform_geo_moving_platform_geo_mesh_layer_1_vtx_0[24] = {
-	{{{-6, -57, 53}, 0, {368, 1008}, {0x81, 0x0, 0x0, 0xFF}}},
-	{{{-6, 57, 53}, 0, {624, 1008}, {0x81, 0x0, 0x0, 0xFF}}},
-	{{{-6, 57, -62}, 0, {624, 752}, {0x81, 0x0, 0x0, 0xFF}}},
-	{{{-6, -57, -62}, 0, {368, 752}, {0x81, 0x0, 0x0, 0xFF}}},
-	{{{-6, -57, -62}, 0, {368, 752}, {0x0, 0x0, 0x81, 0xFF}}},
-	{{{-6, 57, -62}, 0, {624, 752}, {0x0, 0x0, 0x81, 0xFF}}},
-	{{{10, 57, -62}, 0, {624, 496}, {0x0, 0x0, 0x81, 0xFF}}},
-	{{{10, -57, -62}, 0, {368, 496}, {0x0, 0x0, 0x81, 0xFF}}},
-	{{{10, -57, -62}, 0, {368, 496}, {0x7F, 0x0, 0x0, 0xFF}}},
-	{{{10, 57, -62}, 0, {624, 496}, {0x7F, 0x0, 0x0, 0xFF}}},
-	{{{10, 57, 53}, 0, {624, 240}, {0x7F, 0x0, 0x0, 0xFF}}},
-	{{{10, -57, 53}, 0, {368, 240}, {0x7F, 0x0, 0x0, 0xFF}}},
-	{{{10, -57, 53}, 0, {368, 240}, {0x0, 0x0, 0x7F, 0xFF}}},
-	{{{10, 57, 53}, 0, {624, 240}, {0x0, 0x0, 0x7F, 0xFF}}},
-	{{{-6, 57, 53}, 0, {624, -16}, {0x0, 0x0, 0x7F, 0xFF}}},
-	{{{-6, -57, 53}, 0, {368, -16}, {0x0, 0x0, 0x7F, 0xFF}}},
-	{{{-6, -57, -62}, 0, {112, 496}, {0x0, 0x81, 0x0, 0xFF}}},
-	{{{10, -57, -62}, 0, {368, 496}, {0x0, 0x81, 0x0, 0xFF}}},
-	{{{10, -57, 53}, 0, {368, 240}, {0x0, 0x81, 0x0, 0xFF}}},
-	{{{-6, -57, 53}, 0, {112, 240}, {0x0, 0x81, 0x0, 0xFF}}},
-	{{{10, 57, -62}, 0, {624, 496}, {0x0, 0x7F, 0x0, 0xFF}}},
-	{{{-6, 57, -62}, 0, {880, 496}, {0x0, 0x7F, 0x0, 0xFF}}},
-	{{{-6, 57, 53}, 0, {880, 240}, {0x0, 0x7F, 0x0, 0xFF}}},
-	{{{10, 57, 53}, 0, {624, 240}, {0x0, 0x7F, 0x0, 0xFF}}},
+	{{{-53, -397, 397}, 0, {368, 1008}, {0x81, 0x0, 0x0, 0xFF}}},
+	{{{-53, 397, 397}, 0, {624, 1008}, {0x81, 0x0, 0x0, 0xFF}}},
+	{{{-53, 397, -397}, 0, {624, 752}, {0x81, 0x0, 0x0, 0xFF}}},
+	{{{-53, -397, -397}, 0, {368, 752}, {0x81, 0x0, 0x0, 0xFF}}},
+	{{{-53, -397, -397}, 0, {368, 752}, {0x0, 0x0, 0x81, 0xFF}}},
+	{{{-53, 397, -397}, 0, {624, 752}, {0x0, 0x0, 0x81, 0xFF}}},
+	{{{53, 397, -397}, 0, {624, 496}, {0x0, 0x0, 0x81, 0xFF}}},
+	{{{53, -397, -397}, 0, {368, 496}, {0x0, 0x0, 0x81, 0xFF}}},
+	{{{53, -397, -397}, 0, {368, 496}, {0x7F, 0x0, 0x0, 0xFF}}},
+	{{{53, 397, -397}, 0, {624, 496}, {0x7F, 0x0, 0x0, 0xFF}}},
+	{{{53, 397, 397}, 0, {624, 240}, {0x7F, 0x0, 0x0, 0xFF}}},
+	{{{53, -397, 397}, 0, {368, 240}, {0x7F, 0x0, 0x0, 0xFF}}},
+	{{{53, -397, 397}, 0, {368, 240}, {0x0, 0x0, 0x7F, 0xFF}}},
+	{{{53, 397, 397}, 0, {624, 240}, {0x0, 0x0, 0x7F, 0xFF}}},
+	{{{-53, 397, 397}, 0, {624, -16}, {0x0, 0x0, 0x7F, 0xFF}}},
+	{{{-53, -397, 397}, 0, {368, -16}, {0x0, 0x0, 0x7F, 0xFF}}},
+	{{{-53, -397, -397}, 0, {112, 496}, {0x0, 0x81, 0x0, 0xFF}}},
+	{{{53, -397, -397}, 0, {368, 496}, {0x0, 0x81, 0x0, 0xFF}}},
+	{{{53, -397, 397}, 0, {368, 240}, {0x0, 0x81, 0x0, 0xFF}}},
+	{{{-53, -397, 397}, 0, {112, 240}, {0x0, 0x81, 0x0, 0xFF}}},
+	{{{53, 397, -397}, 0, {624, 496}, {0x0, 0x7F, 0x0, 0xFF}}},
+	{{{-53, 397, -397}, 0, {880, 496}, {0x0, 0x7F, 0x0, 0xFF}}},
+	{{{-53, 397, 397}, 0, {880, 240}, {0x0, 0x7F, 0x0, 0xFF}}},
+	{{{53, 397, 397}, 0, {624, 240}, {0x0, 0x7F, 0x0, 0xFF}}},
 };
 
 Gfx moving_platform_geo_moving_platform_geo_mesh_layer_1_tri_0[] = {
@@ -48,7 +48,7 @@ Gfx moving_platform_geo_moving_platform_geo_mesh_layer_1_tri_0[] = {
 };
 
 
-Gfx mat_moving_platform_geo_cozies_noise_thing_layer1[] = {
+Gfx mat_moving_platform_geo_cozies_noise_thing_2_layer1[] = {
 	gsDPPipeSync(),
 	gsDPSetCombineLERP(NOISE, 0, SHADE_ALPHA, ENVIRONMENT, 0, 0, 0, 1, PRIMITIVE, SHADE, COMBINED, SHADE, 0, 0, 0, 1),
 	gsDPSetFogColor(141, 255, 239, 255),
@@ -57,12 +57,12 @@ Gfx mat_moving_platform_geo_cozies_noise_thing_layer1[] = {
 	gsDPSetCycleType(G_CYC_2CYCLE),
 	gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_OPA_SURF2),
 	gsSPTexture(65535, 65535, 0, 0, 1),
-	gsDPSetPrimColor(0, 36, 17, 66, 70, 255),
-	gsDPSetEnvColor(204, 224, 193, 255),
+	gsDPSetPrimColor(0, 36, 70, 34, 0, 255),
+	gsDPSetEnvColor(155, 224, 160, 255),
 	gsSPEndDisplayList(),
 };
 
-Gfx mat_revert_moving_platform_geo_cozies_noise_thing_layer1[] = {
+Gfx mat_revert_moving_platform_geo_cozies_noise_thing_2_layer1[] = {
 	gsDPPipeSync(),
 	gsSPGeometryMode(G_FOG, 0),
 	gsDPSetCycleType(G_CYC_1CYCLE),
@@ -75,9 +75,9 @@ Gfx moving_platform_geo_moving_platform_geo_mesh_layer_1[] = {
 	gsSPVertex(moving_platform_geo_moving_platform_geo_mesh_layer_1_vtx_cull + 0, 8, 0),
 	gsSPSetGeometryMode(G_LIGHTING),
 	gsSPCullDisplayList(0, 7),
-	gsSPDisplayList(mat_moving_platform_geo_cozies_noise_thing_layer1),
+	gsSPDisplayList(mat_moving_platform_geo_cozies_noise_thing_2_layer1),
 	gsSPDisplayList(moving_platform_geo_moving_platform_geo_mesh_layer_1_tri_0),
-	gsSPDisplayList(mat_revert_moving_platform_geo_cozies_noise_thing_layer1),
+	gsSPDisplayList(mat_revert_moving_platform_geo_cozies_noise_thing_2_layer1),
 	gsSPEndDisplayList(),
 };
 

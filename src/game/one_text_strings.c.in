@@ -1,53 +1,80 @@
+#define HEAD(x)    PP_COL("FFFFFFFF") "Challenge " x PP_COL_RESET "\n"
+#define BODY(x, y) PP_COL(x "--") y "..." PP_COL_RESET
+
 // Yeah yeah, this is stupid, but at least it gives us the option to add to this text if we need to later for a unique description or something
-#define TEXT_CHALLENGE_0  "Challenge 1"
-#define TEXT_CHALLENGE_1  "Challenge 2"
-#define TEXT_CHALLENGE_2  "Challenge 3"
-#define TEXT_CHALLENGE_3  "Challenge 4"
-#define TEXT_CHALLENGE_4  "Challenge 5"
-#define TEXT_CHALLENGE_5  "Challenge 6"
-#define TEXT_CHALLENGE_6  "Challenge 7"
-#define TEXT_CHALLENGE_7  "Challenge 8"
-#define TEXT_CHALLENGE_8  "Challenge 9"
-#define TEXT_CHALLENGE_9  "Challenge 10"
-#define TEXT_CHALLENGE_10 "Challenge 11"
-#define TEXT_CHALLENGE_11 "Challenge 12"
-#define TEXT_CHALLENGE_12 "Challenge 13"
-#define TEXT_CHALLENGE_13 "Challenge 14"
-#define TEXT_CHALLENGE_14 "Challenge 15"
-#define TEXT_CHALLENGE_15 "Challenge 16"
-#define TEXT_CHALLENGE_16 "Challenge 17"
-#define TEXT_CHALLENGE_17 "Challenge 18"
-#define TEXT_CHALLENGE_18 "Challenge 19"
-#define TEXT_CHALLENGE_19 "Challenge 20"
-#define TEXT_CHALLENGE_20 "Challenge 21"
-#define TEXT_CHALLENGE_21 "Challenge 22"
-#define TEXT_CHALLENGE_22 "Challenge 23"
-#define TEXT_CHALLENGE_23 "Challenge 24"
-#define TEXT_CHALLENGE_24 "Challenge 25"
-#define TEXT_CHALLENGE_25 "Challenge 26"
-#define TEXT_CHALLENGE_26 "Challenge 27"
-#define TEXT_CHALLENGE_27 "Challenge 28"
-#define TEXT_CHALLENGE_28 "Challenge 29"
-#define TEXT_CHALLENGE_29 "Challenge 30"
-#define TEXT_CHALLENGE_30 "Challenge 31"
-#define TEXT_CHALLENGE_31 "Challenge 32"
+#define TEXT_CHALLENGE_0        HEAD("1")   BODY("FFFF3F", "Collect the star")
+#define TEXT_CHALLENGE_1        HEAD("2")   BODY("FFFF3F", "Collect the star")
+#define TEXT_CHALLENGE_2        HEAD("3")   BODY("FFFF3F", "Collect the star")
+#define TEXT_CHALLENGE_3        HEAD("4")   BODY("FFFF3F", "Collect the star")
+#define TEXT_CHALLENGE_4        HEAD("5")   BODY("FFFF3F", "Collect the star")
+#define TEXT_CHALLENGE_5        HEAD("6")   BODY("FFFF3F", "Collect the star")
+#define TEXT_CHALLENGE_6        HEAD("7")   BODY("FFFF3F", "Collect the star")
+#define TEXT_CHALLENGE_7        HEAD("8")   BODY("FFFF3F", "Collect the star")
+#define TEXT_CHALLENGE_8        HEAD("9")   BODY("FFFF3F", "Collect the star")
+#define TEXT_CHALLENGE_9        HEAD("10")  BODY("1FFF1F", "TODO" PP_COL_RESET)
+#define TEXT_CHALLENGE_10       HEAD("11")  BODY("1FFF1F", "TODO" PP_COL_RESET)
+#define TEXT_CHALLENGE_11       HEAD("12")  BODY("1FFF1F", "TODO" PP_COL_RESET)
+#define TEXT_CHALLENGE_12       HEAD("13")  BODY("1FFF1F", "TODO" PP_COL_RESET)
+#define TEXT_CHALLENGE_13       HEAD("14")  BODY("1FFF1F", "TODO" PP_COL_RESET)
+#define TEXT_CHALLENGE_14       HEAD("15")  BODY("1FFF1F", "TODO" PP_COL_RESET)
+#define TEXT_CHALLENGE_15       HEAD("16")  BODY("1FFF1F", "TODO" PP_COL_RESET)
+#define TEXT_CHALLENGE_16       HEAD("17")  BODY("1FFF1F", "TODO" PP_COL_RESET)
+#define TEXT_CHALLENGE_17       HEAD("18")  BODY("1FFF1F", "TODO" PP_COL_RESET)
+#define TEXT_CHALLENGE_18       HEAD("19")  BODY("1FFF1F", "TODO" PP_COL_RESET)
+#define TEXT_CHALLENGE_19       HEAD("20")  BODY("1FFF1F", "TODO" PP_COL_RESET)
+#define TEXT_CHALLENGE_20       HEAD("21")  BODY("1FFF1F", "TODO" PP_COL_RESET)
+#define TEXT_CHALLENGE_21       HEAD("22")  BODY("1FFF1F", "TODO" PP_COL_RESET)
+#define TEXT_CHALLENGE_22       HEAD("23")  BODY("1FFF1F", "TODO" PP_COL_RESET)
+#define TEXT_CHALLENGE_23       HEAD("24")  BODY("1FFF1F", "TODO" PP_COL_RESET)
+#define TEXT_CHALLENGE_24       HEAD("25")  BODY("1FFF1F", "TODO" PP_COL_RESET)
+#define TEXT_CHALLENGE_25       HEAD("26")  BODY("1FFF1F", "TODO" PP_COL_RESET)
+#define TEXT_CHALLENGE_26       HEAD("27")  BODY("1FFF1F", "TODO" PP_COL_RESET)
+#define TEXT_CHALLENGE_27       HEAD("28")  BODY("1FFF1F", "TODO" PP_COL_RESET)
+#define TEXT_CHALLENGE_28       HEAD("29")  BODY("1FFF1F", "TODO" PP_COL_RESET)
+#define TEXT_CHALLENGE_29       HEAD("30")  BODY("1FFF1F", "TODO" PP_COL_RESET)
+#define TEXT_CHALLENGE_30       HEAD("31")  BODY("1FFF1F", "TODO" PP_COL_RESET)
+#define TEXT_CHALLENGE_31       HEAD("32")  BODY("1FFF1F", "TODO" PP_COL_RESET)
 
 
-#define TEXT_CHALLENGE_TYPE_JUMP    "With" _ "jump!"
-#define TEXT_CHALLENGE_TYPE_COIN    "While collecting" _ "coin!"
-#define TEXT_CHALLENGE_TYPE_GROUND  "While touching the ground" _ "time!" // Why would you ever use AT LEAST here lol (okay actually it could be done well, huh wait that's actually kinda brilliant)
-#define TEXT_CHALLENGE_TYPE_GOOMBA  "By killing" _ "goomba!"
-#define TEXT_CHALLENGE_TYPE_A_PRESS "With" _ "A press!"
-#define TEXT_CHALLENGE_TYPE_B_PRESS "With" _ "B press!"
+#define TEXT_CHALLENGE_TYPE_JUMP                  "With" _ "jump!"
+#define TEXT_CHALLENGE_TYPE_COIN                  "While collecting" _ "coin!"
+#define TEXT_CHALLENGE_TYPE_GROUND                "While touching the ground" _ "time!" // Why would you ever use AT LEAST here lol (okay actually it could be done well, huh wait that's actually kinda brilliant)
+#define TEXT_CHALLENGE_TYPE_A_PRESS               "With" _ "A press!"
+#define TEXT_CHALLENGE_TYPE_B_PRESS               "With" _ "B press!"
+#define TEXT_CHALLENGE_TYPE_WALLKICK              "While performing" _ "wallkick!"
+#define TEXT_CHALLENGE_TYPE_TRIPLE_JUMP           "While performing" _ "triple jump!"
+#define TEXT_CHALLENGE_TYPE_COLLECT_LIFE          "While collecting" _ "1-Up mushroom!"
+#define TEXT_CHALLENGE_TYPE_TIMER                 TIMER_EXCEPTION
+#define TEXT_CHALLENGE_TYPE_KNOCKED_KOOPA         "After being bumped by" _ "Koopa!"
+#define TEXT_CHALLENGE_TYPE_SLEEPING_PIRANHA     "After disturbing" _ "Piranha Plant!"
+#define TEXT_CHALLENGE_TYPE_KILL_GOOMBA           "By killing" _ "Goomba!"
+#define TEXT_CHALLENGE_TYPE_KILL_KOOPA            "By killing" _ "Koopa!"
+#define TEXT_CHALLENGE_TYPE_KILL_PENGUIN          "By killing" _ "Penguin!" // TODO: Implementation depends on challenge structure
+#define TEXT_CHALLENGE_TYPE_KILL_BOMB             "By blowing up" _ "Bob-omb!"
+#define TEXT_CHALLENGE_TYPE_KILL_ALL_BOMBS        "By blowing up all but" INVERSE "Bob-omb!"
+#define TEXT_CHALLENGE_TYPE_KILL_GOOMBA_WITH_BOMB "By killing" _ "Goomba with a Bob-omb!"
+#define TEXT_CHALLENGE_TYPE_SMOOCH                "By receiving" _ "smooch!"
 
 // Increase this array whenever adding challenge types!
 #define CHALLENGE_TYPE_ARRAY \
     TEXT_CHALLENGE_TYPE_JUMP, \
     TEXT_CHALLENGE_TYPE_COIN, \
     TEXT_CHALLENGE_TYPE_GROUND, \
-    TEXT_CHALLENGE_TYPE_GOOMBA, \
     TEXT_CHALLENGE_TYPE_A_PRESS, \
-    TEXT_CHALLENGE_TYPE_B_PRESS,
+    TEXT_CHALLENGE_TYPE_B_PRESS, \
+    TEXT_CHALLENGE_TYPE_WALLKICK, \
+    TEXT_CHALLENGE_TYPE_TRIPLE_JUMP, \
+    TEXT_CHALLENGE_TYPE_COLLECT_LIFE, \
+    TEXT_CHALLENGE_TYPE_TIMER, \
+    TEXT_CHALLENGE_TYPE_KNOCKED_KOOPA, \
+    TEXT_CHALLENGE_TYPE_SLEEPING_PIRANHA, \
+    TEXT_CHALLENGE_TYPE_KILL_GOOMBA, \
+    TEXT_CHALLENGE_TYPE_KILL_KOOPA, \
+    TEXT_CHALLENGE_TYPE_KILL_PENGUIN, \
+    TEXT_CHALLENGE_TYPE_KILL_BOMB, \
+    TEXT_CHALLENGE_TYPE_KILL_ALL_BOMBS, \
+    TEXT_CHALLENGE_TYPE_KILL_GOOMBA_WITH_BOMB, \
+    TEXT_CHALLENGE_TYPE_SMOOCH,
 
 
 char *gChallengeHeaderText[sizeof(u32)*8] = {
@@ -86,16 +113,41 @@ char *gChallengeHeaderText[sizeof(u32)*8] = {
 };
 
 
-#define _ " " PP_COL("FF5F5F--") PP_WAVE "AT MOST" PP_WAVE " ONE" PP_COL_RESET " "
+#define AT_MOST  " " PP_COL("FF5F5F--") PP_WAVE "AT MOST"  PP_WAVE " ONE" PP_COL_RESET " "
+#define AT_LEAST " " PP_COL("3FFF3F--") PP_WAVE "AT LEAST" PP_WAVE " ONE" PP_COL_RESET " "
+#define EXACTLY  " " PP_COL("5F5FFF--") PP_WAVE "EXACTLY"  PP_WAVE " ONE" PP_COL_RESET " "
+
+
+#define _ AT_MOST
+#define INVERSE AT_LEAST
+#define TIMER_EXCEPTION "Before" _ "minute has passed!"
+
 static char *challengeTypesEnforced[] = {CHALLENGE_TYPE_ARRAY};
+
+#undef TIMER_EXCEPTION
+#undef INVERSE
 #undef _
 
-#define _ " " PP_COL("3FFF3F--") PP_WAVE "AT LEAST" PP_WAVE " ONE" PP_COL_RESET " "
+
+#define _ AT_LEAST
+#define INVERSE AT_MOST
+#define TIMER_EXCEPTION "After" _ "minute has passed!"
+
 static char *challengeTypesRequired[] = {CHALLENGE_TYPE_ARRAY};
+
+#undef TIMER_EXCEPTION
+#undef INVERSE
 #undef _
 
-#define _ " " PP_COL("5F5FFF--") PP_WAVE "EXACTLY" PP_WAVE " ONE" PP_COL_RESET " "
+
+#define _ EXACTLY
+#define INVERSE EXACTLY
+#define TIMER_EXCEPTION "When" _ "minute has passed (frame-perfect)!"
+
 static char *challengeTypesRequiredAndEnforced[] = {CHALLENGE_TYPE_ARRAY};
+
+#undef TIMER_EXCEPTION
+#undef INVERSE
 #undef _
 
 
@@ -107,3 +159,11 @@ char **gChallengeTypesArr[] = {
 STATIC_ASSERT(ARRAY_COUNT(challengeTypesEnforced) == CHALLENGE_NAME_TOTAL, "Mismatch of entries in challengeTypesEnforced array!");
 STATIC_ASSERT(ARRAY_COUNT(challengeTypesRequired) == CHALLENGE_NAME_TOTAL, "Mismatch of entries in challengeTypesRequired array!");
 STATIC_ASSERT(ARRAY_COUNT(challengeTypesRequiredAndEnforced) == CHALLENGE_NAME_TOTAL, "Mismatch of entries in challengeTypesRequiredAndEnforced array!");
+
+
+#undef HEAD
+#undef BODY
+
+#undef AT_MOST
+#undef AT_LEAST
+#undef EXACTLY

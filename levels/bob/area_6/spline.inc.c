@@ -1,7 +1,7 @@
-const Trajectory bob_area_6_spline_NurbsCurve[] = {
-	TRAJECTORY_POS( 0, -306, -50, 21),
-	TRAJECTORY_POS( 1, -467, -50, 109),
-	TRAJECTORY_POS( 2, -306, -50, 198),
-	TRAJECTORY_POS( 3, -306, -50, 21),
+const Trajectory bob_area_6_spline_AAAAAAAAAA[] = {
+	TRAJECTORY_POS( 0, -1485, 156, 255),
+	TRAJECTORY_POS( 1, -513, 156, -279),
+	TRAJECTORY_POS( 2, -1485, 156, -813),
+	TRAJECTORY_POS( 3, -1485, 156, 255),
 	TRAJECTORY_END(),
 };

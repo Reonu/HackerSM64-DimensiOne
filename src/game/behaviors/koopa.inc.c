@@ -1,3 +1,4 @@
+#include "game/one_challenges.h"
 
 /**
  * Behavior for bhvKoopa and bhvKoopaRaceEndpoint.
@@ -326,6 +327,7 @@ static void koopa_shelled_update(void) {
 static void koopa_unshelled_act_run(void) {
     f32 distToShell = 99999.0f;
     struct Object *shell;
+    u8 shouldAttackMario = FALSE;
 
     cur_obj_init_animation_with_sound(KOOPA_ANIM_UNSHELLED_RUN);
     koopa_play_footstep_sound(0, 6);
@@ -339,7 +341,16 @@ static void koopa_unshelled_act_run(void) {
         }
 
         // If shell exists, then turn toward shell
-        shell = cur_obj_find_nearest_object_with_behavior(bhvKoopaShell, &distToShell);
+        if (
+            gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING &&
+            ((get_challenge_obtained_flags() & get_challenge_obtained_flags()) & CHALLENGE_FLAG_KNOCKED_KOOPA)
+        ) {
+            shell = cur_obj_find_nearest_object_with_behavior(bhvMario, &distToShell); // Chase Mario instead of shell
+            shouldAttackMario = TRUE;
+        } else {
+            shell = cur_obj_find_nearest_object_with_behavior(bhvKoopaShell, &distToShell);
+        }
+
         if (shell != NULL) {
             //! This overrides turning toward home
             o->oKoopaTargetYaw = obj_angle_to_object(o, shell);
@@ -355,7 +366,7 @@ static void koopa_unshelled_act_run(void) {
 
         // If mario is far away, or our running away from mario coincides with
         // running toward the shell
-        if (o->oDistanceToMario > 800.0f
+        if (shouldAttackMario || o->oDistanceToMario > 800.0f
             || (shell != NULL
                 && abs_angle_diff(o->oKoopaTargetYaw, o->oAngleToMario + 0x8000) < 0x2000)) {
             // then turn toward the shell
@@ -797,6 +808,9 @@ void bhv_koopa_update(void) {
         }
     } else {
         o->oAnimState = 1;
+        if (o->oKoopaMovementType == KOOPA_BP_UNSHELLED && o->activeFlags == ACTIVE_FLAG_DEACTIVATED) {
+            add_challenge_flags(CHALLENGE_FLAG_KILL_KOOPA);
+        }
     }
 
     obj_face_yaw_approach(o->oMoveAngleYaw, 0x600);

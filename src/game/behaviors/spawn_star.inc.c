@@ -19,47 +19,58 @@ static void update_challenge_star_model(void) {
     }
 
     if (gChallengeStatus == CHALLENGE_STATUS_CAN_WIN) {
-        o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_STAR];
+        if (o->header.gfx.sharedChild == gLoadedGraphNodes[MODEL_OUTLINE_STAR]) {
+            o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_STAR];
+        } else if (o->header.gfx.sharedChild == gLoadedGraphNodes[MODEL_OUTLINE_STAR_COLLECTED]) {
+            o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_TRANSPARENT_STAR];
+        }
         cur_obj_become_tangible();
     } else {
-        o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_TRANSPARENT_STAR];
+        if (o->header.gfx.sharedChild == gLoadedGraphNodes[MODEL_STAR]) {
+            o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_OUTLINE_STAR];
+        } else if (o->header.gfx.sharedChild == gLoadedGraphNodes[MODEL_TRANSPARENT_STAR]) {
+            o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_OUTLINE_STAR_COLLECTED];
+        }
         cur_obj_become_intangible();
     }
 }
 
 void bhv_collect_star_init(void) {
-    if (gChallengeStatus == CHALLENGE_STATUS_NOT_PLAYING) {
-        u8 starId = GET_BPARAM1(o->oBehParams);
+    u8 starId = GET_BPARAM1(o->oBehParams);
 #ifdef GLOBAL_STAR_IDS
-        u8 currentLevelStarFlags = save_file_get_star_flags((gCurrSaveFileNum - 1), COURSE_NUM_TO_INDEX(starId / 7));
-        if (currentLevelStarFlags & (1 << (starId % 7))) {
+    u8 currentLevelStarFlags = save_file_get_star_flags((gCurrSaveFileNum - 1), COURSE_NUM_TO_INDEX(starId / 7));
+    if (currentLevelStarFlags & (1 << (starId % 7))) {
 #else
-        u8 currentLevelStarFlags = save_file_get_star_flags((gCurrSaveFileNum - 1), COURSE_NUM_TO_INDEX(gCurrCourseNum));
-        if (currentLevelStarFlags & (1 << starId)) {
+    u8 currentLevelStarFlags = save_file_get_star_flags((gCurrSaveFileNum - 1), COURSE_NUM_TO_INDEX(gCurrCourseNum));
+    if (currentLevelStarFlags & (1 << starId)) {
 #endif
-            o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_TRANSPARENT_STAR];
-        } else {
-            o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_STAR];
-        }
-
-        obj_set_hitbox(o, &sCollectStarHitbox);
-    } else {
-        obj_set_hitbox(o, &sCollectStarHitbox); // Order matters
         o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_TRANSPARENT_STAR];
+    } else {
+        o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_STAR];
+    }
+
+    obj_set_hitbox(o, &sCollectStarHitbox);
+
+    if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING) {
+        if (o->header.gfx.sharedChild == gLoadedGraphNodes[MODEL_STAR]) {
+            o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_OUTLINE_STAR];
+        } else if (o->header.gfx.sharedChild == gLoadedGraphNodes[MODEL_TRANSPARENT_STAR]) {
+            o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_OUTLINE_STAR_COLLECTED];
+        }
         cur_obj_become_intangible();
     }
 }
 
 void bhv_collect_star_loop(void) {
-    u8 intensity = 240;
-    Vec3f pos = {o->oPosX, o->oPosY + 100, o->oPosZ};
+    //u8 intensity = 240;
+    //Vec3f pos = {o->oPosX, o->oPosY + 100, o->oPosZ};
     if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING) {
         update_challenge_star_model();
-        if (o->header.gfx.sharedChild == gLoadedGraphNodes[MODEL_TRANSPARENT_STAR]) {
-            o->oFaceAngleYaw += 0x200;
-        } else {
+        if (o->oIntangibleTimer == 0) {
             o->oFaceAngleYaw += 0x800;
-            emit_light(pos, intensity, intensity, 0, 4, 50, 8);
+            //emit_light(pos, intensity, intensity, 0, 4, 50, 8);
+        } else {
+            o->oFaceAngleYaw += 0x200;
         }
     } else {
         o->oFaceAngleYaw += 0x800;
@@ -142,10 +153,11 @@ void bhv_star_spawn_loop(void) {
         case SPAWN_STAR_ARC_CUTSCENE_ACT_END:
             if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING) {
                 update_challenge_star_model();
-                if (o->header.gfx.sharedChild == gLoadedGraphNodes[MODEL_TRANSPARENT_STAR]) {
-                    o->oFaceAngleYaw += 0x200;
-                } else {
+                if (o->oIntangibleTimer == 0) {
                     o->oFaceAngleYaw += 0x800;
+                    //emit_light(pos, intensity, intensity, 0, 4, 50, 8);
+                } else {
+                    o->oFaceAngleYaw += 0x200;
                 }
             } else {
                 o->oFaceAngleYaw += 0x800;

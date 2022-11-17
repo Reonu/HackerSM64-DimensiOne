@@ -178,14 +178,8 @@ void print_challenge_types(void) {
         y -= lineSpacing;
     }
 
-    if (sChallengesPrintTimer > FADE_IN_FRAMES) {
-        alpha = 255;
-    }
-
-    if (alpha != 0) {
-        print_set_envcolour(0xFF, 0xFF, 0xFF, alpha);
-        print_small_text(SCREEN_WIDTH / 2, 12, gChallengeHeaderText[gChallengeLevel], PRINT_TEXT_ALIGN_CENTER, PRINT_ALL, FONT_DEFAULT);
-    }
+    print_set_envcolour(0xFF, 0xFF, 0xFF, alpha);
+    print_small_text(SCREEN_WIDTH / 2, 12, gChallengeHeaderText[gChallengeLevel], PRINT_TEXT_ALIGN_CENTER, PRINT_ALL, FONT_DEFAULT);
 }
 #undef FADE_IN_FRAMES
 #undef FADE_OUT_FRAMES

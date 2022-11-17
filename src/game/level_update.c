@@ -757,6 +757,14 @@ s16 level_trigger_warp(struct MarioState *m, s32 warpOp) {
                 play_transition(WARP_TRANSITION_FADE_INTO_COLOR, sDelayedWarpTimer, 0x00, 0x00, 0x00);
                 break;
 
+            case WARP_OP_DEBUG_CHALLENGE_SKIP:
+                sDelayedWarpTimer = 1;
+                sSourceWarpNodeId = WARP_NODE_DEFAULT;
+                gSavedCourseNum = COURSE_NONE;
+                play_transition(WARP_TRANSITION_FADE_INTO_COLOR, sDelayedWarpTimer, 0x00, 0x00, 0x00);
+                debugChallengeTransition = TRUE;
+                break;
+
             case WARP_OP_STAR_EXIT:
                 sDelayedWarpTimer = 32;
                 sSourceWarpNodeId = WARP_NODE_DEFAULT;
@@ -796,10 +804,6 @@ s16 level_trigger_warp(struct MarioState *m, s32 warpOp) {
                         sSourceWarpNodeId = WARP_NODE_DEATH;
 #endif
                     }                    
-                }
-
-                if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING) {
-                    sDelayedWarpArg = WARP_OP_WARP_FLOOR;
                 }
 
                 sDelayedWarpTimer = 20;
@@ -932,6 +936,16 @@ void initiate_delayed_warp(void) {
 
                     if (sDelayedWarpOp == WARP_OP_START_CHALLENGES) {
                         start_challenge();
+                    }
+
+                    if (sDelayedWarpOp == WARP_OP_START_CHALLENGES && gChallengeStatus == CHALLENGE_STATUS_NOT_PLAYING) {
+                        gChallengeStatus = CHALLENGE_STATUS_PLAYING;
+                        warpNode = area_get_warp_node(WARP_NODE_DEATH);
+                        if (warpNode != NULL) {
+                            gChallengeLevel = warpNode->node.destNode - 1;
+                        } else {
+                            gChallengeLevel = 0;
+                        }
                     }
 
                     if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING) {
@@ -1132,12 +1146,9 @@ s32 play_mode_paused(void) {
         if (gDebugLevelSelect) {
             fade_into_special_warp(WARP_SPECIAL_LEVEL_SELECT, 1);
         } else {
-            if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING) {
-                gChallengeLevel = EXIT_COURSE_NODE - 1;
-                if (gChallengeStatus == CHALLENGE_STATUS_WIN) {
-                    gChallengeStatus = CHALLENGE_STATUS_PLAYING;
-                }
-            }
+            gChallengeLevel = 0;
+            gChallengeStatus = CHALLENGE_STATUS_NOT_PLAYING;
+            gMarioState->health = MARIO_MAX_HEALTH;
 
             tmpChallengeWarpID = -2; // Dumb hardcoded case for exit course level warps
             initiate_warp(EXIT_COURSE_LEVEL, EXIT_COURSE_AREA, EXIT_COURSE_NODE, WARP_FLAGS_NONE);
