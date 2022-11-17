@@ -951,6 +951,20 @@ static void level_cmd_moving_platform(void) {
         sCurrAreaIndex != -1
         && ((CMD_GET(u8, 2) & (1 << (gCurrActNum - 1))) || (CMD_GET(u8, 2) == 0x1F))
     ) {
+        u32 bparams = CMD_GET(u32, 16);
+        if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING) {
+            u8 level = gChallengeLevel;
+            if (level >= sizeof(u32) * 8) {
+                level = (sizeof(u32) * 8) - 1;
+            }
+
+            // bparam4 overrides (1-indexed)
+            if ((bparams & 0xFF) != 0 && (bparams & 0xFF) != (u32) (level + 1)) {
+                sCurrentCmd = CMD_NEXT;
+                return;
+            }
+        }
+
         struct SpawnInfo *spawnInfo = alloc_only_pool_alloc(sLevelPool, sizeof(struct SpawnInfo));
 
         vec3s_set(spawnInfo->startPos, CMD_GET(s16, 4),
@@ -964,7 +978,7 @@ static void level_cmd_moving_platform(void) {
         spawnInfo->areaIndex = sCurrAreaIndex;
         spawnInfo->activeAreaIndex = sCurrAreaIndex;
 
-        spawnInfo->behaviorArg = CMD_GET(u32, 16);
+        spawnInfo->behaviorArg = bparams;
         spawnInfo->behaviorScript = CMD_GET(void *, 20);
 
         void *geo = CMD_GET(void *, 24);
