@@ -115,6 +115,9 @@ u8 gChallengeLevel = (u8) -1; // ONE_TODO: Save file support?
 // What is the current status of the challenge?
 u32 gChallengeStatus = CHALLENGE_STATUS_NOT_PLAYING;
 
+// How many Bob-ombs have been spawned into the level?
+u16 gBombsSpawned = 0xFFFF;
+
 // Flags of which challenge conditions have been met by the player
 u32 sObtainedChallengeFlags = CHALLENGE_FLAG_NONE;
 
@@ -132,6 +135,7 @@ u32 internalFlagsForFrame = CHALLENGE_FLAG_NONE;
 
 
 static u8 freshlyTouchedGround = FALSE;
+static u16 sBombsSpawnedLast = 0;
 
 
 static void can_win_challenge(void) {
@@ -179,6 +183,27 @@ static void check_flag_conditions(void) {
     // CHALLENGE_FLAG_B_PRESS
     if (gPlayer1Controller->buttonPressed & B_BUTTON) {
         add_challenge_flags(CHALLENGE_FLAG_B_PRESS);
+    }
+
+    // CHALLENGE_FLAG_KILL_ALL_BOMBS
+    if (gBombsSpawned >= (u16) -3) {
+        gBombsSpawned--; // Process 3 frames later instead, just in case the bombs haven't spawned in yet (hacky but oh well)
+    } else if (gBombsSpawned & 0x8000) {
+        if (gBombsSpawned >= 0xFFF0) { // No bombs were spawned
+            gBombsSpawned = 0;
+            sBombsSpawnedLast = 2; // Trigger 2 bomb spawn flags
+        } else {
+            gBombsSpawned &= ~0x8000;
+            sBombsSpawnedLast = gBombsSpawned;
+        }
+    }
+    if (sBombsSpawnedLast < gBombsSpawned) {
+        sBombsSpawnedLast = gBombsSpawned;
+    } else if (sBombsSpawnedLast > gBombsSpawned) {
+        sBombsSpawnedLast--;
+        if (sBombsSpawnedLast <= 1) {
+            add_challenge_flags(CHALLENGE_FLAG_KILL_ALL_BOMBS);
+        }
     }
 }
 
@@ -273,6 +298,8 @@ void reset_challenge(void) {
     internalFlagsForFrame = CHALLENGE_FLAG_NONE;
 
     freshlyTouchedGround = TRUE;
+    gBombsSpawned = 0xFFFF;
+    sBombsSpawnedLast = 0;
 
     gChallengeStatus = CHALLENGE_STATUS_NOT_PLAYING;
     update_last_print_vars(sObtainedChallengeFlags, sFailureFlags);

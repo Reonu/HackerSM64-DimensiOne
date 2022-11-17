@@ -806,10 +806,6 @@ s16 level_trigger_warp(struct MarioState *m, s32 warpOp) {
                     }                    
                 }
 
-                if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING) {
-                    sDelayedWarpArg = WARP_OP_WARP_FLOOR;
-                }
-
                 sDelayedWarpTimer = 20;
                 play_transition(WARP_TRANSITION_FADE_INTO_CIRCLE, sDelayedWarpTimer, 0x00, 0x00, 0x00);
                 break;

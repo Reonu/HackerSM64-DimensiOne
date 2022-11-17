@@ -17,6 +17,13 @@ void bhv_bobomb_init(void) {
     o->oFriction = 0.8f;
     o->oBuoyancy = 1.3f;
     o->oInteractionSubtype = INT_SUBTYPE_KICKABLE;
+
+    if (gBombsSpawned >= 0xFFF0) {
+        gBombsSpawned = 0;
+    }
+
+    gBombsSpawned |= 0x8000;
+    gBombsSpawned++;
 }
 
 void bobomb_spawn_coin(void) {
@@ -272,6 +279,11 @@ void bhv_bobomb_loop(void) {
 
             o->oBobombFuseTimer++;
         }
+    }    
+
+    if (o->activeFlags == ACTIVE_FLAG_DEACTIVATED) {
+        gBombsSpawned--;
+        add_challenge_flags(CHALLENGE_FLAG_KILL_BOMB);
     }
 }
 

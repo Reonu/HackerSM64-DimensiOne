@@ -50,8 +50,8 @@
 #define TEXT_CHALLENGE_TYPE_KILL_GOOMBA           "By killing" _ "Goomba!"
 #define TEXT_CHALLENGE_TYPE_KILL_KOOPA            "By killing" _ "Koopa!"
 #define TEXT_CHALLENGE_TYPE_KILL_PENGUIN          "By killing" _ "Penguin!" // TODO: Implementation depends on challenge structure
-#define TEXT_CHALLENGE_TYPE_KILL_BOMB             "By killing" _ "Bob-omb!"
-#define TEXT_CHALLENGE_TYPE_KILL_ALL_BOMBS        "By killing all but" _ "Bob-omb!"
+#define TEXT_CHALLENGE_TYPE_KILL_BOMB             "By blowing up" _ "Bob-omb!"
+#define TEXT_CHALLENGE_TYPE_KILL_ALL_BOMBS        "By blowing up all but" INVERSE "Bob-omb!"
 #define TEXT_CHALLENGE_TYPE_KILL_GOOMBA_WITH_BOMB "By killing" _ "Goomba with a Bob-omb!"
 #define TEXT_CHALLENGE_TYPE_SMOOCH                "By receiving" _ "smooch!"
 
@@ -113,30 +113,41 @@ char *gChallengeHeaderText[sizeof(u32)*8] = {
 };
 
 
-#define _ " " PP_COL("FF5F5F--") PP_WAVE "AT MOST" PP_WAVE " ONE" PP_COL_RESET " "
+#define AT_MOST  " " PP_COL("FF5F5F--") PP_WAVE "AT MOST"  PP_WAVE " ONE" PP_COL_RESET " "
+#define AT_LEAST " " PP_COL("3FFF3F--") PP_WAVE "AT LEAST" PP_WAVE " ONE" PP_COL_RESET " "
+#define EXACTLY  " " PP_COL("5F5FFF--") PP_WAVE "EXACTLY"  PP_WAVE " ONE" PP_COL_RESET " "
+
+
+#define _ AT_MOST
+#define INVERSE AT_LEAST
 #define TIMER_EXCEPTION "Before" _ "minute has passed!"
 
 static char *challengeTypesEnforced[] = {CHALLENGE_TYPE_ARRAY};
 
 #undef TIMER_EXCEPTION
+#undef INVERSE
 #undef _
 
 
-#define _ " " PP_COL("3FFF3F--") PP_WAVE "AT LEAST" PP_WAVE " ONE" PP_COL_RESET " "
+#define _ AT_LEAST
+#define INVERSE AT_MOST
 #define TIMER_EXCEPTION "After" _ "minute has passed!"
 
 static char *challengeTypesRequired[] = {CHALLENGE_TYPE_ARRAY};
 
 #undef TIMER_EXCEPTION
+#undef INVERSE
 #undef _
 
 
-#define _ " " PP_COL("5F5FFF--") PP_WAVE "EXACTLY" PP_WAVE " ONE" PP_COL_RESET " "
+#define _ EXACTLY
+#define INVERSE EXACTLY
 #define TIMER_EXCEPTION "When" _ "minute has passed (frame-perfect)!"
 
 static char *challengeTypesRequiredAndEnforced[] = {CHALLENGE_TYPE_ARRAY};
 
 #undef TIMER_EXCEPTION
+#undef INVERSE
 #undef _
 
 
@@ -152,3 +163,7 @@ STATIC_ASSERT(ARRAY_COUNT(challengeTypesRequiredAndEnforced) == CHALLENGE_NAME_T
 
 #undef HEAD
 #undef BODY
+
+#undef AT_MOST
+#undef AT_LEAST
+#undef EXACTLY

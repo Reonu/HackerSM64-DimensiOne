@@ -10,6 +10,10 @@ void bhv_respawner_loop(void) {
 }
 
 void create_respawner(ModelID32 model, const BehaviorScript *behToSpawn, s32 minSpawnDist) {
+    if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING && behToSpawn == bhvBobomb) {
+        return;
+    }
+
     struct Object *respawner = spawn_object_abs_with_rot(o, 0, MODEL_NONE, bhvRespawner, o->oHomeX, o->oHomeY, o->oHomeZ, 0, 0, 0);
     respawner->oBehParams = o->oBehParams;
     respawner->oRespawnerModelToRespawn = model;

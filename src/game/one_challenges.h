@@ -67,6 +67,7 @@ struct OneChallengeLevel {
 };
 
 extern u8 gChallengeLevel;
+extern u16 gBombsSpawned;
 extern u32 gChallengeStatus;
 
 u8 is_challenge_active(void);
