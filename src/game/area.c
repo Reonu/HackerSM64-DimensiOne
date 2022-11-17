@@ -324,7 +324,7 @@ void area_update_objects(void) {
  */
 void play_transition(s16 transType, s16 time, Color red, Color green, Color blue) {
     if (debugChallengeTransition) {
-        time = 1;
+        time = 2;
         debugChallengeTransition = FALSE;
     }
 
