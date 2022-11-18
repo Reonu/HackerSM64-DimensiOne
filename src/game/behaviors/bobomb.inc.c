@@ -66,17 +66,41 @@ void bobomb_check_interactions(void) {
         o->oInteractStatus = INT_STATUS_NONE;
     }
 
+    obj_resolve_object_collisions(&o->oMoveAngleYaw);
+
     if (obj_attack_collided_from_other_object(o)) {
         o->oAction = BOBOMB_ACT_EXPLODE;
     }
 }
 
+#define BOB_CHANGE_SPOT_THRESHOLD 400.0f
+#define BOB_CHANGE_SPOT_AMOUNT 5000.0f
+
 void bobomb_act_patrol(void) {
     o->oForwardVel = 5.0f;
 
     s16 collisionFlags = object_step();
-    if (obj_return_home_if_safe(o, o->oHomeX, o->oHomeY, o->oHomeZ, 400)
-     && obj_check_if_facing_toward_angle(o->oMoveAngleYaw, o->oAngleToMario, 0x2000)) {
+    f32 homeDistX = o->oHomeX - o->oPosX;
+    f32 homeDistZ = o->oHomeZ - o->oPosZ;
+    f32 sqD = sqr(homeDistX) + sqr(homeDistZ);
+    if (sqD < BOB_CHANGE_SPOT_THRESHOLD || collisionFlags & OBJ_COL_FLAG_HIT_WALL) {
+        o->oHomeX += (random_float() - 0.5f) * 2.0f * BOB_CHANGE_SPOT_AMOUNT;
+        o->oHomeZ += (random_float() - 0.5f) * 2.0f * BOB_CHANGE_SPOT_AMOUNT;
+        homeDistX = o->oHomeX - o->oPosX;
+        homeDistZ = o->oHomeZ - o->oPosZ;
+    }
+    
+    s16 angleTowardsHome = atan2s(homeDistZ, homeDistX);
+    if (collisionFlags & OBJ_COL_FLAG_HIT_WALL) {
+        o->oMoveAngleYaw = approach_s16_asymptotic(o->oMoveAngleYaw, angleTowardsHome, 3);
+    } else {
+        o->oMoveAngleYaw = approach_s16_symmetric(o->oMoveAngleYaw, angleTowardsHome, 320);
+    }
+    
+    if (
+        o->oDistanceToMario < 400
+        && obj_check_if_facing_toward_angle(o->oMoveAngleYaw, o->oAngleToMario, 0x2000)
+    ) {
         o->oBobombFuseLit = TRUE;
         o->oAction = BOBOMB_ACT_CHASE_MARIO;
     }
