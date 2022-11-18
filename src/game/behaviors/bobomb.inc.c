@@ -84,15 +84,19 @@ void bobomb_act_patrol(void) {
     f32 homeDistZ = o->oHomeZ - o->oPosZ;
     f32 sqD = sqr(homeDistX) + sqr(homeDistZ);
     if (sqD < BOB_CHANGE_SPOT_THRESHOLD || collisionFlags & OBJ_COL_FLAG_HIT_WALL) {
-        o->oHomeX += (random_float() - 0.5f) * 2.0f * BOB_CHANGE_SPOT_AMOUNT;
-        o->oHomeZ += (random_float() - 0.5f) * 2.0f * BOB_CHANGE_SPOT_AMOUNT;
+        s16 angle = (s16)random_u16();
+        if (collisionFlags & OBJ_COL_FLAG_HIT_WALL) {
+            angle = approach_s16_asymptotic(angle, o->oMoveAngleYaw + 0x8000, 2);
+        }
+        o->oHomeX += sins(angle) * random_float() * BOB_CHANGE_SPOT_AMOUNT;
+        o->oHomeZ += coss(angle) * random_float() * BOB_CHANGE_SPOT_AMOUNT;
         homeDistX = o->oHomeX - o->oPosX;
         homeDistZ = o->oHomeZ - o->oPosZ;
     }
     
     s16 angleTowardsHome = atan2s(homeDistZ, homeDistX);
     if (collisionFlags & OBJ_COL_FLAG_HIT_WALL) {
-        o->oMoveAngleYaw = approach_s16_asymptotic(o->oMoveAngleYaw, angleTowardsHome, 3);
+        o->oMoveAngleYaw = approach_s16_asymptotic(o->oMoveAngleYaw, angleTowardsHome, 2);
     } else {
         o->oMoveAngleYaw = approach_s16_symmetric(o->oMoveAngleYaw, angleTowardsHome, 320);
     }
