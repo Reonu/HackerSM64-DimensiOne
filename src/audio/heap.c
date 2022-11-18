@@ -10,6 +10,7 @@
 #include "game/puppyprint.h"
 #include "game/vc_check.h"
 #include "game/debug.h"
+#include "game/one_challenges.h"
 #include "string.h"
 
 struct PoolSplit {
@@ -1063,6 +1064,10 @@ void init_reverb_us(s32 presetId) {
 #ifdef BETTER_REVERB
     // This will likely crash if given an invalid preset value. Adding a safety check here isn't worth the usability interference.
     struct BetterReverbSettings *betterReverbPreset = &gBetterReverbSettings[gBetterReverbPreset];
+
+    if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING) {
+        betterReverbPreset = &gBetterReverbSettings[1]; // Always use preset 1 for now
+    }
 
     betterReverbDownsampleRate = betterReverbPreset->downsampleRate;
     monoReverb = betterReverbPreset->isMono;

@@ -60,6 +60,7 @@ const LevelScript level_bob_entry[] = {
 		SET_BACKGROUND_MUSIC(0x00, SEQ_LEVEL_GRASS),
 		TERRAIN_TYPE(TERRAIN_GRASS),
 		/* Fast64 begin persistent block [area commands] */
+		SET_ECHO(0xF0, 0xF0),
 		/* Fast64 end persistent block [area commands] */
 	END_AREA(),
 
@@ -93,6 +94,7 @@ const LevelScript level_bob_entry[] = {
 		SET_BACKGROUND_MUSIC(0x00, SEQ_LEVEL_GRASS),
 		TERRAIN_TYPE(TERRAIN_GRASS),
 		/* Fast64 begin persistent block [area commands] */
+		SET_ECHO(0xF0, 0xF0),
 		/* Fast64 end persistent block [area commands] */
 	END_AREA(),
 
@@ -124,6 +126,7 @@ const LevelScript level_bob_entry[] = {
 		SET_BACKGROUND_MUSIC(0x00, SEQ_LEVEL_GRASS),
 		TERRAIN_TYPE(TERRAIN_GRASS),
 		/* Fast64 begin persistent block [area commands] */
+		SET_ECHO(0xF0, 0xF0),
 		/* Fast64 end persistent block [area commands] */
 	END_AREA(),
 
@@ -158,6 +161,7 @@ const LevelScript level_bob_entry[] = {
 		SET_BACKGROUND_MUSIC(0x00, SEQ_LEVEL_GRASS),
 		TERRAIN_TYPE(TERRAIN_GRASS),
 		/* Fast64 begin persistent block [area commands] */
+		SET_ECHO(0x22, 0x22),
 		/* Fast64 end persistent block [area commands] */
 	END_AREA(),
 
@@ -230,6 +234,7 @@ const LevelScript level_bob_entry[] = {
 		SET_BACKGROUND_MUSIC(0x00, SEQ_LEVEL_GRASS),
 		TERRAIN_TYPE(TERRAIN_GRASS),
 		/* Fast64 begin persistent block [area commands] */
+		SET_ECHO(0x22, 0x22),
 		/* Fast64 end persistent block [area commands] */
 	END_AREA(),
 
@@ -262,6 +267,7 @@ const LevelScript level_bob_entry[] = {
 		AREA_SPLINE(bob_area_6_spline_ASplineChallenge0A),
 		AREA_SPLINE(bob_area_6_spline_ASplineChallenge0B),
 		/* Fast64 begin persistent block [area commands] */
+		SET_ECHO(0x22, 0x22),
 		/* Fast64 end persistent block [area commands] */
 	END_AREA(),
 
@@ -282,6 +288,7 @@ const LevelScript level_bob_entry[] = {
 		TERRAIN_TYPE(TERRAIN_GRASS),
 		AREA_SPLINE(bob_area_7_spline_ASplineChallenge0B_001),
 		/* Fast64 begin persistent block [area commands] */
+		SET_ECHO(0x22, 0x22),
 		/* Fast64 end persistent block [area commands] */
 	END_AREA(),
 

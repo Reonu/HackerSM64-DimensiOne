@@ -1,10 +1,12 @@
 #include "sm64.h"
+#include "seq_ids.h"
 #include "area.h"
 #include "game_init.h"
 #include "level_update.h"
 #include "one_challenges.h"
 #include "one_text.h"
 #include "puppyprint.h"
+#include "sound_init.h"
 #include "audio/external.h"
 
 // Actual data for all challenges
@@ -334,6 +336,11 @@ void reset_challenge(void) {
     sBombsKilled = 0;
     sPiranhasDisturbed = 0;
     sGoombasKilledWithBombs = 0;
+
+    if (gChallengeStatus == CHALLENGE_STATUS_NOT_PLAYING) {
+        gChallengeStatus = CHALLENGE_STATUS_PLAYING;
+        set_background_music(0, SEQ_LEVEL_UNDERGROUND, 0);
+    }
 
     gChallengeStatus = CHALLENGE_STATUS_NOT_PLAYING;
     update_last_print_vars(sObtainedChallengeFlags, sFailureFlags);

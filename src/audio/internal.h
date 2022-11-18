@@ -737,7 +737,7 @@ struct BetterReverbSettings {
     s8 downsampleRate;
     u8 isMono;
     u8 filterCount;
-    u16 windowSize;
+    s16 windowSize;
     s16 gain;
     s32 reverbIndex;
     s32 gainIndex;

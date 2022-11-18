@@ -50,8 +50,6 @@ enum OneChallengeFlags {
     CHALLENGE_FLAG_KNOCKED_KOOPA         = (1U << CHALLENGE_NAME_KNOCKED_KOOPA), // TODO: Timer survival thing
     CHALLENGE_FLAG_TIMER                 = (1U << CHALLENGE_NAME_TIMER), // TODO: Everything lol
     CHALLENGE_FLAG_SLEEPING_PIRANHA      = (1U << CHALLENGE_NAME_SLEEPING_PIRANHA),
-
-    // TODO: Killing multiple enemies on the same frame only counts as one. Change this please lol. (Just add to a zeroed variable for kill count or something, easy enough. (CHALLENGE_NAME_KILL_ALL_BOMBS has been handled properly already.))
     CHALLENGE_FLAG_KILL_GOOMBA           = (1U << CHALLENGE_NAME_KILL_GOOMBA),
     CHALLENGE_FLAG_KILL_KOOPA            = (1U << CHALLENGE_NAME_KILL_KOOPA),
     CHALLENGE_FLAG_KILL_PENGUIN          = (1U << CHALLENGE_NAME_KILL_PENGUIN), // TODO: Everything lol

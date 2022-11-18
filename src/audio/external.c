@@ -11,6 +11,7 @@
 #include "game/main.h"
 #include "game/level_update.h"
 #include "game/object_list_processor.h"
+#include "game/one_challenges.h"
 #include "game/camera.h"
 #include "engine/math_util.h"
 #include "seq_ids.h"
@@ -1138,7 +1139,8 @@ static f32 get_sound_freq_scale(u8 bank, u8 item) {
 static u32 get_sound_reverb(UNUSED u8 bank, UNUSED u8 soundIndex, u8 channelIndex) {
     u8 area;
     u8 level;
-    u8 reverb;
+    s8 areaEcho;
+    s16 reverb;
 
     // Disable level reverb if NO_ECHO is set
     if (sSoundBanks[bank][soundIndex].soundBits & SOUND_NO_ECHO) {
@@ -1151,19 +1153,24 @@ static u32 get_sound_reverb(UNUSED u8 bank, UNUSED u8 soundIndex, u8 channelInde
             area = 2;
         }
     }
+    areaEcho = sLevelAreaReverbs[level][area];
+
+    if (gAreaData[gCurrAreaIndex].echoOverride >= -0x80 && gAreaData[gCurrAreaIndex].echoOverride < 0x80) {
+        areaEcho = (s8) gAreaData[gCurrAreaIndex].echoOverride;
+    }
 
     // reverb = reverb adjustment + level reverb + a volume-dependent value
     // The volume-dependent value is 0 when volume is at maximum, and raises to
     // LOW_VOLUME_REVERB when the volume is 0
-    reverb = (u8)(u8) gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->soundScriptIO[5]
-                  + sLevelAreaReverbs[level][area]
-                  + ((1.0f - gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->volume)
+    reverb = (s16) ((u8) gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->soundScriptIO[5]) + (s16) areaEcho
+                  + (s16) ((1.0f - gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->volume)
                         * LOW_VOLUME_REVERB);
-
-    if (reverb > 0x7f) {
+    if (reverb < 0 || areaEcho == -0x80) {
+        reverb = 0;
+    } else if (reverb > 0x7f) {
         reverb = 0x7f;
     }
-    return reverb;
+    return (u8) reverb;
 }
 
 /**
@@ -2414,6 +2421,10 @@ void func_803210D4(u16 fadeDuration) {
  * Called from threads: thread5_game_loop
  */
 void play_course_clear(s32 isKey) {
+    if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING) {
+        return;
+    }
+
     if (isKey) {
         seq_player_play_sequence(SEQ_PLAYER_ENV, SEQ_EVENT_CUTSCENE_COLLECT_KEY, 0);
     } else {
