@@ -80,6 +80,7 @@ void reset_challenge(void);
 void start_next_challenge_level(void);
 void start_challenge(void);
 void add_challenge_flags(u32 flags);
+void add_challenge_kill_flags(u32 flags);
 
 void challenge_update(void);
 

@@ -162,10 +162,10 @@ static void mark_goomba_as_dead(void) {
     }
 
     if (gChallengeLevel == 2) {
-        add_challenge_flags(CHALLENGE_FLAG_KILL_GOOMBA);
+        add_challenge_kill_flags(CHALLENGE_FLAG_KILL_GOOMBA);
 
         if (o->oBlownUp) {
-            add_challenge_flags(CHALLENGE_FLAG_KILL_GOOMBA_WITH_BOMB);
+            add_challenge_kill_flags(CHALLENGE_FLAG_KILL_GOOMBA_WITH_BOMB);
         }
     }
 }
@@ -391,10 +391,10 @@ void bhv_goomba_update(void) {
 
     if (gChallengeLevel != 2) {
         if (o->activeFlags == ACTIVE_FLAG_DEACTIVATED) {
-            add_challenge_flags(CHALLENGE_FLAG_KILL_GOOMBA);
+            add_challenge_kill_flags(CHALLENGE_FLAG_KILL_GOOMBA);
 
             if (o->oBlownUp) {
-                add_challenge_flags(CHALLENGE_FLAG_KILL_GOOMBA_WITH_BOMB);
+                add_challenge_kill_flags(CHALLENGE_FLAG_KILL_GOOMBA_WITH_BOMB);
             }
         }
     }

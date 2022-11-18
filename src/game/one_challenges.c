@@ -137,6 +137,12 @@ u32 internalFlagsForFrame = CHALLENGE_FLAG_NONE;
 static u8 freshlyTouchedGround = FALSE;
 static u16 sBombsSpawnedLast = 0;
 
+static u8 sGoombasKilled = 0;
+static u8 sKoopasKilled = 0;
+static u8 sBombsKilled = 0;
+static u8 sPiranhasDisturbed = 0;
+static u8 sGoombasKilledWithBombs = 0;
+
 
 static void can_win_challenge(void) {
     if (gChallengeStatus != CHALLENGE_STATUS_PLAYING) {
@@ -204,6 +210,28 @@ static void check_flag_conditions(void) {
         if (sBombsSpawnedLast <= 1) {
             add_challenge_flags(CHALLENGE_FLAG_KILL_ALL_BOMBS);
         }
+    }
+
+    // Kill Flags
+    if (sGoombasKilled > 0) {
+        sGoombasKilled--;
+        add_challenge_flags(CHALLENGE_FLAG_KILL_GOOMBA);
+    }
+    if (sKoopasKilled > 0) {
+        sKoopasKilled--;
+        add_challenge_flags(CHALLENGE_FLAG_KILL_KOOPA);
+    }
+    if (sBombsKilled > 0) {
+        sBombsKilled--;
+        add_challenge_flags(CHALLENGE_FLAG_KILL_BOMB);
+    }
+    if (sPiranhasDisturbed > 0) {
+        sPiranhasDisturbed--;
+        add_challenge_flags(CHALLENGE_FLAG_SLEEPING_PIRANHA);
+    }
+    if (sGoombasKilledWithBombs > 0) {
+        sGoombasKilledWithBombs--;
+        add_challenge_flags(CHALLENGE_FLAG_KILL_GOOMBA_WITH_BOMB);
     }
 }
 
@@ -300,6 +328,12 @@ void reset_challenge(void) {
     freshlyTouchedGround = TRUE;
     gBombsSpawned = 0xFFFF;
     sBombsSpawnedLast = 0;
+    
+    sGoombasKilled = 0;
+    sKoopasKilled = 0;
+    sBombsKilled = 0;
+    sPiranhasDisturbed = 0;
+    sGoombasKilledWithBombs = 0;
 
     gChallengeStatus = CHALLENGE_STATUS_NOT_PLAYING;
     update_last_print_vars(sObtainedChallengeFlags, sFailureFlags);
@@ -336,6 +370,20 @@ void start_challenge(void) {
 // Apply a challenge flag or flags when a condition is met; updated automatically at end of frame.
 void add_challenge_flags(u32 flags) {
     internalFlagsForFrame |= flags;
+}
+
+// add_challenge_flags(), but allows case stacking, particularly for killing of multiple enemies on the same frame.
+void add_challenge_kill_flags(u32 flags) {
+    if (flags & CHALLENGE_FLAG_KILL_GOOMBA)
+        sGoombasKilled++;
+    if (flags & CHALLENGE_FLAG_KILL_KOOPA)
+        sKoopasKilled++;
+    if (flags & CHALLENGE_FLAG_KILL_BOMB)
+        sBombsKilled++;
+    if (flags & CHALLENGE_FLAG_SLEEPING_PIRANHA)
+        sPiranhasDisturbed++;
+    if (flags & CHALLENGE_FLAG_KILL_GOOMBA_WITH_BOMB)
+        sGoombasKilledWithBombs++;
 }
 
 #define ALL_LETTERS "!\"#$%&'()*+,-./\n0123456789:;<=>?@\nABCDEFGHIJKLMNOPQRSTUVWXYZ\n[\\]^_`\nabcdefghijklmnopqrstuvwxyz{|}~"
