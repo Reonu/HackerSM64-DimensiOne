@@ -358,7 +358,8 @@ void challenge_update(void) {
             // ONE_TODO: future conditions
             // gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING &&
             gChallengeStatus != CHALLENGE_STATUS_WIN &&
-            !gWarpTransition.isActive
+            !gWarpTransition.isActive &&
+            sCurrPlayMode == PLAY_MODE_NORMAL
         ) {
             level_trigger_warp(gMarioState, WARP_OP_START_CHALLENGES); // reset level
         }
@@ -372,7 +373,8 @@ void challenge_update(void) {
         if (
             gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING &&
             sDelayedWarpOp == WARP_OP_NONE &&
-            !gWarpTransition.isActive
+            !gWarpTransition.isActive &&
+            sCurrPlayMode == PLAY_MODE_NORMAL
         ) {
             gChallengeStatus = CHALLENGE_STATUS_WIN;
             level_trigger_warp(gMarioState, WARP_OP_DEBUG_CHALLENGE_SKIP); // warp to next challenge
