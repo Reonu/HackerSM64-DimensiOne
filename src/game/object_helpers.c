@@ -2243,7 +2243,6 @@ s32 obj_attack_collided_from_other_object(struct Object *obj) {
         struct Object *other = obj->collidedObjs[0];
 
         if (other != gMarioObject) {
-            u32 bobFlag = 0;
             s32 oneIsBobOmb = obj_has_behavior(obj, bhvBobomb) || obj_has_behavior(other, bhvBobomb);
             if (oneIsBobOmb) {
                 if (check_obj_is_LIT(obj) || check_obj_is_LIT(other)) {
