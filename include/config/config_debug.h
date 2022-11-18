@@ -89,4 +89,4 @@
 /**
  * BoB music really is the best, isn't it?
  */
-#define MUTE_MUSIC_PLAYERS
+// #define MUTE_MUSIC_PLAYERS

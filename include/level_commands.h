@@ -182,6 +182,7 @@ enum LevelCommands {
     /*0x42*/ LEVEL_CMD_CHALLENGE_JUMP,
     /*0x43*/ LEVEL_CMD_CHALLENGE_JUMP_NO_STACK,
     /*0x44*/ LEVEL_CMD_AREA_SPLINE,
+    /*0x45*/ LEVEL_CMD_SET_ECHO,
 };
 
 enum BankOrObjectLoad {
@@ -590,6 +591,9 @@ enum GoddardScene {
 
 #define STOP_MUSIC(fadeOutTime) \
     CMD_BBH(LEVEL_CMD_FADEOUT_MUSIC, 0x04, fadeOutTime)
+
+#define SET_ECHO(console, emulator) \
+    CMD_BBBB(LEVEL_CMD_SET_ECHO, 0x04, console, emulator)
 
 #define MACRO_OBJECTS(objList) \
     CMD_BBH(LEVEL_CMD_SET_MACRO_OBJECTS, 0x08, 0x0000), \

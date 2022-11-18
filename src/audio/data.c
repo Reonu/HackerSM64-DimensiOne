@@ -78,8 +78,8 @@ s32 reverbMultsArr[][NUM_ALLPASS / 3] = {
  * - filterCount
  * - windowSize
  * - gain
- * - gainIndex
  * - reverbIndex
+ * - gainIndex
  * 
  * - *delaysL
  * - *delaysR

@@ -323,7 +323,7 @@ void bhv_piranha_plant_loop(void) {
 
 #endif
     if (isSleeping == TRUE && o->oAction != PIRANHA_PLANT_ACT_SLEEPING) {
-        add_challenge_flags(CHALLENGE_FLAG_SLEEPING_PIRANHA);
+        add_challenge_kill_flags(CHALLENGE_FLAG_SLEEPING_PIRANHA);
     }
 
     o->oInteractStatus = INT_STATUS_NONE;

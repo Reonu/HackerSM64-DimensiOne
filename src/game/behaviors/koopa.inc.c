@@ -809,7 +809,7 @@ void bhv_koopa_update(void) {
     } else {
         o->oAnimState = 1;
         if (o->oKoopaMovementType == KOOPA_BP_UNSHELLED && o->activeFlags == ACTIVE_FLAG_DEACTIVATED) {
-            add_challenge_flags(CHALLENGE_FLAG_KILL_KOOPA);
+            add_challenge_kill_flags(CHALLENGE_FLAG_KILL_KOOPA);
         }
     }
 

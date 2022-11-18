@@ -979,6 +979,9 @@ void print_small_text(s32 x, s32 y, const char *str, s32 align, s32 amount, u8 f
     u8 lines = 0;
     u8 shakeTablePos = 0;
 
+    u32 largestWidth = 0;
+    u32 largestHeight = 0;
+
     shakeToggle = 0;
     waveToggle = 0;
     rainbowToggle = 0;
@@ -990,47 +993,74 @@ void print_small_text(s32 x, s32 y, const char *str, s32 align, s32 amount, u8 f
     }
 
     // Calculate the text width for centre and right aligned text.
-    if (align == PRINT_TEXT_ALIGN_CENTRE || align == PRINT_TEXT_ALIGN_RIGHT) {
-        for (s32 i = 0; i < strLen; i++) {
-            while (i < strLen && str[i] == PP_CMD_START) {
-                commandOffset = text_iterate_command(str, i, FALSE);
-                if (commandOffset == 0)
-                    break;
-
-                i += commandOffset;
-            }
-
-            if (i >= strLen)
+    for (s32 i = 0; i < strLen; i++) {
+        while (i < strLen && str[i] == PP_CMD_START) {
+            commandOffset = text_iterate_command(str, i, FALSE);
+            if (commandOffset == 0)
                 break;
 
-            if (str[i] == '\0') {
-                break;
-            }
-
-            if (str[i] == '\n') {
-                textPos[0] = 0;
-                lines++;
-                wideX[lines] = 0;
-                continue;
-            }
-
-            get_char_from_byte(str[i], &textX, &spaceX, &offsetY, font);
-            textPos[0] += (spaceX + 1) * textSizeTotal;
-            wideX[lines] = MAX(textPos[0], wideX[lines]);
+            i += commandOffset;
         }
 
-        if (align == PRINT_TEXT_ALIGN_CENTRE) {
-            textPos[0] = -(wideX[0] / 2);
-        } else {
-            textPos[0] = -(wideX[0]);
+        if (i >= strLen)
+            break;
+
+        if (str[i] == '\0') {
+            break;
         }
+
+        if (str[i] == '\n') {
+            textPos[0] = 0;
+            lines++;
+            wideX[lines] = 0;
+            continue;
+        }
+
+        get_char_from_byte(str[i], &textX, &spaceX, &offsetY, font);
+        textPos[0] += (spaceX + 1) * textSizeTotal;
+        wideX[lines] = MAX(textPos[0], wideX[lines]);
+
+        if (wideX[lines] > largestWidth) {
+            largestWidth = wideX[lines];
+        }
+    }
+
+    if (align == PRINT_TEXT_ALIGN_CENTRE) {
+        textPos[0] = -(wideX[0] / 2);
+    } else if (align == PRINT_TEXT_ALIGN_RIGHT) {
+        textPos[0] = -(wideX[0]);
+    } else if (align == PRINT_TEXT_ALIGN_LEFT) {
+        textPos[0] = 0;
     }
 
     //Reset text size properties.
     textSizeTemp = 1.0f;
     set_text_size_params();
     topLineHeight = 12.0f * textSizeTotal;
+    largestHeight = topLineHeight * (lines + 1);
     lines = 0;
+
+    s32 startX = x - 2;
+    s32 endX = x + largestWidth + 1;
+    if (align == PRINT_TEXT_ALIGN_CENTRE) {
+        startX -= largestWidth / 2;
+        endX -= largestWidth / 2;
+    } else if (align == PRINT_TEXT_ALIGN_RIGHT) {
+        startX -= largestWidth;
+        endX -= largestWidth;
+    }
+
+    ColorRGBA gCurrEnvColTmp;
+    gCurrEnvColTmp[0] = gCurrEnvCol[0];
+    gCurrEnvColTmp[1] = gCurrEnvCol[1];
+    gCurrEnvColTmp[2] = gCurrEnvCol[2];
+    gCurrEnvColTmp[3] = gCurrEnvCol[3];
+
+    prepare_blank_box();
+    render_blank_box(startX, y - 2, endX, y + largestHeight + 3, 0, 0, 0, ((u32) 96 * gCurrEnvCol[3]) / 255);
+    finish_blank_box();
+
+    print_set_envcolour(gCurrEnvColTmp[0], gCurrEnvColTmp[1], gCurrEnvColTmp[2], gCurrEnvColTmp[3]);
     
     shakeTablePos = gGlobalTimer % sizeof(sTextShakeTable);
 
@@ -1118,7 +1148,7 @@ void print_small_text(s32 x, s32 y, const char *str, s32 align, s32 amount, u8 f
             lines++;
             if (align == PRINT_TEXT_ALIGN_RIGHT) {
                 textPos[0] = -(wideX[lines]);
-            } else {
+            } else if (align == PRINT_TEXT_ALIGN_CENTRE) {
                 textPos[0] = -(wideX[lines] / 2);
             }
             textPos[1] += topLineHeight;

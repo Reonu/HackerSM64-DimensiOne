@@ -319,7 +319,7 @@ void bhv_bobomb_loop(void) {
 
     if (o->activeFlags == ACTIVE_FLAG_DEACTIVATED) {
         gBombsSpawned--;
-        add_challenge_flags(CHALLENGE_FLAG_KILL_BOMB);
+        add_challenge_kill_flags(CHALLENGE_FLAG_KILL_BOMB);
     }
 }
 

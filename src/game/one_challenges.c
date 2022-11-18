@@ -1,10 +1,12 @@
 #include "sm64.h"
+#include "seq_ids.h"
 #include "area.h"
 #include "game_init.h"
 #include "level_update.h"
 #include "one_challenges.h"
 #include "one_text.h"
 #include "puppyprint.h"
+#include "sound_init.h"
 #include "audio/external.h"
 
 // Actual data for all challenges
@@ -37,14 +39,14 @@ static struct OneChallengeLevel sChallengeLevels[sizeof(u32)*8] = {
         (CHALLENGE_FLAG_KNOCKED_KOOPA), // Requirements  TODO: for this challenge only, add on timer flag after meeting knocked Koopa condition
         (CHALLENGE_FLAG_KNOCKED_KOOPA | CHALLENGE_FLAG_GROUND | CHALLENGE_FLAG_KILL_KOOPA), // Enforcements
     }, { /*09*/
-        (CHALLENGE_FLAG_NONE), // Requirements
-        (CHALLENGE_FLAG_NONE), // Enforcements
+        (CHALLENGE_FLAG_TRIPLE_JUMP | CHALLENGE_FLAG_COIN), // Requirements
+        (CHALLENGE_FLAG_TRIPLE_JUMP), // Enforcements
     }, { /*10*/
-        (CHALLENGE_FLAG_NONE), // Requirements
-        (CHALLENGE_FLAG_NONE), // Enforcements
+        (CHALLENGE_FLAG_A_PRESS), // Requirements
+        (CHALLENGE_FLAG_A_PRESS), // Enforcements
     }, { /*11*/
-        (CHALLENGE_FLAG_NONE), // Requirements
-        (CHALLENGE_FLAG_NONE), // Enforcements
+        (CHALLENGE_FLAG_COLLECT_LIFE), // Requirements
+        (CHALLENGE_FLAG_COLLECT_LIFE), // Enforcements
     }, { /*12*/
         (CHALLENGE_FLAG_NONE), // Requirements
         (CHALLENGE_FLAG_NONE), // Enforcements
@@ -137,6 +139,12 @@ u32 internalFlagsForFrame = CHALLENGE_FLAG_NONE;
 static u8 freshlyTouchedGround = FALSE;
 static u16 sBombsSpawnedLast = 0;
 
+static u8 sGoombasKilled = 0;
+static u8 sKoopasKilled = 0;
+static u8 sBombsKilled = 0;
+static u8 sPiranhasDisturbed = 0;
+static u8 sGoombasKilledWithBombs = 0;
+
 
 static void can_win_challenge(void) {
     if (gChallengeStatus != CHALLENGE_STATUS_PLAYING) {
@@ -204,6 +212,28 @@ static void check_flag_conditions(void) {
         if (sBombsSpawnedLast <= 1) {
             add_challenge_flags(CHALLENGE_FLAG_KILL_ALL_BOMBS);
         }
+    }
+
+    // Kill Flags
+    if (sGoombasKilled > 0) {
+        sGoombasKilled--;
+        add_challenge_flags(CHALLENGE_FLAG_KILL_GOOMBA);
+    }
+    if (sKoopasKilled > 0) {
+        sKoopasKilled--;
+        add_challenge_flags(CHALLENGE_FLAG_KILL_KOOPA);
+    }
+    if (sBombsKilled > 0) {
+        sBombsKilled--;
+        add_challenge_flags(CHALLENGE_FLAG_KILL_BOMB);
+    }
+    if (sPiranhasDisturbed > 0) {
+        sPiranhasDisturbed--;
+        add_challenge_flags(CHALLENGE_FLAG_SLEEPING_PIRANHA);
+    }
+    if (sGoombasKilledWithBombs > 0) {
+        sGoombasKilledWithBombs--;
+        add_challenge_flags(CHALLENGE_FLAG_KILL_GOOMBA_WITH_BOMB);
     }
 }
 
@@ -300,6 +330,17 @@ void reset_challenge(void) {
     freshlyTouchedGround = TRUE;
     gBombsSpawned = 0xFFFF;
     sBombsSpawnedLast = 0;
+    
+    sGoombasKilled = 0;
+    sKoopasKilled = 0;
+    sBombsKilled = 0;
+    sPiranhasDisturbed = 0;
+    sGoombasKilledWithBombs = 0;
+
+    if (gChallengeStatus == CHALLENGE_STATUS_NOT_PLAYING) {
+        gChallengeStatus = CHALLENGE_STATUS_PLAYING;
+        set_background_music(0, SEQ_LEVEL_UNDERGROUND, 0);
+    }
 
     gChallengeStatus = CHALLENGE_STATUS_NOT_PLAYING;
     update_last_print_vars(sObtainedChallengeFlags, sFailureFlags);
@@ -336,6 +377,20 @@ void start_challenge(void) {
 // Apply a challenge flag or flags when a condition is met; updated automatically at end of frame.
 void add_challenge_flags(u32 flags) {
     internalFlagsForFrame |= flags;
+}
+
+// add_challenge_flags(), but allows case stacking, particularly for killing of multiple enemies on the same frame.
+void add_challenge_kill_flags(u32 flags) {
+    if (flags & CHALLENGE_FLAG_KILL_GOOMBA)
+        sGoombasKilled++;
+    if (flags & CHALLENGE_FLAG_KILL_KOOPA)
+        sKoopasKilled++;
+    if (flags & CHALLENGE_FLAG_KILL_BOMB)
+        sBombsKilled++;
+    if (flags & CHALLENGE_FLAG_SLEEPING_PIRANHA)
+        sPiranhasDisturbed++;
+    if (flags & CHALLENGE_FLAG_KILL_GOOMBA_WITH_BOMB)
+        sGoombasKilledWithBombs++;
 }
 
 #define ALL_LETTERS "!\"#$%&'()*+,-./\n0123456789:;<=>?@\nABCDEFGHIJKLMNOPQRSTUVWXYZ\n[\\]^_`\nabcdefghijklmnopqrstuvwxyz{|}~"

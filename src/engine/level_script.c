@@ -1024,6 +1024,16 @@ static void level_cmd_area_spline(void) {
     sCurrentCmd = CMD_NEXT;
 }
 
+static void level_cmd_set_echo(void) {
+    if (sCurrAreaIndex >= 0 && sCurrAreaIndex < AREA_COUNT) {
+        if (gIsConsole)
+            gAreaData[sCurrAreaIndex].echoOverride = CMD_GET(s8, 2);
+        else
+            gAreaData[sCurrAreaIndex].echoOverride = CMD_GET(s8, 3);
+    }
+    sCurrentCmd = CMD_NEXT;
+}
+
 static void (*LevelScriptJumpTable[])(void) = {
     /*LEVEL_CMD_LOAD_AND_EXECUTE            */ level_cmd_load_and_execute,
     /*LEVEL_CMD_EXIT_AND_EXECUTE            */ level_cmd_exit_and_execute,
@@ -1093,7 +1103,8 @@ static void (*LevelScriptJumpTable[])(void) = {
     /*LEVEL_CMD_MOVING_PLATFORM             */ level_cmd_moving_platform,
     /*LEVEL_CMD_CHALLENGE_JUMP              */ level_cmd_challenge_jump,
     /*LEVEL_CMD_CHALLENGE_JUMP_NO_STACK     */ level_cmd_challenge_jump_no_stack,
-    /*LEVEL_CMD_AREA_SPLINE                */ level_cmd_area_spline,
+    /*LEVEL_CMD_AREA_SPLINE                 */ level_cmd_area_spline,
+    /*LEVEL_CMD_SET_ECHO                    */ level_cmd_set_echo,
 };
 
 struct LevelCommand *level_script_execute(struct LevelCommand *cmd) {

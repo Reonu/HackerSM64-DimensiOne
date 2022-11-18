@@ -151,15 +151,23 @@ static void goomba_begin_jump(void) {
  * comes back.
  */
 static void mark_goomba_as_dead(void) {
-    if (o->parentObj != o) {
-        set_object_respawn_info_bits(
-            o->parentObj, (o->oBehParams2ndByte & GOOMBA_BP_TRIPLET_FLAG_MASK) >> 2);
+    if (gChallengeStatus == CHALLENGE_STATUS_NOT_PLAYING) {
+        if (o->parentObj != o) {
+            set_object_respawn_info_bits(
+                o->parentObj, (o->oBehParams2ndByte & GOOMBA_BP_TRIPLET_FLAG_MASK) >> 2);
 
-        o->parentObj->oBehParams =
-            o->parentObj->oBehParams | (o->oBehParams2ndByte & GOOMBA_BP_TRIPLET_FLAG_MASK) << 6;
+            o->parentObj->oBehParams =
+                o->parentObj->oBehParams | (o->oBehParams2ndByte & GOOMBA_BP_TRIPLET_FLAG_MASK) << 6;
+        }
     }
 
-    add_challenge_flags(CHALLENGE_FLAG_KILL_GOOMBA);
+    if (gChallengeLevel == 2) {
+        add_challenge_kill_flags(CHALLENGE_FLAG_KILL_GOOMBA);
+
+        if (o->oBlownUp) {
+            add_challenge_kill_flags(CHALLENGE_FLAG_KILL_GOOMBA_WITH_BOMB);
+        }
+    }
 }
 
 /**
@@ -360,6 +368,11 @@ void bhv_goomba_update(void) {
                 break;
 #endif
         }
+
+        
+        if (o->oInteractStatus & INT_STATUS_TOUCHED_BOB_OMB) {
+            o->oBlownUp = TRUE;
+        }
         if (obj_handle_attacks(&sGoombaHitbox, GOOMBA_ACT_ATTACKED_MARIO,
                                sGoombaAttackHandlers[o->oGoombaSize & 0x1])
                                && (o->oAction != GOOMBA_ACT_ATTACKED_MARIO)) {
@@ -374,5 +387,15 @@ void bhv_goomba_update(void) {
             o->oAnimState += FLOOMBA_ANIM_STATE_EYES_OPEN;
         }
 #endif
+    }
+
+    if (gChallengeLevel != 2) {
+        if (o->activeFlags == ACTIVE_FLAG_DEACTIVATED) {
+            add_challenge_kill_flags(CHALLENGE_FLAG_KILL_GOOMBA);
+
+            if (o->oBlownUp) {
+                add_challenge_kill_flags(CHALLENGE_FLAG_KILL_GOOMBA_WITH_BOMB);
+            }
+        }
     }
 }

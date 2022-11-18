@@ -53,8 +53,8 @@ static void print_challenge_type_images(s32 x, s32 y, u8 typeIndex, u8 alphaFram
     u32 requiredFlags = get_challenge_required_flags();
     u32 failureFlags = get_challenge_failure_flags();
 
-    if (typeTimerArray[typeIndex] < alphaFrames) {
-        color[3] = 127.0f * (typeTimerArray[typeIndex] / (f32) alphaFrames); // Fade in
+    if (challengeTypeDisplayTimer < alphaFrames) {
+        color[3] = 255.0f * (challengeTypeDisplayTimer / (f32) alphaFrames); // Fade in
     }
 
     if (failureFlags & typeFlag) {
@@ -65,7 +65,7 @@ static void print_challenge_type_images(s32 x, s32 y, u8 typeIndex, u8 alphaFram
         color[0] = 0xFF;
         color[1] = 0x00;
         color[2] = 0x00;
-        color[3] = color[3] * 1.0f;
+        color[3] = color[3] * 0.8f;
 
         if (typeTimerArray[typeIndex] < 14) {
             x += 0.5f + 1.0f * sins((0x10000 * typeTimerArray[typeIndex]) / 4);
@@ -79,27 +79,27 @@ static void print_challenge_type_images(s32 x, s32 y, u8 typeIndex, u8 alphaFram
             color[0] = 0xDF;
             color[1] = 0xDF;
             color[2] = 0x00;
-            color[3] = color[3] * 1.0f;
+            color[3] = color[3] * 0.8f;
         } else if (requiredFlags & typeFlag) {
             color[0] = 0x00;
             color[1] = 0xFF;
             color[2] = 0x00;
-            color[3] = color[3] * 1.0f;
+            color[3] = color[3] * 0.8f;
         } 
 
         if (typeTimerArray[typeIndex] < 6) {
             y += 0.5f + 2.0f * sins(0x8000 + ((0x8000 * typeTimerArray[typeIndex]) / 6)); // Acquire an objective, animate it if required
         }
     } else if (requiredFlags & typeFlag) {
-        color[0] = 0x2F;
-        color[1] = 0x2F;
-        color[2] = 0x2F;
-        color[3] = color[3] * 0.5f;
+        color[0] = 0x0F;
+        color[1] = 0x0F;
+        color[2] = 0x0F;
+        color[3] = color[3] * 0.67f;
     } else if (enforcedFlags & typeFlag) {
         color[0] = 0xBF;
         color[1] = 0xBF;
         color[2] = 0xBF;
-        color[3] = color[3] * 1.0f;
+        color[3] = color[3] * 0.8f;
     }
 
     Gfx *circle = segmented_to_virtual(circle_init_dl);
@@ -176,8 +176,10 @@ void print_challenge_types(void) {
         y -= lineSpacing;
     }
 
-    print_set_envcolour(0xFF, 0xFF, 0xFF, alpha);
+    print_set_envcolour(0xFF, 0xFF, 0xFF, 0xFF);
     print_small_text(SCREEN_WIDTH / 2, 12, gChallengeHeaderText[gChallengeLevel], PRINT_TEXT_ALIGN_CENTER, PRINT_ALL, FONT_DEFAULT);
+    print_set_envcolour(0xFF, 0xFF, 0xFF, alpha);
+    print_small_text(SCREEN_WIDTH / 2, 29, gChallengeHeaderBodyText[gChallengeLevel], PRINT_TEXT_ALIGN_CENTER, PRINT_ALL, FONT_DEFAULT);
 }
 #undef FADE_IN_FRAMES
 #undef FADE_OUT_FRAMES

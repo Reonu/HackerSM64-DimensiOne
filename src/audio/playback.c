@@ -8,6 +8,7 @@
 #include "synthesis.h"
 #include "effects.h"
 #include "external.h"
+#include "game/area.h"
 
 void note_set_resampling_rate(struct Note *note, f32 resamplingRateInput);
 
@@ -591,6 +592,17 @@ void process_notes(void) {
                 velocity = note->parentLayer->noteVelocity;
                 pan = note->parentLayer->notePan;
                 reverbVol = note->parentLayer->seqChannel->reverbVol;
+                if (note->parentLayer->seqChannel->seqPlayer != NULL) {
+                    if (note->parentLayer->seqChannel->seqPlayer == &gSequencePlayers[SEQ_PLAYER_ENV]) {
+                        if (gAreaData[gCurrAreaIndex].echoOverride < 0 && (s32) reverbVol < -gAreaData[gCurrAreaIndex].echoOverride)
+                            reverbVol = 0;
+                        else
+                            reverbVol += gAreaData[gCurrAreaIndex].echoOverride;
+
+                        if (reverbVol > 0x7F)
+                            reverbVol = 0x7F;
+                     }
+                }
             }
 
             scale = note->adsrVolScale;
@@ -729,6 +741,18 @@ void seq_channel_layer_decay_release_internal(struct SequenceChannelLayer *seqLa
 #endif
         if (seqLayer->seqChannel != NULL) {
             attributes->reverbVol = seqLayer->seqChannel->reverbVol;
+            
+            if (seqLayer->seqChannel->seqPlayer != NULL) {
+                if (seqLayer->seqChannel->seqPlayer == &gSequencePlayers[SEQ_PLAYER_ENV]) {
+                    if (gAreaData[gCurrAreaIndex].echoOverride < 0 && (s32) attributes->reverbVol < -gAreaData[gCurrAreaIndex].echoOverride)
+                        attributes->reverbVol = 0;
+                    else
+                        attributes->reverbVol += gAreaData[gCurrAreaIndex].echoOverride;
+
+                    if (attributes->reverbVol > 0x7F)
+                        attributes->reverbVol = 0x7F;
+                }
+            }
 #ifdef VERSION_SH
             attributes->synthesisVolume = seqLayer->seqChannel->synthesisVolume;
             attributes->filter = seqLayer->seqChannel->filter;

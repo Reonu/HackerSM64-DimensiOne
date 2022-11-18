@@ -16,6 +16,7 @@
 #include "rumble_init.h"
 #include "puppyprint.h"
 #include "profiling.h"
+#include "one_challenges.h"
 
 #include "config/config_audio.h"
 
@@ -279,6 +280,10 @@ void play_cutscene_music(u16 seqArgs) {
  * Called from threads: thread5_game_loop
  */
 void play_shell_music(void) {
+    if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING) {
+        return;
+    }
+
     play_music(SEQ_PLAYER_LEVEL, SEQUENCE_ARGS(4, SEQ_EVENT_POWERUP | SEQ_VARIATION), 0);
     sCurrentShellMusic = SEQUENCE_ARGS(4, SEQ_EVENT_POWERUP | SEQ_VARIATION);
 }
@@ -303,6 +308,10 @@ extern void stop_cap_music(void);
 #endif
 
 void play_cap_music(u16 seqArgs) {
+    if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING) {
+        return;
+    }
+
 #ifdef PERSISTENT_CAP_MUSIC
     if (sDoResetMusic) {
         sDoResetMusic = FALSE;

@@ -402,7 +402,9 @@ void init_mario_after_warp(void) {
 #ifdef BETTER_REVERB
         gBetterReverbPreset = gCurrentArea->betterReverbPreset;
 #endif
-        set_background_music(gCurrentArea->musicParam, gCurrentArea->musicParam2, 0);
+        if (gChallengeStatus == CHALLENGE_STATUS_NOT_PLAYING) {
+            set_background_music(gCurrentArea->musicParam, gCurrentArea->musicParam2, 0);
+        }
 
         if (gMarioState->flags & MARIO_METAL_CAP) {
             play_cap_music(SEQUENCE_ARGS(4, SEQ_EVENT_METAL_CAP));
@@ -443,6 +445,10 @@ void init_mario_after_warp(void) {
     gLastWarpID = sWarpDest.nodeId;
     gPuppyWarpArea = 0;
 #endif
+
+    if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING) {
+        gMarioState->health = MARIO_MAX_HEALTH;
+    }
 }
 
 // used for warps inside one level
@@ -516,7 +522,9 @@ void warp_credits(void) {
 #ifdef BETTER_REVERB
         gBetterReverbPreset = gCurrentArea->betterReverbPreset;
 #endif
-        set_background_music(gCurrentArea->musicParam, gCurrentArea->musicParam2, 0);
+        if (gChallengeStatus == CHALLENGE_STATUS_NOT_PLAYING) {
+            set_background_music(gCurrentArea->musicParam, gCurrentArea->musicParam2, 0);
+        }
     }
 }
 
@@ -862,7 +870,7 @@ s16 level_trigger_warp(struct MarioState *m, s32 warpOp) {
                 break;
         }
 
-        if (fadeMusic && gCurrDemoInput == NULL) {
+        if (fadeMusic && gCurrDemoInput == NULL && gChallengeStatus == CHALLENGE_STATUS_NOT_PLAYING) {
             fadeout_music((3 * sDelayedWarpTimer / 2) * 8 - 2);
         }
     }
@@ -1146,7 +1154,7 @@ s32 play_mode_paused(void) {
         if (gDebugLevelSelect) {
             fade_into_special_warp(WARP_SPECIAL_LEVEL_SELECT, 1);
         } else {
-            gChallengeLevel = 0;
+            gChallengeLevel = 0xFF;
             gChallengeStatus = CHALLENGE_STATUS_NOT_PLAYING;
             gMarioState->health = MARIO_MAX_HEALTH;
 
@@ -1352,7 +1360,9 @@ s32 init_level(void) {
 #ifdef BETTER_REVERB
             gBetterReverbPreset = gCurrentArea->betterReverbPreset;
 #endif
-            set_background_music(gCurrentArea->musicParam, gCurrentArea->musicParam2, 0);
+            if (gChallengeStatus == CHALLENGE_STATUS_NOT_PLAYING) {
+                set_background_music(gCurrentArea->musicParam, gCurrentArea->musicParam2, 0);
+            }
         }
     }
 #if ENABLE_RUMBLE
