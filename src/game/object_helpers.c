@@ -2234,13 +2234,33 @@ void cur_obj_shake_screen(s32 shake) {
     set_camera_shake_from_point(shake, o->oPosX, o->oPosY, o->oPosZ);
 }
 
+s32 check_obj_is_LIT(struct Object *obj) {
+    return obj_has_behavior(obj, bhvBobomb) && o->oBobombFuseLit;
+}
+
 s32 obj_attack_collided_from_other_object(struct Object *obj) {
     if (obj->numCollidedObjs != 0) {
         struct Object *other = obj->collidedObjs[0];
 
         if (other != gMarioObject) {
-            other->oInteractStatus |= INT_STATUS_TOUCHED_MARIO | INT_STATUS_WAS_ATTACKED | INT_STATUS_INTERACTED
-                                      | INT_STATUS_TOUCHED_BOB_OMB;
+            s32 oneIsBobOmb = obj_has_behavior(obj, bhvBobomb) || obj_has_behavior(other, bhvBobomb);
+            if (oneIsBobOmb) {
+                if (check_obj_is_LIT(obj) || check_obj_is_LIT(other)) {
+                    other->oInteractStatus |= INT_STATUS_TOUCHED_MARIO
+                        | INT_STATUS_WAS_ATTACKED
+                        | INT_STATUS_INTERACTED
+                        | INT_STATUS_TOUCHED_BOB_OMB;
+                    return TRUE;
+                }
+
+                return FALSE;
+            }
+
+            other->oInteractStatus |= INT_STATUS_TOUCHED_MARIO
+                | INT_STATUS_WAS_ATTACKED
+                | INT_STATUS_INTERACTED
+                | INT_STATUS_TOUCHED_BOB_OMB;
+
             return TRUE;
         }
     }
@@ -2441,12 +2461,17 @@ void init_obj_spline(void) {
     }
 
     obj->oSplineActive = GET_BPARAM1(obj->oBehParams) == SPLINE_OBJECT_BHV_AUTO;
+    if (!obj->oSplineActive) {
+        obj->oForwardVel = 0;
+    } else {
+        obj->oForwardVel = (f32)GET_BPARAM3(obj->oBehParams);
+    }
 }
 
 void bhv_follow_spline(void) {
     struct Object *obj = o;
-    // this is also the dist threshold for going to the next spline
-    f32 moveSpeed = (f32)GET_BPARAM3(obj->oBehParams); 
+ 
+    f32 goalSpeed = (f32)GET_BPARAM3(obj->oBehParams); 
     u32 behavior = GET_BPARAM1(obj->oBehParams);
     u32 direction = GET_BPARAM2(obj->oBehParams);
 
@@ -2459,15 +2484,25 @@ void bhv_follow_spline(void) {
 
     if (!loops) {
         if (activateFromMario) {
-            o->oSplineActive = check_mario_on_object(gMarioState);
+            s32 wasActive = obj->oSplineActive;
+            obj->oSplineActive = check_mario_on_object(gMarioState);
+            if (wasActive != obj->oSplineActive) {
+                obj->oTimer = 0;
+                obj->oForwardVel = 0;
+            }
             if (direction == SPLINE_OBJECT_MOVE_FORWARD) {
-                o->oSplineDir = o->oSplineActive ? SPLINE_OBJECT_MOVE_FORWARD : SPLINE_OBJECT_MOVE_BACKWARDS;
+                obj->oSplineDir = obj->oSplineActive ? SPLINE_OBJECT_MOVE_FORWARD : SPLINE_OBJECT_MOVE_BACKWARDS;
             } else {
-                o->oSplineDir = o->oSplineActive ? SPLINE_OBJECT_MOVE_BACKWARDS: SPLINE_OBJECT_MOVE_FORWARD;
+                obj->oSplineDir = obj->oSplineActive ? SPLINE_OBJECT_MOVE_BACKWARDS: SPLINE_OBJECT_MOVE_FORWARD;
             }
         }
     
-        direction = o->oSplineDir;
+        direction = obj->oSplineDir;
+    }
+
+    if (obj->oTimer > 10 && obj->oForwardVel < goalSpeed) {
+        obj->oForwardVel += goalSpeed / 10.0f;
+        obj->oForwardVel = MIN(obj->oForwardVel, goalSpeed);
     }
 
     struct Waypoint *thisWaypoint = obj->oSplinePrevWaypoint;
@@ -2481,7 +2516,7 @@ void bhv_follow_spline(void) {
                 // clamp the waypoint to where you are
                 nextWaypoint = thisWaypoint;
             } else {
-                o->oSplineDir = SPLINE_OBJECT_MOVE_BACKWARDS;
+                obj->oSplineDir = SPLINE_OBJECT_MOVE_BACKWARDS;
                 nextWaypoint = thisWaypoint;
             }
         }
@@ -2492,7 +2527,7 @@ void bhv_follow_spline(void) {
             } else if (activateFromMario) {
                 nextWaypoint = thisWaypoint;
             } else {
-                o->oSplineDir = SPLINE_OBJECT_MOVE_FORWARD;
+                obj->oSplineDir = SPLINE_OBJECT_MOVE_FORWARD;
                 nextWaypoint = thisWaypoint;
             }
         } else {
@@ -2512,10 +2547,10 @@ void bhv_follow_spline(void) {
         vec3_zero(dir);
     }
 
-    f32 moveAmount = MIN(dist, moveSpeed);
+    f32 moveAmount = MIN(dist, obj->oForwardVel);
     vec3_mul_val(dir, moveAmount);
-    vec3f_add(&o->oPosX, dir);
-    if (dist < moveSpeed) {
+    vec3f_add(&obj->oPosX, dir);
+    if (dist < obj->oForwardVel) {
         obj->oSplinePrevWaypoint = nextWaypoint;
     }
 }

@@ -34,6 +34,7 @@
 #include "rumble_init.h"
 #include "puppylights.h"
 #include "one_challenges.h"
+#include "obj_behaviors_2.h"
 
 /**
  * @file obj_behaviors.c

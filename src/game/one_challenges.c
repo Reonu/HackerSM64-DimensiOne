@@ -37,14 +37,14 @@ static struct OneChallengeLevel sChallengeLevels[sizeof(u32)*8] = {
         (CHALLENGE_FLAG_KNOCKED_KOOPA), // Requirements  TODO: for this challenge only, add on timer flag after meeting knocked Koopa condition
         (CHALLENGE_FLAG_KNOCKED_KOOPA | CHALLENGE_FLAG_GROUND | CHALLENGE_FLAG_KILL_KOOPA), // Enforcements
     }, { /*09*/
-        (CHALLENGE_FLAG_NONE), // Requirements
-        (CHALLENGE_FLAG_NONE), // Enforcements
+        (CHALLENGE_FLAG_TRIPLE_JUMP | CHALLENGE_FLAG_COIN), // Requirements
+        (CHALLENGE_FLAG_TRIPLE_JUMP), // Enforcements
     }, { /*10*/
-        (CHALLENGE_FLAG_NONE), // Requirements
-        (CHALLENGE_FLAG_NONE), // Enforcements
+        (CHALLENGE_FLAG_A_PRESS), // Requirements
+        (CHALLENGE_FLAG_A_PRESS), // Enforcements
     }, { /*11*/
-        (CHALLENGE_FLAG_NONE), // Requirements
-        (CHALLENGE_FLAG_NONE), // Enforcements
+        (CHALLENGE_FLAG_COLLECT_LIFE), // Requirements
+        (CHALLENGE_FLAG_COLLECT_LIFE), // Enforcements
     }, { /*12*/
         (CHALLENGE_FLAG_NONE), // Requirements
         (CHALLENGE_FLAG_NONE), // Enforcements
@@ -358,7 +358,8 @@ void challenge_update(void) {
             // ONE_TODO: future conditions
             // gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING &&
             gChallengeStatus != CHALLENGE_STATUS_WIN &&
-            !gWarpTransition.isActive
+            !gWarpTransition.isActive &&
+            sCurrPlayMode == PLAY_MODE_NORMAL
         ) {
             level_trigger_warp(gMarioState, WARP_OP_START_CHALLENGES); // reset level
         }
@@ -372,7 +373,8 @@ void challenge_update(void) {
         if (
             gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING &&
             sDelayedWarpOp == WARP_OP_NONE &&
-            !gWarpTransition.isActive
+            !gWarpTransition.isActive &&
+            sCurrPlayMode == PLAY_MODE_NORMAL
         ) {
             gChallengeStatus = CHALLENGE_STATUS_WIN;
             level_trigger_warp(gMarioState, WARP_OP_DEBUG_CHALLENGE_SKIP); // warp to next challenge
