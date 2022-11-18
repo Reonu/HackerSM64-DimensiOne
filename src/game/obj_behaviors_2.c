@@ -408,7 +408,7 @@ static void obj_update_blinking(s32 *blinkTimer, s16 baseCycleLength, s16 cycleL
     }
 }
 
-static s32 obj_resolve_object_collisions(s32 *targetYaw) {
+s32 obj_resolve_object_collisions(s32 *targetYaw) {
     struct Object *otherObject;
     f32 dx, dz;
     s16 angle;
@@ -443,7 +443,7 @@ static s32 obj_resolve_object_collisions(s32 *targetYaw) {
     return FALSE;
 }
 
-static s32 obj_bounce_off_walls_edges_objects(s32 *targetYaw) {
+s32 obj_bounce_off_walls_edges_objects(s32 *targetYaw) {
     if (o->oMoveFlags & OBJ_MOVE_HIT_WALL) {
         *targetYaw = cur_obj_reflect_move_angle_off_wall();
     } else if (o->oMoveFlags & OBJ_MOVE_HIT_EDGE) {

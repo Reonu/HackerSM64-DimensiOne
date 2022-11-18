@@ -2234,13 +2234,34 @@ void cur_obj_shake_screen(s32 shake) {
     set_camera_shake_from_point(shake, o->oPosX, o->oPosY, o->oPosZ);
 }
 
+s32 check_obj_is_LIT(struct Object *obj) {
+    return obj_has_behavior(obj, bhvBobomb) && o->oBobombFuseLit;
+}
+
 s32 obj_attack_collided_from_other_object(struct Object *obj) {
     if (obj->numCollidedObjs != 0) {
         struct Object *other = obj->collidedObjs[0];
 
         if (other != gMarioObject) {
-            other->oInteractStatus |= INT_STATUS_TOUCHED_MARIO | INT_STATUS_WAS_ATTACKED | INT_STATUS_INTERACTED
-                                      | INT_STATUS_TOUCHED_BOB_OMB;
+            u32 bobFlag = 0;
+            s32 oneIsBobOmb = obj_has_behavior(obj, bhvBobomb) || obj_has_behavior(other, bhvBobomb);
+            if (oneIsBobOmb) {
+                if (check_obj_is_LIT(obj) || check_obj_is_LIT(other)) {
+                    other->oInteractStatus |= INT_STATUS_TOUCHED_MARIO
+                        | INT_STATUS_WAS_ATTACKED
+                        | INT_STATUS_INTERACTED
+                        | INT_STATUS_TOUCHED_BOB_OMB;
+                    return TRUE;
+                }
+
+                return FALSE;
+            }
+
+            other->oInteractStatus |= INT_STATUS_TOUCHED_MARIO
+                | INT_STATUS_WAS_ATTACKED
+                | INT_STATUS_INTERACTED
+                | INT_STATUS_TOUCHED_BOB_OMB;
+
             return TRUE;
         }
     }
