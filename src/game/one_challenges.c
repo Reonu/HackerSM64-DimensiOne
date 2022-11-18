@@ -37,14 +37,14 @@ static struct OneChallengeLevel sChallengeLevels[sizeof(u32)*8] = {
         (CHALLENGE_FLAG_KNOCKED_KOOPA), // Requirements  TODO: for this challenge only, add on timer flag after meeting knocked Koopa condition
         (CHALLENGE_FLAG_KNOCKED_KOOPA | CHALLENGE_FLAG_GROUND | CHALLENGE_FLAG_KILL_KOOPA), // Enforcements
     }, { /*09*/
-        (CHALLENGE_FLAG_NONE), // Requirements
-        (CHALLENGE_FLAG_NONE), // Enforcements
+        (CHALLENGE_FLAG_TRIPLE_JUMP | CHALLENGE_FLAG_COIN), // Requirements
+        (CHALLENGE_FLAG_TRIPLE_JUMP), // Enforcements
     }, { /*10*/
-        (CHALLENGE_FLAG_NONE), // Requirements
-        (CHALLENGE_FLAG_NONE), // Enforcements
+        (CHALLENGE_FLAG_A_PRESS), // Requirements
+        (CHALLENGE_FLAG_A_PRESS), // Enforcements
     }, { /*11*/
-        (CHALLENGE_FLAG_NONE), // Requirements
-        (CHALLENGE_FLAG_NONE), // Enforcements
+        (CHALLENGE_FLAG_COLLECT_LIFE), // Requirements
+        (CHALLENGE_FLAG_COLLECT_LIFE), // Enforcements
     }, { /*12*/
         (CHALLENGE_FLAG_NONE), // Requirements
         (CHALLENGE_FLAG_NONE), // Enforcements

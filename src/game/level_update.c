@@ -443,6 +443,10 @@ void init_mario_after_warp(void) {
     gLastWarpID = sWarpDest.nodeId;
     gPuppyWarpArea = 0;
 #endif
+
+    if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING) {
+        gMarioState->health = MARIO_MAX_HEALTH;
+    }
 }
 
 // used for warps inside one level
