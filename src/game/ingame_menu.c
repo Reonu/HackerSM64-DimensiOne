@@ -2179,6 +2179,7 @@ s32 render_menus_and_dialogs(void) {
     create_dl_ortho_matrix();
 
     if (gMenuMode != MENU_MODE_NONE) {
+/*
         switch (gMenuMode) {
             case MENU_MODE_UNUSED_0:
                 mode = render_pause_courses_and_castle();
@@ -2192,6 +2193,34 @@ s32 render_menus_and_dialogs(void) {
             case MENU_MODE_UNUSED_3:
                 mode = render_course_complete_screen();
                 break;
+        }
+*/
+
+        shade_screen();
+        if (gDialogBoxState == DIALOG_STATE_OPENING) {
+            gDialogLineNum = MENU_OPT_DEFAULT;
+            gDialogTextAlpha = 0;
+            level_set_transition(-1, NULL);
+            play_sound(SOUND_MENU_PAUSE_OPEN, gGlobalSoundSource);
+
+            if (gCurrCourseNum >= COURSE_MIN
+                && gCurrCourseNum <= COURSE_MAX) {
+                change_dialog_camera_angle();
+                gDialogBoxState = DIALOG_STATE_VERTICAL;
+            } else {
+                highlight_last_course_complete_stars();
+                gDialogBoxState = DIALOG_STATE_HORIZONTAL;
+            }
+        } else if (gPlayer3Controller->buttonPressed & (A_BUTTON | START_BUTTON)) {
+            level_set_transition(0, NULL);
+            play_sound(SOUND_MENU_PAUSE_CLOSE, gGlobalSoundSource);
+            gDialogBoxState = DIALOG_STATE_OPENING;
+            gMenuMode = MENU_MODE_NONE;
+            mode = MENU_OPT_DEFAULT;
+        }
+        if (gPlayer1Controller->buttonPressed & L_TRIG) {
+            gConfig.widescreen ^= 1;
+            save_file_set_widescreen_mode(gConfig.widescreen);
         }
 
         gDialogColorFadeTimer = (s16) gDialogColorFadeTimer + 0x1000;
