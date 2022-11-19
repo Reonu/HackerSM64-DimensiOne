@@ -14,11 +14,11 @@
 #define TEXT_CHALLENGE_12       HEAD("13")  BODY("FFFF3F", "Collect the star")
 #define TEXT_CHALLENGE_13       HEAD("14")  BODY("FFFF3F", "Collect the star")
 #define TEXT_CHALLENGE_14       HEAD("15")  BODY("FFFF3F", "Collect the star")
-#define TEXT_CHALLENGE_15       HEAD("16")  BODY("1FFF1F", "TODO" PP_COL_RESET)
-#define TEXT_CHALLENGE_16       HEAD("17")  BODY("1FFF1F", "TODO" PP_COL_RESET)
-#define TEXT_CHALLENGE_17       HEAD("18")  BODY("1FFF1F", "TODO" PP_COL_RESET)
-#define TEXT_CHALLENGE_18       HEAD("19")  BODY("1FFF1F", "TODO" PP_COL_RESET)
-#define TEXT_CHALLENGE_19       HEAD("20")  BODY("1FFF1F", "TODO" PP_COL_RESET)
+#define TEXT_CHALLENGE_15       HEAD("16")  BODY("FFFF3F", "Collect the star")
+#define TEXT_CHALLENGE_16       HEAD("17")  BODY("FFFF3F", "Collect the star")
+#define TEXT_CHALLENGE_17       HEAD("18")  BODY("FFFF3F", "Collect the star")
+#define TEXT_CHALLENGE_18       HEAD("19")  BODY("FFFF3F", "Collect the star")
+#define TEXT_CHALLENGE_19       HEAD("20")  BODY("FFFF3F", "Collect the star")
 #define TEXT_CHALLENGE_20       HEAD("21")  BODY("1FFF1F", "TODO" PP_COL_RESET)
 #define TEXT_CHALLENGE_21       HEAD("22")  BODY("1FFF1F", "TODO" PP_COL_RESET)
 #define TEXT_CHALLENGE_22       HEAD("23")  BODY("1FFF1F", "TODO" PP_COL_RESET)
@@ -41,7 +41,6 @@
 #define TEXT_CHALLENGE_TYPE_WALLKICK              "While performing" _ "wallkick!"
 #define TEXT_CHALLENGE_TYPE_TRIPLE_JUMP           "While performing" _ "triple jump!"
 #define TEXT_CHALLENGE_TYPE_COLLECT_LIFE          "While collecting" _ "1-Up mushroom!"
-#define TEXT_CHALLENGE_TYPE_TIMER                 TIMER_EXCEPTION
 #define TEXT_CHALLENGE_TYPE_KNOCKED_KOOPA         "After being bumped by" _ "Koopa!"
 #define TEXT_CHALLENGE_TYPE_SLEEPING_PIRANHA     "After disturbing" _ "Piranha Plant!"
 #define TEXT_CHALLENGE_TYPE_KILL_GOOMBA           "By killing" _ "Goomba!"
@@ -52,6 +51,7 @@
 #define TEXT_CHALLENGE_TYPE_KILL_GOOMBA_WITH_BOMB "By killing" _ "Goomba with a Bob-omb!"
 #define TEXT_CHALLENGE_TYPE_KILL_WHOMP_KING       "By killing" _ "Traitor!"
 #define TEXT_CHALLENGE_TYPE_SMOOCH                "By receiving" _ "smooch!"
+#define TEXT_CHALLENGE_TYPE_TIMER                 TIMER_EXCEPTION // Must be last
 
 // Increase this array whenever adding challenge types!
 #define CHALLENGE_TYPE_ARRAY \
@@ -63,7 +63,6 @@
     TEXT_CHALLENGE_TYPE_WALLKICK, \
     TEXT_CHALLENGE_TYPE_TRIPLE_JUMP, \
     TEXT_CHALLENGE_TYPE_COLLECT_LIFE, \
-    TEXT_CHALLENGE_TYPE_TIMER, \
     TEXT_CHALLENGE_TYPE_KNOCKED_KOOPA, \
     TEXT_CHALLENGE_TYPE_SLEEPING_PIRANHA, \
     TEXT_CHALLENGE_TYPE_KILL_GOOMBA, \
@@ -73,7 +72,8 @@
     TEXT_CHALLENGE_TYPE_KILL_ALL_BOMBS, \
     TEXT_CHALLENGE_TYPE_KILL_GOOMBA_WITH_BOMB, \
     TEXT_CHALLENGE_TYPE_KILL_WHOMP_KING, \
-    TEXT_CHALLENGE_TYPE_SMOOCH,
+    TEXT_CHALLENGE_TYPE_SMOOCH, \
+    TEXT_CHALLENGE_TYPE_TIMER, // Must be last
 
 
 #define HEAD(x) PP_COL("FFFFFFFF") "Challenge " x PP_COL_RESET

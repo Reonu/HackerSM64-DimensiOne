@@ -246,7 +246,7 @@ void whomp_die(void) {
             cur_obj_shake_screen(SHAKE_POS_SMALL);
             o->oPosY += 100.0f;
             add_challenge_flags(CHALLENGE_FLAG_KILL_WHOMP_KING);
-            spawn_default_star(12.0f, 389.0f, 6.0f);
+            spawn_default_star(o->oHomeX, o->oHomeY + 350.0f, o->oHomeZ);
             cur_obj_play_sound_2(SOUND_OBJ_KING_WHOMP_DEATH);
             o->oAction = 9;
         }
