@@ -17,8 +17,29 @@ u32 challengeTypeDisplayTimer = -1U;
 
 static u32 sObtainedChallengeFlagsLast = CHALLENGE_FLAG_NONE;
 static u32 sFailureFlagsLast = CHALLENGE_FLAG_NONE;
-static u32 sChallengesPrintTimer = -1U;
+u32 gChallengesPrintTimer = -1U;
 
+
+static void update_timer(void) {
+    if (!((get_challenge_required_flags() | get_challenge_enforced_flags()) & CHALLENGE_FLAG_TIMER)) {
+        return;
+    }
+
+    gChallengeTimer--;
+
+    if (gChallengeTimer < 0) {
+        add_challenge_flags(CHALLENGE_FLAG_TIMER);
+        gChallengeTimer = 0;
+    }
+
+    s32 seconds = gChallengeTimer / 30;
+    s32 decaseconds = (gChallengeTimer % 30) / 3;
+
+    char str[16];
+    sprintf(str, "%d.%d", seconds, decaseconds);
+
+    print_small_text(16, 16, str, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_DEFAULT);
+}
 
 static char* get_challenge_type_text_entry(u8 typeIndex) {
     s32 arrayVal = 0;
@@ -128,7 +149,7 @@ void clear_challenge_print_timers(void) {
     sObtainedChallengeFlagsLast = get_challenge_obtained_flags();
     sFailureFlagsLast = get_challenge_failure_flags();
 
-    sChallengesPrintTimer = 0;
+    gChallengesPrintTimer = 0;
 }
 
 #define FADE_IN_FRAMES 30
@@ -140,18 +161,18 @@ void print_challenge_types(void) {
     }
 
     u8 alpha = 0;
-    if (sChallengesPrintTimer < FADE_OUT_AFTER_FRAMES + FADE_OUT_FRAMES) {
+    if (gChallengesPrintTimer < FADE_OUT_AFTER_FRAMES + FADE_OUT_FRAMES) {
         alpha = 255;
 
-        if (sChallengesPrintTimer < FADE_IN_FRAMES) {
-            alpha = 255.0f * (sChallengesPrintTimer / (f32) FADE_IN_FRAMES);
-        } else if (sChallengesPrintTimer > FADE_OUT_AFTER_FRAMES) {
-            alpha = 255.0f * (((FADE_OUT_AFTER_FRAMES + FADE_OUT_FRAMES) - sChallengesPrintTimer) / (f32) FADE_OUT_FRAMES);
+        if (gChallengesPrintTimer < FADE_IN_FRAMES) {
+            alpha = 255.0f * (gChallengesPrintTimer / (f32) FADE_IN_FRAMES);
+        } else if (gChallengesPrintTimer > FADE_OUT_AFTER_FRAMES) {
+            alpha = 255.0f * (((FADE_OUT_AFTER_FRAMES + FADE_OUT_FRAMES) - gChallengesPrintTimer) / (f32) FADE_OUT_FRAMES);
         }
     }
 
-    if (sChallengesPrintTimer != -1U) {
-        sChallengesPrintTimer++;
+    if (gChallengesPrintTimer != -1U) {
+        gChallengesPrintTimer++;
     }
 
     // Actual display stuff yay
@@ -180,6 +201,8 @@ void print_challenge_types(void) {
     print_small_text(SCREEN_WIDTH / 2, 12, gChallengeHeaderText[gChallengeLevel], PRINT_TEXT_ALIGN_CENTER, PRINT_ALL, FONT_DEFAULT);
     print_set_envcolour(0xFF, 0xFF, 0xFF, alpha);
     print_small_text(SCREEN_WIDTH / 2, 29, gChallengeHeaderBodyText[gChallengeLevel], PRINT_TEXT_ALIGN_CENTER, PRINT_ALL, FONT_DEFAULT);
+
+    update_timer();
 }
 #undef FADE_IN_FRAMES
 #undef FADE_OUT_FRAMES
