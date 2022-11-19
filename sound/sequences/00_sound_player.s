@@ -34,7 +34,7 @@ chan_setpanmix 127
 chan_setnotepriority 14
 chan_setval 0
 chan_iowriteval 5
-chan_stereoheadseteffects 1
+// chan_stereoheadseteffects 1
 chan_setdyntable .channel0_table
 chan_jump .main_loop_023589
 
@@ -45,7 +45,7 @@ chan_setpanmix 127
 chan_setnotepriority 14
 chan_setval 0
 chan_iowriteval 5
-chan_stereoheadseteffects 1
+// chan_stereoheadseteffects 1
 chan_setdyntable .channel2_table
 chan_jump .main_loop_023589
 
@@ -56,7 +56,7 @@ chan_setpanmix 127
 chan_setnotepriority 14
 chan_setval 0
 chan_iowriteval 5
-chan_stereoheadseteffects 1
+// chan_stereoheadseteffects 1
 chan_setdyntable .channel38_table
 chan_jump .main_loop_023589
 
@@ -67,7 +67,7 @@ chan_setpanmix 127
 chan_setnotepriority 14
 chan_setval 0
 chan_iowriteval 5
-chan_stereoheadseteffects 1
+// chan_stereoheadseteffects 1
 chan_setdyntable .channel59_table
 chan_jump .main_loop_023589
 
@@ -110,7 +110,7 @@ chan_setnotepriority 14
 chan_setval 0
 chan_iowriteval 5
 chan_setmutebhv 0x20
-chan_stereoheadseteffects 1
+// chan_stereoheadseteffects 1
 chan_setdyntable .channel1_table
 chan_jump .main_loop_146
 
@@ -122,7 +122,7 @@ chan_setnotepriority 14
 chan_setval 0
 chan_iowriteval 5
 chan_setmutebhv 0x20
-chan_stereoheadseteffects 1
+// chan_stereoheadseteffects 1
 chan_setdyntable .channel4_table
 chan_jump .main_loop_146
 
@@ -134,7 +134,7 @@ chan_setnotepriority 14
 chan_setval 0
 chan_iowriteval 5
 chan_setmutebhv 0x20
-chan_stereoheadseteffects 1
+// chan_stereoheadseteffects 1
 chan_setdyntable .channel6_table
 chan_jump .main_loop_146
 
@@ -172,7 +172,7 @@ chan_setinstr 0
 chan_setnotepriority 14
 chan_setval 0
 chan_iowriteval 5
-chan_stereoheadseteffects 1
+// chan_stereoheadseteffects 1
 chan_setdyntable .channel7_table
 
 // Loop for menu sound effects
@@ -5005,8 +5005,8 @@ sound_ref .sound_obj_wiggler_low_pitch
 sound_ref .sound_obj_snufit_skeeter_death
 sound_ref .sound_obj_bubba_chomp
 sound_ref .sound_obj_enemy_defeat_shrink
-sound_ref .sound_obj_bowser_tail_pickup
-sound_ref .sound_obj_bowser_defeated
+sound_ref .sound_obj_simpleflips_twoo
+sound_ref .sound_obj_simpleflips_bruh
 sound_ref .sound_obj_bowser_spinning
 sound_ref .sound_obj_klepto2
 sound_ref .sound_obj_king_bobomb_talk
@@ -5993,6 +5993,30 @@ chan_end
 
 .layer_252C:
 layer_note1 34, 0xaf, 127
+layer_end
+
+.sound_obj_simpleflips_twoo:
+chan_setbank 0
+chan_setinstr 6
+chan_setval 0x58
+chan_call .set_reverb
+chan_setlayer 0, .layer_obj_simpleflips_twoo
+chan_end
+
+.layer_obj_simpleflips_twoo:
+layer_note1 39, 0x52, 127
+layer_end
+
+.sound_obj_simpleflips_bruh:
+chan_setbank 0
+chan_setinstr 7
+chan_setval 12
+chan_call .set_reverb
+chan_setlayer 0, .layer_obj_simpleflips_bruh
+chan_end
+
+.layer_obj_simpleflips_bruh:
+layer_note1 39, 0x33, 127
 layer_end
 
 .sound_obj_boo_laugh_long:
@@ -7341,7 +7365,7 @@ chan_setenvelope .envelope_3454
 chan_setval 25
 chan_call .set_reverb
 chan_setpanmix 0
-chan_stereoheadseteffects 1
+// chan_stereoheadseteffects 1
 chan_setlayer 0, .layer_2E65
 chan_end
 
@@ -7364,7 +7388,7 @@ chan_reservenotes 4
 chan_setbank 9
 chan_setinstr 2
 chan_setpanmix 0
-chan_stereoheadseteffects 1
+// chan_stereoheadseteffects 1
 chan_setval 30
 chan_call .set_reverb
 chan_setenvelope .envelope_33BC
