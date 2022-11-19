@@ -2482,7 +2482,7 @@ const BehaviorScript bhvPiranhaPlant[] = {
     SET_INT(oDamageOrCoinValue, 3),
     SET_INT(oNumLootCoins,      5),
     SPAWN_CHILD(/*Model*/ MODEL_BUBBLE, /*Behavior*/ bhvPiranhaPlantBubble),
-    SET_FLOAT(oDrawingDistance, 2000),
+    SET_FLOAT(oDrawingDistance, 5000),
     SET_HOME(),
     CALL_NATIVE(bhv_piranha_plant_init),
     BEGIN_LOOP(),
@@ -6126,4 +6126,12 @@ const BehaviorScript bhvSpring[] = {
         CALL_NATIVE(bhv_spring_loop),
         SET_INT(oInteractStatus, 0),
     END_LOOP(),
+};
+
+const BehaviorScript bhvStaticObjectCustom[] = {
+    BEGIN(OBJ_LIST_SURFACE),
+    OR_INT(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
+    SET_FLOAT(oDrawingDistance, 20000),
+    CALL_NATIVE(load_object_static_model),
+    BREAK(),
 };
