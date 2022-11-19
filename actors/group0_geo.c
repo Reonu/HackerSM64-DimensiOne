@@ -23,3 +23,5 @@
 #include "bullet_bill/geo.inc.c"
 
 #include "peach/geo.inc.c"
+
+#include "moneybag/geo.inc.c"

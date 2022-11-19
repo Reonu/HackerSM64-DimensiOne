@@ -10,6 +10,7 @@
 #define MODEL_SPRING                           0x100
 #define MODEL_BULLET_BILL                      0x101        // bullet_bill_geo
 #define MODEL_PEACH                            0x102       // peach_geo
+#define MODEL_MONEYBAG                         0x103
 
 /* Various static level geometry, the geo layout differs but terrain object presets treat them the same.*/
 
@@ -423,7 +424,6 @@
 // group 16
 #define MODEL_CHILL_BULLY                 0x64        // chilly_chief_geo
 #define MODEL_BIG_CHILL_BULLY             0x65        // chilly_chief_big_geo
-#define MODEL_MONEYBAG                    0x66        // moneybag_geo
 
 // group 17
 #define MODEL_SWOOP                       0x64        // swoop_geo
