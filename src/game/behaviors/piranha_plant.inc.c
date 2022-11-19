@@ -308,6 +308,17 @@ ObjActionFunc TablePiranhaPlantActions[] = {
 /**
  * Main loop for bhvPiranhaPlant.
  */
+void bhv_piranha_plant_init(void) {
+    f32 dist;
+    o->oSpline = cur_obj_find_nearest_object_with_behavior(bhvSplinePlatform, &dist);
+    if (o->oSpline && dist > 2000) {
+        o->oSpline = NULL;
+    }
+}
+
+/**
+ * Main loop for bhvPiranhaPlant.
+ */
 void bhv_piranha_plant_loop(void) {
     u8 isSleeping = FALSE;
     if (o->oAction == PIRANHA_PLANT_ACT_SLEEPING) {
@@ -327,4 +338,11 @@ void bhv_piranha_plant_loop(void) {
     }
 
     o->oInteractStatus = INT_STATUS_NONE;
+
+    if (o->oSpline != NULL) {
+        vec3f_copy(&o->oPosVec, &o->oSpline->oPosVec);
+        // should instead use the top collision of the platform,
+        // would need to figure out HOW since the collision wouldnt be loaded unless marios close
+        o->oPosY += 24.4f;
+    }
 }
