@@ -175,9 +175,8 @@ void moneybag_act_death(void) {
         create_sound_spawner(SOUND_GENERAL_SPLATTERING);
         spawn_mist_particles();
         o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
+        add_challenge_kill_flags(CHALLENGE_FLAG_KILL_MONEYBAG);
     }
-
-    add_challenge_kill_flags(CHALLENGE_FLAG_KILL_MONEYBAG);
 }
 
 void bhv_moneybag_loop(void) {
