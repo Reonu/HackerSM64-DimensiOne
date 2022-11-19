@@ -11,18 +11,18 @@ const Trajectory bob_area_6_spline_ASplineChallenge0A[] = {
 	TRAJECTORY_END(),
 };
 const Trajectory bob_area_6_spline_ASplineChallenge0A_001[] = {
-	TRAJECTORY_POS( 0, 2349, 156, 515),
-	TRAJECTORY_POS( 1, 2349, 156, -751),
+	TRAJECTORY_POS( 0, 2349, 66, 515),
+	TRAJECTORY_POS( 1, 2349, 66, -751),
 	TRAJECTORY_END(),
 };
 const Trajectory bob_area_6_spline_ASplineChallenge0A_002[] = {
-	TRAJECTORY_POS( 0, 2783, 156, 515),
-	TRAJECTORY_POS( 1, 2783, 156, -751),
+	TRAJECTORY_POS( 0, 3703, 66, 515),
+	TRAJECTORY_POS( 1, 3703, 66, -751),
 	TRAJECTORY_END(),
 };
 const Trajectory bob_area_6_spline_ASplineChallenge0A_003[] = {
-	TRAJECTORY_POS( 0, 3221, 156, 515),
-	TRAJECTORY_POS( 1, 3221, 156, -751),
+	TRAJECTORY_POS( 0, 5168, 66, 515),
+	TRAJECTORY_POS( 1, 5168, 66, -751),
 	TRAJECTORY_END(),
 };
 const Trajectory bob_area_6_spline_ASplineChallenge0B[] = {
