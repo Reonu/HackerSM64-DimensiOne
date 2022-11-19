@@ -13,7 +13,7 @@ static struct ObjectHitbox sGoombaHitbox = {
     /* downOffset:        */ 0,
     /* damageOrCoinValue: */ 1,
     /* health:            */ 0,
-    /* numLootCoins:      */ 1,
+    /* numLootCoins:      */ 0,
     /* radius:            */ 72,
     /* height:            */ 50,
     /* hurtboxRadius:     */ 42,

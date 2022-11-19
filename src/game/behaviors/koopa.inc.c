@@ -17,7 +17,7 @@ static struct ObjectHitbox sKoopaHitbox = {
     /* downOffset:        */ 0,
     /* damageOrCoinValue: */ 0,
     /* health:            */ 0,
-    /* numLootCoins:      */ -1,
+    /* numLootCoins:      */ 0,
     /* radius:            */ 60,
     /* height:            */ 40,
     /* hurtboxRadius:     */ 40,

@@ -51,6 +51,8 @@ Gfx moving_platform_geo_moving_platform_geo_mesh_layer_1_tri_0[] = {
 Gfx mat_moving_platform_geo_cozies_noise_thing_2_layer1[] = {
 	gsDPPipeSync(),
 	gsDPSetCombineLERP(NOISE, 0, SHADE_ALPHA, ENVIRONMENT, 0, 0, 0, 1, PRIMITIVE, SHADE, COMBINED, SHADE, 0, 0, 0, 1),
+	gsDPSetFogColor(141, 255, 239, 255),
+	gsSPFogPosition(962, 980),
 	gsSPGeometryMode(0, G_FOG),
 	gsDPSetCycleType(G_CYC_2CYCLE),
 	gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_OPA_SURF2),

@@ -168,7 +168,7 @@ void piranha_plant_act_shrink_and_die(void) {
         o->oPiranhaPlantScale = o->oPiranhaPlantScale - 0.04f;
     } else {
         o->oPiranhaPlantScale = 0.0f;
-        cur_obj_spawn_loot_blue_coin();
+        //cur_obj_spawn_loot_blue_coin();
         o->oAction = PIRANHA_PLANT_ACT_WAIT_TO_RESPAWN;
     }
 
