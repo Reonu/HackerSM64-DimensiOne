@@ -66,21 +66,6 @@ const LevelScript level_bob_entry[] = {
 		/* Fast64 end persistent block [area commands] */
 	END_AREA(),
 
-	AREA(10, bob_area_10),
-		WARP_NODE(0xF0, LEVEL_BOB, 0x01, 0x0A, WARP_NO_CHECKPOINT),
-		WARP_NODE(0xF1, LEVEL_BOB, 0x01, 0x0A, WARP_NO_CHECKPOINT),
-		WARP_NODE(0x0E, LEVEL_BOB, 0x09, 0x0E, WARP_NO_CHECKPOINT),
-		WARP_NODE(0x11, LEVEL_BOB, 0x10, 0x11, WARP_NO_CHECKPOINT),
-		OBJECT(MODEL_NONE, 19, 0, -22, 0, 0, 0, (0x11 << 16), bhvInstantActiveWarp),
-		TERRAIN(bob_area_10_collision),
-		MACRO_OBJECTS(bob_area_10_macro_objs),
-		SET_BACKGROUND_MUSIC(0x00, SEQ_LEVEL_GRASS),
-		TERRAIN_TYPE(TERRAIN_GRASS),
-		/* Fast64 begin persistent block [area commands] */
-		SET_ECHO(0x22, 0x22),
-		/* Fast64 end persistent block [area commands] */
-	END_AREA(),
-
 	AREA(2, bob_area_2),
 		WARP_NODE(0xF0, LEVEL_BOB, 0x01, 0x0A, WARP_NO_CHECKPOINT),
 		WARP_NODE(0xF1, LEVEL_BOB, 0x01, 0x0A, WARP_NO_CHECKPOINT),
@@ -193,7 +178,7 @@ const LevelScript level_bob_entry[] = {
 		WARP_NODE(0x0F, LEVEL_BOB, 0x05, 0x0F, WARP_NO_CHECKPOINT),
 		WARP_NODE(0x0A, LEVEL_BOB, 0x06, 0x0A, WARP_NO_CHECKPOINT),
 		WARP_NODE(0x10, LEVEL_BOB, 0x05, 0x10, WARP_NO_CHECKPOINT),
-		WARP_NODE(0x11, LEVEL_BOB, 0x10, 0x11, WARP_NO_CHECKPOINT),
+		WARP_NODE(0x11, LEVEL_WF, 0x01, 0x11, WARP_NO_CHECKPOINT),
 		OBJECT(MODEL_BLACK_BOBOMB, 852, -368, -815, 0, 0, 0, (0x0F), bhvBobomb),
 		OBJECT(MODEL_BLACK_BOBOMB, -396, -368, -366, 0, 0, 0, (0x0F), bhvBobomb),
 		OBJECT(MODEL_BLACK_BOBOMB, 1646, -368, 660, 0, 0, 0, (0x0F), bhvBobomb),
@@ -416,8 +401,10 @@ const LevelScript level_bob_entry[] = {
 		WARP_NODE(0xF0, LEVEL_BOB, 0x01, 0x0A, WARP_NO_CHECKPOINT),
 		WARP_NODE(0xF1, LEVEL_BOB, 0x01, 0x0A, WARP_NO_CHECKPOINT),
 		WARP_NODE(0x0F, LEVEL_BOB, 0x09, 0x0F, WARP_NO_CHECKPOINT),
-		OBJECT(MODEL_NONE, -2039, 39, 49, 0, 0, 0, (0x0F << 16), bhvInstantActiveWarp),
-		OBJECT(MODEL_WHOMP, 12, 39, 6, 0, 0, 0, (0x0F), bhvWhompKingBoss),
+		WARP_NODE(0x12, LEVEL_BOB, 0x09, 0x12, WARP_NO_CHECKPOINT),
+		OBJECT(MODEL_PEACH, 2193, 39, -10, 0, 0, 0, 0x00000000, bhvPeach),
+		OBJECT(MODEL_NONE, -2039, 39, 49, 0, 0, 0, (0x12 << 16), bhvInstantActiveWarp),
+		OBJECT(MODEL_WHOMP, 12, 39, 6, 0, 0, 0, (0x12), bhvWhompKingBoss),
 		TERRAIN(bob_area_9_collision),
 		MACRO_OBJECTS(bob_area_9_macro_objs),
 		SET_BACKGROUND_MUSIC(0x00, SEQ_LEVEL_GRASS),
