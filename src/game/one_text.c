@@ -2,6 +2,7 @@
 #include "debug.h"
 #include "game_init.h"
 #include "level_update.h"
+#include "object_list_processor.h"
 #include "one_challenges.h"
 #include "one_text.h"
 #include "puppyprint.h"
@@ -171,8 +172,21 @@ void print_challenge_types(void) {
         }
     }
 
-    if (gChallengesPrintTimer != -1U) {
+    if (
+        gChallengesPrintTimer != -1U && (gChallengesPrintTimer < FADE_IN_FRAMES ||
+        !(
+            (gTimeStopState & TIME_STOP_ENABLED) ||
+            sCurrPlayMode == PLAY_MODE_PAUSED
+        ))
+    ) {
         gChallengesPrintTimer++;
+    }
+
+    if (sCurrPlayMode == PLAY_MODE_PAUSED) {
+        alpha = 255;
+        if (gChallengesPrintTimer > FADE_OUT_AFTER_FRAMES) {
+            gChallengesPrintTimer = FADE_OUT_AFTER_FRAMES;
+        }
     }
 
     // Actual display stuff yay
