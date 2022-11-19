@@ -224,7 +224,7 @@ static void koopa_dive_update_speed(f32 decel) {
         obj_forward_vel_approach(0.0f, decel);
         if (o->oForwardVel > 5.0f) {
             if (!(o->oTimer % 4)) {
-                spawn_object_with_scale(o, MODEL_SMOKE, bhvWhitePuffSmoke2, 1.0f);
+                //spawn_object_with_scale(o, MODEL_SMOKE, bhvWhitePuffSmoke2, 1.0f);
             }
         }
     }

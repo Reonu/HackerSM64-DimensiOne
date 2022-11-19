@@ -63,7 +63,7 @@ void pole_1up_move_towards_mario(void) {
 
     o->oMoveAnglePitch = approach_s16_symmetric(o->oMoveAnglePitch, targetPitch, 0x1000);
     o->oVelY = sins(o->oMoveAnglePitch) * 30.0f;
-    o->oForwardVel = coss(o->oMoveAnglePitch) * 30.0f;
+    o->oForwardVel = coss(o->oMoveAnglePitch) * 25.0f;
 
     bhv_1up_interact();
 }

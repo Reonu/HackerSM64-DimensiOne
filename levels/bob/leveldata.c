@@ -33,3 +33,5 @@
 #include "levels/bob/moving_platform_geo/collision.inc.c"
 #include "levels/bob/moving_platform_geo_challenge_10/model.inc.c"
 #include "levels/bob/moving_platform_geo_challenge_10/collision.inc.c"
+#include "levels/bob/BulletBillCannon/model.inc.c"
+#include "levels/bob/BulletBillCannon/collision.inc.c"

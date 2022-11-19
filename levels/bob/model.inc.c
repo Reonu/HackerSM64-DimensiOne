@@ -7644,7 +7644,7 @@ Gfx mat_bob_dl_stone_wall_layer1[] = {
 	gsDPPipeSync(),
 	gsDPSetTile(G_IM_FMT_CI, G_IM_SIZ_4b, 4, 0, 1, 0, G_TX_WRAP | G_TX_NOMIRROR, 6, 0, G_TX_WRAP | G_TX_NOMIRROR, 6, 0),
 	gsDPSetTileSize(1, 0, 0, 252, 252),
-	gsDPSetEnvColor(255, 116, 0, 255),
+	gsDPSetEnvColor(0, 52, 255, 255),
 	gsSPEndDisplayList(),
 };
 

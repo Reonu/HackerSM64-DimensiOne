@@ -51,14 +51,14 @@ static struct OneChallengeLevel sChallengeLevels[sizeof(u32)*8] = {
         (CHALLENGE_FLAG_A_PRESS), // Requirements
         (CHALLENGE_FLAG_A_PRESS | CHALLENGE_FLAG_SLEEPING_PIRANHA), // Enforcements
     }, { /*13*/
-        (CHALLENGE_FLAG_KILL_WHOMP_KING), // Requirements
-        (CHALLENGE_FLAG_KILL_WHOMP_KING), // Enforcements
+        (CHALLENGE_FLAG_A_PRESS), // Requirements
+        (CHALLENGE_FLAG_A_PRESS), // Enforcements
     }, { /*14*/
-        (CHALLENGE_FLAG_NONE), // Requirements
+        (CHALLENGE_FLAG_TIMER), // Requirements
         (CHALLENGE_FLAG_NONE), // Enforcements
     }, { /*15*/
-        (CHALLENGE_FLAG_NONE), // Requirements
-        (CHALLENGE_FLAG_NONE), // Enforcements
+        (CHALLENGE_FLAG_COIN), // Requirements
+        (CHALLENGE_FLAG_COIN | CHALLENGE_FLAG_KILL_MONEYBAG), // Enforcements
     }, { /*16*/
         (CHALLENGE_FLAG_NONE), // Requirements
         (CHALLENGE_FLAG_NONE), // Enforcements
@@ -69,8 +69,8 @@ static struct OneChallengeLevel sChallengeLevels[sizeof(u32)*8] = {
         (CHALLENGE_FLAG_NONE), // Requirements
         (CHALLENGE_FLAG_NONE), // Enforcements
     }, { /*19*/
-        (CHALLENGE_FLAG_NONE), // Requirements
-        (CHALLENGE_FLAG_NONE), // Enforcements
+        (CHALLENGE_FLAG_KILL_WHOMP_KING | CHALLENGE_FLAG_SMOOCH), // Requirements
+        (CHALLENGE_FLAG_KILL_WHOMP_KING | CHALLENGE_FLAG_SMOOCH), // Enforcements
     }, { /*20*/
         (CHALLENGE_FLAG_NONE), // Requirements
         (CHALLENGE_FLAG_NONE), // Enforcements
@@ -120,6 +120,9 @@ u32 gChallengeStatus = CHALLENGE_STATUS_NOT_PLAYING;
 // How many Bob-ombs have been spawned into the level?
 u16 gBombsSpawned = 0xFFFF;
 
+// One-minute timer used for the challenges that need it
+s32 gChallengeTimer;
+
 // Flags of which challenge conditions have been met by the player
 u32 sObtainedChallengeFlags = CHALLENGE_FLAG_NONE;
 
@@ -144,11 +147,18 @@ static u8 sKoopasKilled = 0;
 static u8 sBombsKilled = 0;
 static u8 sPiranhasDisturbed = 0;
 static u8 sGoombasKilledWithBombs = 0;
+static u8 sMoneybagsKilled = 0;
 static u8 sLivesCollected = 0;
 
 
 static void can_win_challenge(void) {
     if (gChallengeStatus != CHALLENGE_STATUS_PLAYING) {
+        return;
+    }
+
+    if (gChallengeLevel == 8 && !(sRequiredChallengeFlags & CHALLENGE_FLAG_TIMER)) {
+        sRequiredChallengeFlags |= CHALLENGE_FLAG_TIMER;
+        gChallengesPrintTimer = 0;
         return;
     }
 
@@ -189,6 +199,10 @@ static void process_kill_flags(void) {
     if (sGoombasKilledWithBombs > 0) {
         sGoombasKilledWithBombs--;
         add_challenge_flags(CHALLENGE_FLAG_KILL_GOOMBA_WITH_BOMB);
+    }
+    if (sMoneybagsKilled > 0) {
+        sMoneybagsKilled--;
+        add_challenge_flags(CHALLENGE_FLAG_KILL_MONEYBAG);
     }
     if (sLivesCollected > 0) {
         sLivesCollected--;
@@ -344,7 +358,10 @@ void reset_challenge(void) {
     sBombsKilled = 0;
     sPiranhasDisturbed = 0;
     sGoombasKilledWithBombs = 0;
+    sMoneybagsKilled = 0;
     sLivesCollected = 0;
+
+    gChallengeTimer = 60 * 30; // 1 minute
 
     if (gChallengeStatus == CHALLENGE_STATUS_NOT_PLAYING) {
         gChallengeStatus = CHALLENGE_STATUS_PLAYING;
@@ -400,6 +417,8 @@ void add_challenge_kill_flags(u32 flags) {
         sPiranhasDisturbed++;
     if (flags & CHALLENGE_FLAG_KILL_GOOMBA_WITH_BOMB)
         sGoombasKilledWithBombs++;
+    if (flags & CHALLENGE_FLAG_KILL_MONEYBAG)
+        sMoneybagsKilled++;
     if (flags & CHALLENGE_FLAG_COLLECT_LIFE)
         sLivesCollected++;
 }

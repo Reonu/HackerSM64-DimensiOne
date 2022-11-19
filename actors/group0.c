@@ -35,3 +35,12 @@
 #include "spring/model.inc.c"
 
 #include "bullet_bill/model.inc.c"
+
+
+#include "peach/model.inc.c"
+#include "peach/anims/data.inc.c"
+#include "peach/anims/table.inc.c"
+
+#include "moneybag/model.inc.c"
+#include "moneybag/anims/data.inc.c"
+#include "moneybag/anims/table.inc.c"

@@ -543,5 +543,8 @@ extern const BehaviorScript bhvUnusedFakeStar[];
 extern const BehaviorScript bhvSplinePlatform[];
 extern const BehaviorScript bhvSplineFollower[];
 extern const BehaviorScript bhvSpring[];
+extern const BehaviorScript bhvStaticObjectCustom[];
+extern const BehaviorScript bhvPeach[];
+
 
 #endif // BEHAVIOR_DATA_H
