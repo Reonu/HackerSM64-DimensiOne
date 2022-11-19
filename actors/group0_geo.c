@@ -21,3 +21,5 @@
 #include "spring/geo.inc.c"
 
 #include "bullet_bill/geo.inc.c"
+
+#include "peach/geo.inc.c"
