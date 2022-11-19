@@ -257,9 +257,9 @@ void whomp_die(void) {
             o->oNumLootCoins = 2;
             obj_spawn_loot_yellow_coins(o, 2, 50.0f);
             o->oAction = 9;
-            sEndPeachObj = spawn_object_relative(0, 0, 0, 0, o, MODEL_PEACH, bhvPeach);
-            // sEndPeachObj = spawn_object_abs_with_rot(o, 0, MODEL_PEACH, bhvPeach, 0, 2428,
-            //                                      -1300, 0, 0, 0);
+            f32 d;
+            struct Object *peach = cur_obj_find_nearest_object_with_behavior(bhvPeach, &d);
+            peach->oAction = 1;
         // }
     } else {
         spawn_mist_particles_variable(0, 0, 100.0f);

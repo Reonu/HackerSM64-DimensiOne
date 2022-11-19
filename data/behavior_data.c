@@ -6135,6 +6135,7 @@ const BehaviorScript bhvStaticObjectCustom[] = {
     CALL_NATIVE(load_object_static_model),
     BREAK(),
 };
+
 const BehaviorScript bhvPeach[] = {
     BEGIN(OBJ_LIST_GENACTOR),
     LOAD_ANIMATIONS(oAnimations, peach_seg5_anims_0501C41C),
@@ -6145,6 +6146,7 @@ const BehaviorScript bhvPeach[] = {
     SET_HITBOX(/*Radius*/ 100, /*Height*/ 60),
     SET_HOME(),
     BEGIN_LOOP(),
+        CALL_NATIVE(bhv_end_peach_loop),
         SET_INT(oIntangibleTimer, 0),
     END_LOOP(),
 };

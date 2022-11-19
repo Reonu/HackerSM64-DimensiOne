@@ -612,5 +612,6 @@ void find_surface_on_ray(Vec3f orig, Vec3f dir, struct Surface **hit_surface, Ve
 void closest_point_on_line_segment(Vec3f pA, Vec3f pB, Vec3f point, Vec3f res);
 
 f32 remap(f32 x, f32 fromA, f32 toA, f32 fromB, f32 toB);
+f32 lerp(f32 from, f32 to, f32 amt);
 
 #endif // MATH_UTIL_H

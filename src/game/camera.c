@@ -7060,13 +7060,15 @@ void cutscene_ending_dialog(struct Camera *c) {
     player2_rotate_cam(c, -0x800, 0x2000, -0x2000, 0x2000);
 }
 
+extern struct Object *sEndPeachObj;
+
 /**
  * Zoom in and move the camera close to Mario and peach.
  */
 void cutscene_ending_kiss_closeup(struct Camera *c) {
     set_fov_function(CAM_FOV_SET_29);
-    vec3f_set(c->focus, 350.f, 1034.f, -1216.f);
-    vec3f_set(c->pos, -149.f, 1021.f, -1216.f);
+    vec3f_set(c->focus, sEndPeachObj->oPosX - (120.0f/2.0f), 39+140.0f, 26.f);
+    vec3f_set(c->pos, sEndPeachObj->oPosX - (120.0f/2.0f), 39+140.0f-13, 26.f - 500.0f);
 }
 
 /**
@@ -7076,8 +7078,8 @@ void cutscene_ending_kiss_here_we_go(struct Camera *c) {
     Vec3f pos, foc;
 
     set_fov_function(CAM_FOV_DEFAULT);
-    vec3f_set(foc, 233.f, 1068.f, -1298.f);
-    vec3f_set(pos, -250.f, 966.f, -1111.f);
+    vec3f_set(foc, sEndPeachObj->oPosX - (120.0f/2.0f), 39+140.0f+50.0f, 100);
+    vec3f_set(pos, sEndPeachObj->oPosX - (120.0f/2.0f), 39+140.0f-13.0f-55.0f, 26.0f-500.0f-100.0f);
     approach_vec3f_asymptotic(c->pos, pos, 0.2f, 0.1f, 0.2f);
     approach_vec3f_asymptotic(c->focus, foc, 0.2f, 0.1f, 0.2f);
 }
@@ -7088,7 +7090,6 @@ void cutscene_ending_kiss_here_we_go(struct Camera *c) {
 void cutscene_ending_kiss(struct Camera *c) {
     cutscene_event(cutscene_ending_kiss_closeup, c, 0, 0);
     cutscene_event(cutscene_ending_kiss_here_we_go, c, 155, -1);
-    player2_rotate_cam(c, -0x800, 0x2000, -0x2000, 0x2000);
 }
 
 /**
@@ -9958,26 +9959,26 @@ void cutscene_door_mode(struct Camera *c) {
  * Cutscene that plays when Mario beats the game.
  */
 struct Cutscene sCutsceneEnding[] = {
-    { cutscene_ending_mario_fall, 170 },
-    { cutscene_ending_mario_land, 70 },
-    { cutscene_ending_mario_land_closeup, 75 },
-#ifdef VERSION_SH
-    { cutscene_ending_stars_free_peach, 431 },
-#else
-    { cutscene_ending_stars_free_peach, 386 },
-#endif
-    { cutscene_ending_peach_appears, 139 },
-    { cutscene_ending_peach_descends, 590 },
-    { cutscene_ending_mario_to_peach, 95 },
-#ifdef VERSION_SH
-    { cutscene_ending_peach_wakeup, 455 },
-    { cutscene_ending_dialog, 286 },
-#else
-    { cutscene_ending_peach_wakeup, 425 },
-    { cutscene_ending_dialog, 236 },
-#endif
-    { cutscene_ending_kiss, 245 },
-    { cutscene_ending_cake_for_mario, CUTSCENE_LOOP },
+//     { cutscene_ending_mario_fall, 170 },
+//     { cutscene_ending_mario_land, 70 },
+//     { cutscene_ending_mario_land_closeup, 75 },
+// #ifdef VERSION_SH
+//     { cutscene_ending_stars_free_peach, 431 },
+// #else
+//     { cutscene_ending_stars_free_peach, 386 },
+// #endif
+//     { cutscene_ending_peach_appears, 139 },
+//     { cutscene_ending_peach_descends, 590 },
+//     { cutscene_ending_mario_to_peach, 95 },
+// #ifdef VERSION_SH
+//     { cutscene_ending_peach_wakeup, 455 },
+//     { cutscene_ending_dialog, 286 },
+// #else
+//     { cutscene_ending_peach_wakeup, 425 },
+//     { cutscene_ending_dialog, 236 },
+// #endif
+    { cutscene_ending_kiss, 300+140 },
+    // { cutscene_ending_cake_for_mario, CUTSCENE_LOOP },
     { cutscene_ending_stop, 0 }
 };
 

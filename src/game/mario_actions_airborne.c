@@ -6,6 +6,7 @@
 #include "audio/external.h"
 #include "camera.h"
 #include "engine/graph_node.h"
+#include "engine/surface_collision.h"
 #include "engine/math_util.h"
 #include "game_init.h"
 #include "interaction.h"
@@ -14,6 +15,7 @@
 #include "mario_step.h"
 #include "save_file.h"
 #include "rumble_init.h"
+#include "behavior_data.h"
 
 #include "config.h"
 
@@ -913,6 +915,9 @@ s32 act_ground_pound(struct MarioState *m) {
     play_sound_if_no_flag(m, SOUND_ACTION_THROW, MARIO_ACTION_SOUND_PLAYED);
 
     if (m->actionState == 0) {
+        struct Surface *ceil; 
+        f32 ceilHeight = find_mario_ceil(m->pos, m->floorHeight, &ceil);
+        set_mario_ceil(m, ceil, ceilHeight);
         if (m->actionTimer < 10) {
             yOffset = 20 - 2 * m->actionTimer;
             if (m->pos[1] + yOffset + 160.0f < m->ceilHeight) {
@@ -921,6 +926,8 @@ s32 act_ground_pound(struct MarioState *m) {
                 vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
             }
         }
+
+        if (m->pos[1] + 160.0f > m->ceilHeight) m->pos[1] = m->ceilHeight - 160.0f;
 
         m->vel[1] = -50.0f;
         mario_set_forward_vel(m, 0.0f);
@@ -956,6 +963,11 @@ s32 act_ground_pound(struct MarioState *m) {
                 }
             }
             set_camera_shake_from_hit(SHAKE_GROUND_POUND);
+        }
+        else if (stepResult == AIR_STEP_HIT_CEILING && m->ceil && m->ceil->object) {
+            if (obj_has_behavior(m->ceil->object, bhvWhompKingBoss)) {
+                set_mario_action(m, ACT_BACKWARD_AIR_KB, 0);
+            }
         }
 #ifndef DISABLE_GROUNDPOUND_BONK
         else if (stepResult == AIR_STEP_HIT_WALL) {

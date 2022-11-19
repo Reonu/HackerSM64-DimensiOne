@@ -28,6 +28,8 @@
 #include "sound_init.h"
 #include "rumble_init.h"
 #include "one_challenges.h"
+#include "fb_effects.h"
+#include "render_fog.h"
 
 static struct Object *sIntroWarpPipeObj;
 struct Object *sEndPeachObj;
@@ -158,13 +160,86 @@ void print_displaying_credits_entry(void) {
     }
 }
 
+enum {
+    END_PEACH_CUTSCENE_MARIO_FALLING,
+    END_PEACH_CUTSCENE_MARIO_LANDING,
+    END_PEACH_CUTSCENE_SUMMON_JUMBO_STAR,
+    END_PEACH_CUTSCENE_SPAWN_PEACH,
+    END_PEACH_CUTSCENE_DESCEND_PEACH,
+    END_PEACH_CUTSCENE_RUN_TO_PEACH,
+    END_PEACH_CUTSCENE_DIALOG_1,
+    END_PEACH_CUTSCENE_DIALOG_2,
+    END_PEACH_CUTSCENE_KISS_FROM_PEACH,
+    END_PEACH_CUTSCENE_STAR_DANCE,
+    END_PEACH_CUTSCENE_DIALOG_3,
+    END_PEACH_CUTSCENE_RUN_TO_CASTLE,
+    END_PEACH_CUTSCENE_FADE_OUT
+};
+
+// #define END_MOTION_BLUR_R 20
+// #define END_MOTION_BLUR_G 10
+// #define END_MOTION_BLUR_B 15
+// [171.47095173597336, 133.88899236917496, 157.93373733758926]
+#define END_MOTION_FOG_NEAR 860
+#define END_MOTION_FOG_FAR 940
+#define END_MOTION_BLUR_MAX 180
+#define END_MOTION_BLUR_R (171*.4f)
+#define END_MOTION_BLUR_G (134*.4f)
+#define END_MOTION_BLUR_B (158*.4f)
+
 void bhv_end_peach_loop(void) {
+    if (o->oAction == 0) {
+        o->oPosX = 1470;
+        o->oPosY = 39;
+        o->oPosZ = 26;
+        sEndPeachObj = o;
+        // osSyncPrintf("0: %d\n", sEndPeachAnimation);
+        sEndPeachAnimation = 0;
+        obj_turn_toward_object(o, gMarioObject, O_MOVE_ANGLE_YAW_INDEX, 0x400);
+        cur_obj_init_animation_with_sound(sEndPeachAnimation);
+        // whomp sets peach's action to 1
+        return;
+    } else if (o->oAction == 1) {
+        
+        set_fb_effect_type(FBE_EFFECT_BRIGHTEN);
+        set_fb_effect_col(END_MOTION_BLUR_R, END_MOTION_BLUR_G, END_MOTION_BLUR_B);
+
+        f32 amt = remap(o->oDistanceToMario, 2000.0f, 170.0f, 0.0f, 1.0f);
+        update_global_fog_override(
+            20, 20, 20, 0,
+            (s16)roundf(lerp(960, END_MOTION_FOG_NEAR, amt)),
+            (s16)roundf(lerp(1000, END_MOTION_FOG_FAR, amt))
+        );
+
+        s32 blurAmt = roundf(amt*END_MOTION_BLUR_MAX);
+        run_motion_blur(CLAMP(blurAmt, 0, END_MOTION_BLUR_MAX));
+        // osSyncPrintf("1: %d || %f\n", sEndPeachAnimation, o->oDistanceToMario);
+        sEndPeachAnimation = 0;
+        obj_turn_toward_object(o, gMarioObject, O_MOVE_ANGLE_YAW_INDEX, 0x400);
+        cur_obj_init_animation_with_sound(sEndPeachAnimation);
+        if (o->oDistanceToMario < 120.0f+50.0f) {
+            o->oAction = 2;
+            sEndPeachAnimation = PEACH_ANIM_KISS;
+            set_mario_action(gMarioState, ACT_END_PEACH_CUTSCENE, END_PEACH_CUTSCENE_KISS_FROM_PEACH);
+        }
+        return;
+    }
+    run_motion_blur(END_MOTION_BLUR_MAX);
+    update_global_fog_override(
+        20, 20, 20, 0,
+        END_MOTION_FOG_NEAR,
+        END_MOTION_FOG_FAR
+    );
+    // osSyncPrintf("2: %d\n", sEndPeachAnimation);
+
+    obj_turn_toward_object(o, gMarioObject, O_MOVE_ANGLE_YAW_INDEX, 0x400);
     cur_obj_init_animation_with_sound(sEndPeachAnimation);
+
     if (cur_obj_check_if_near_animation_end()) {
         // anims: 0-3, 4, 5, 6-8, 9, 10, 11
-        if (sEndPeachAnimation <  PEACH_ANIM_3 || sEndPeachAnimation == PEACH_ANIM_DIALOG_1_PART_1 || sEndPeachAnimation == PEACH_ANIM_DIALOG_1_PART_2) {
-            sEndPeachAnimation++;
-        }
+        // if (sEndPeachAnimation <  PEACH_ANIM_3 || sEndPeachAnimation == PEACH_ANIM_DIALOG_1_PART_1 || sEndPeachAnimation == PEACH_ANIM_DIALOG_1_PART_2) {
+        // }
+        sEndPeachAnimation = 0;
     }
 }
 
@@ -2315,6 +2390,30 @@ static u8 sMarioBlinkOverride[20] = {
 
 static void end_peach_cutscene_kiss_from_peach(struct MarioState *m) {
     sEndPeachAnimation = PEACH_ANIM_KISS;
+    m->pos[0] = approach_f32_asymptotic(m->pos[0], sEndPeachObj->oPosX - 120.0f, 0.1f);
+    m->pos[1] = approach_f32_symmetric(m->pos[1], sEndPeachObj->oPosY, 30.0f);
+    m->pos[2] = approach_f32_asymptotic(m->pos[2], sEndPeachObj->oPosZ, 0.1f);
+    m->faceAngle[0] = 0;
+    m->faceAngle[2] = 0;
+    vec3f_get_yaw(m->pos, &sEndPeachObj->oPosVec, &m->faceAngle[1]);
+    vec3s_copy(m->marioObj->header.gfx.angle, m->faceAngle);
+    vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
+
+    if (m->actionTimer == 0) {
+        m->statusForCamera->cameraEvent = CAM_EVENT_START_ENDING;
+    }
+
+    s32 animFrame = set_mario_animation(m, m->actionState == 0 ? MARIO_ANIM_CREDITS_TAKE_OFF_CAP
+                                                               : MARIO_ANIM_CREDITS_LOOK_UP);
+    if (m->actionState == ACT_STATE_END_PEACH_CUTSCENE_DIALOG_1_TAKE_OFF_CAP) {
+        if (animFrame == 8) {
+            cutscene_take_cap_off(m);
+        }
+
+        if (is_anim_at_end(m)) {
+            m->actionState = ACT_STATE_END_PEACH_CUTSCENE_DIALOG_1_LOOK_UP;
+        }
+    }
 
     if (m->actionTimer >= 90) {
         m->marioBodyState->eyeState =
@@ -2380,14 +2479,15 @@ static void end_peach_cutscene_star_dance(struct MarioState *m) {
         case 120: sPeachManualBlinkTime = 0; break;
 
         case 140:
-#ifndef VERSION_JP
-            seq_player_unlower_volume(SEQ_PLAYER_LEVEL, 60);
-#endif
-            play_cutscene_music(SEQUENCE_ARGS(15, SEQ_EVENT_CUTSCENE_CREDITS));
+// #ifndef VERSION_JP
+//             seq_player_unlower_volume(SEQ_PLAYER_LEVEL, 60);
+// #endif
+//             play_cutscene_music(SEQUENCE_ARGS(15, SEQ_EVENT_CUTSCENE_CREDITS));
             break;
 
-        case 142:
-            advance_cutscene_step(m);
+        case 300:
+            set_mario_action(m, ACT_IDLE, 0);
+            // advance_cutscene_step(m);
             break;
     }
 }
@@ -2462,21 +2562,6 @@ static void end_peach_cutscene_fade_out(struct MarioState *m) {
     }
 }
 
-enum {
-    END_PEACH_CUTSCENE_MARIO_FALLING,
-    END_PEACH_CUTSCENE_MARIO_LANDING,
-    END_PEACH_CUTSCENE_SUMMON_JUMBO_STAR,
-    END_PEACH_CUTSCENE_SPAWN_PEACH,
-    END_PEACH_CUTSCENE_DESCEND_PEACH,
-    END_PEACH_CUTSCENE_RUN_TO_PEACH,
-    END_PEACH_CUTSCENE_DIALOG_1,
-    END_PEACH_CUTSCENE_DIALOG_2,
-    END_PEACH_CUTSCENE_KISS_FROM_PEACH,
-    END_PEACH_CUTSCENE_STAR_DANCE,
-    END_PEACH_CUTSCENE_DIALOG_3,
-    END_PEACH_CUTSCENE_RUN_TO_CASTLE,
-    END_PEACH_CUTSCENE_FADE_OUT
-};
 
 static s32 act_end_peach_cutscene(struct MarioState *m) {
     switch (m->actionArg) {
