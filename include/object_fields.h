@@ -1299,7 +1299,7 @@ os16112*/
 #define /*0x104*/ o104                                          OBJECT_FIELD_S32(0x1F)
 #define /*0x108*/ o108                                          OBJECT_FIELD_S32(0x20)
 #define /*0x10C*/ o10C                                          OBJECT_FIELD_S32(0x21)
-#define /*0x110*/ o110                                          OBJECT_FIELD_S32(0x22)
+#define /*0x110*/ oPrimRGB                                      OBJECT_FIELD_S32(0x22)
 
 #define /*0x0F4*/ oFloatF4                                      OBJECT_FIELD_F32(0x1B)
 #define /*0x0F8*/ oFloatF8                                      OBJECT_FIELD_F32(0x1C)

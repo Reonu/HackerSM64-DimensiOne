@@ -6104,3 +6104,16 @@ const BehaviorScript bhvSplinePlatform[] = {
     END_LOOP(),
 };
 
+const BehaviorScript bhvSpring[] = {
+    BEGIN(OBJ_LIST_GENACTOR),
+    OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
+    SET_INTERACT_TYPE(INTERACT_SPRING),
+    SET_HITBOX(/*Radius*/ 100, /*Height*/ 120),
+    CALL_NATIVE(bhv_spring_init),
+    SET_INT(oIntangibleTimer, 0),
+    SET_HOME(),
+    BEGIN_LOOP(),
+        CALL_NATIVE(bhv_spring_loop),
+        SET_INT(oInteractStatus, 0),
+    END_LOOP(),
+};
