@@ -53,15 +53,17 @@ const LevelScript level_bob_entry[] = {
 		WARP_NODE(0x02, LEVEL_BOB, 0x02, 0x02, WARP_NO_CHECKPOINT),
 		OBJECT(MODEL_NONE, 372, -3445, 150, 0, -90, 0, (0x01), bhvCoinFormation),
 		MARIO_POS(0x01, 90, -309, -3445, 195),
-		OBJECT(MODEL_SPRING, 321, -3445, -430, 0, -90, 0, (0x01), bhvSpring),
+		OBJECT(MODEL_NONE, 321, -3445, -430, 0, -90, 0, (SPLINE_OBJECT_BHV_AUTO << 24) | (SPLINE_OBJECT_MOVE_BACK_AND_FORTH << 16) | (0x14 << 8), bhvSplineFollower),
 		OBJECT(MODEL_SPRING, 321, -3445, -776, 0, -90, 0, (0x01 << 16) | (0x01), bhvSpring),
 		OBJECT(MODEL_SPRING, 321, -3445, -1173, 0, -90, 0, (0x02 << 16) | (0x01), bhvSpring),
 		OBJECT(MODEL_STAR, 1320, -3134, 165, 0, -90, 0, (0x01 << 24) | (0x01), bhvStar),
+		OBJECT(MODEL_STAR, 593, -3445, -430, 0, -90, 0, (0x14 << 8), bhvStar),
 		OBJECT(MODEL_NONE, -314, -3445, 197, 0, 90, 0, (0x01 << 16) | (0x01), bhvInstantActiveWarp),
 		TERRAIN(bob_area_1_collision),
 		MACRO_OBJECTS(bob_area_1_macro_objs),
 		SET_BACKGROUND_MUSIC(0x00, SEQ_LEVEL_GRASS),
 		TERRAIN_TYPE(TERRAIN_GRASS),
+		AREA_SPLINE(bob_area_1_spline_00000AAAsplinetest),
 		/* Fast64 begin persistent block [area commands] */
 		SET_ECHO(0xF0, 0xF0),
 		/* Fast64 end persistent block [area commands] */
