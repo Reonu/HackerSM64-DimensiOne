@@ -193,6 +193,11 @@ s16 sDynUnk38[] = {
     DYN1(MARIO_IS_IN_AREA, 3, 7),
     0,
 };
+
+s16 sDynChallenges[] = {
+    SEQ_CUSTOM_MAINLOOP,
+};
+
 s16 sDynNone[] = { SEQ_SOUND_PLAYER, 0 };
 
 u8 sCurrentMusicDynamic = 0xff;
@@ -211,23 +216,34 @@ s16 *sLevelDynamics[LEVEL_COUNT] = {
 #undef DEFINE_LEVEL
 
 struct MusicDynamic {
-    /*0x0*/ s16 bits1;
-    /*0x2*/ u16 volScale1;
-    /*0x4*/ s16 dur1;
-    /*0x6*/ s16 bits2;
-    /*0x8*/ u16 volScale2;
-    /*0xA*/ s16 dur2;
-}; // size = 0xC
+    /*0x00*/ s16 bits1;
+    /*0x02*/ u16 volScale1;
+    /*0x04*/ s16 dur1;
+    /*0x06*/ s16 bits2;
+    /*0x08*/ u16 volScale2;
+    /*0x0A*/ s16 dur2;
+    /*0x0C*/ s16 bits3;
+    /*0x0E*/ u16 volScale3;
+    /*0x10*/ s16 dur3;
+    /*0x12*/ s16 bits4;
+    /*0x14*/ u16 volScale4;
+    /*0x16*/ s16 dur4;
+}; // size = 0x18
 
-struct MusicDynamic sMusicDynamics[8] = {
-    { 0x0000, 127, 100, 0x0e43, 0, 100 }, // SEQ_LEVEL_WATER
-    { 0x0003, 127, 100, 0x0e40, 0, 100 }, // SEQ_LEVEL_WATER
-    { 0x0e43, 127, 200, 0x0000, 0, 200 }, // SEQ_LEVEL_WATER
-    { 0x02ff, 127, 100, 0x0100, 0, 100 }, // SEQ_LEVEL_UNDERGROUND
-    { 0x03f7, 127, 100, 0x0008, 0, 100 }, // SEQ_LEVEL_UNDERGROUND
-    { 0x0070, 127, 10, 0x0000, 0, 100 },  // SEQ_LEVEL_SPOOKY
-    { 0x0000, 127, 100, 0x0070, 0, 10 },  // SEQ_LEVEL_SPOOKY
-    { 0xffff, 127, 100, 0x0000, 0, 100 }, // any (unused)
+struct MusicDynamic sMusicDynamics[13] = {
+    { 0x0000, 127, 100, 0x0e43, 0, 100, 0x0000, 0, 100, 0x0000, 0, 100 }, // SEQ_LEVEL_WATER
+    { 0x0003, 127, 100, 0x0e40, 0, 100, 0x0000, 0, 100, 0x0000, 0, 100 }, // SEQ_LEVEL_WATER
+    { 0x0e43, 127, 200, 0x0000, 0, 200, 0x0000, 0, 100, 0x0000, 0, 100 }, // SEQ_LEVEL_WATER
+    { 0x02ff, 127, 100, 0x0100, 0, 100, 0x0000, 0, 100, 0x0000, 0, 100 }, // SEQ_LEVEL_UNDERGROUND
+    { 0x03f7, 127, 100, 0x0008, 0, 100, 0x0000, 0, 100, 0x0000, 0, 100 }, // SEQ_LEVEL_UNDERGROUND
+    { 0x0070, 127, 10,  0x0000, 0, 100, 0x0000, 0, 100, 0x0000, 0, 100 }, // SEQ_LEVEL_SPOOKY
+    { 0x0000, 127, 100, 0x0070, 0, 10,  0x0000, 0, 100, 0x0000, 0, 100 }, // SEQ_LEVEL_SPOOKY
+    { 0xffff, 127, 100, 0x0000, 0, 100, 0x0000, 0, 100, 0x0000, 0, 100 }, // any (unused)
+    { 0x0300, 127, 20,  0xFCFF, 0, 20,  0x0000, 0, 20,  0x0000, 0,  20 }, // SEQ_CUSTOM_MAINLOOP - Normal
+    { 0x0C00, 127, 20,  0xF3FF, 0, 20,  0x0000, 0, 20,  0x0000, 0,  20 }, // SEQ_CUSTOM_MAINLOOP - Can Win
+    { 0x3000, 127, 20,  0xCFFF, 0, 20,  0x0000, 0, 20,  0x0000, 0,  20 }, // SEQ_CUSTOM_MAINLOOP - Lose
+    { 0x4000, 127, 15,  0x3000, 0, 15,  0x8FFF, 0, 15,  0x0000, 0,  15 }, // SEQ_CUSTOM_MAINLOOP - Restart
+    { 0x8000, 127, 15,  0x7FFF, 0, 25,  0x0000, 0, 15,  0x0000, 0,  25 }, // SEQ_CUSTOM_MAINLOOP - Next Challenge
 };
 
 #define STUB_LEVEL(_0, _1, _2, _3, echo1, echo2, echo3, _7, _8) { echo1, echo2, echo3 },
@@ -1682,8 +1698,13 @@ void process_level_music_dynamics(void) {
     u8 i, j;
     s16 conditionValues[8];
     u8 conditionTypes[8];
-    s16 dur1, dur2;
+    s16 dur1, dur2, dur3, dur4;
     u16 bit;
+    s16 *levelDynamics = sLevelDynamics[gCurrLevelNum];
+
+    if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING) {
+        levelDynamics = sDynChallenges;
+    }
 
     func_8031F96C(0);
     func_8031F96C(2);
@@ -1694,12 +1715,12 @@ void process_level_music_dynamics(void) {
         sBackgroundMusicForDynamics = sCurrentBackgroundMusicSeqId;
     }
 
-    if (sBackgroundMusicForDynamics != sLevelDynamics[gCurrLevelNum][0]) {
+    if (sBackgroundMusicForDynamics != levelDynamics[0]) {
         return;
     }
 
-    u32 conditionBits = sLevelDynamics[gCurrLevelNum][1] & 0xFF00;
-    u8  musicDynIndex = (u8) sLevelDynamics[gCurrLevelNum][1] & 0xFF;
+    u32 conditionBits = levelDynamics[1] & 0xFF00;
+    u8  musicDynIndex = (u8) levelDynamics[1] & 0xFF;
     i = 2;
     while (conditionBits & 0xff00) {
         j = 0;
@@ -1707,7 +1728,7 @@ void process_level_music_dynamics(void) {
         bit = 0x8000;
         while (j < 8) {
             if (conditionBits & bit) {
-                conditionValues[condIndex] = sLevelDynamics[gCurrLevelNum][i++];
+                conditionValues[condIndex] = levelDynamics[i++];
                 conditionTypes[condIndex] = j;
                 condIndex++;
             }
@@ -1773,12 +1794,29 @@ void process_level_music_dynamics(void) {
             // The area matches. Break out of the loop.
             tempBits = 0;
         } else {
-            tempBits      = sLevelDynamics[gCurrLevelNum][i] & 0xff00;
-            musicDynIndex = sLevelDynamics[gCurrLevelNum][i] & 0xff;
+            tempBits      = levelDynamics[i] & 0xff00;
+            musicDynIndex = levelDynamics[i] & 0xff;
             i++;
         }
 
         conditionBits = tempBits;
+    }
+
+    
+    if (levelDynamics == sDynChallenges) {
+        // Order is important!
+        if (sDelayedWarpOp == WARP_OP_STAR_EXIT)
+            musicDynIndex = 12;
+        else if (sDelayedWarpOp != WARP_OP_NONE)
+            musicDynIndex = 11;
+        else if (gChallengeStatus == CHALLENGE_STATUS_WIN)
+            musicDynIndex = 9;
+        else if (gChallengeStatus == CHALLENGE_STATUS_LOSE || gMarioState->health <= 0xFF)
+            musicDynIndex = 10;
+        else if (gChallengeStatus == CHALLENGE_STATUS_CAN_WIN)
+            musicDynIndex = 9;
+        else
+            musicDynIndex = 8;
     }
 
     if (sCurrentMusicDynamic != musicDynIndex) {
@@ -1786,9 +1824,13 @@ void process_level_music_dynamics(void) {
         if (sCurrentMusicDynamic == 0xff) {
             dur1 = 1;
             dur2 = 1;
+            dur3 = 1;
+            dur4 = 1;
         } else {
             dur1 = sMusicDynamics[musicDynIndex].dur1;
             dur2 = sMusicDynamics[musicDynIndex].dur2;
+            dur3 = sMusicDynamics[musicDynIndex].dur3;
+            dur4 = sMusicDynamics[musicDynIndex].dur4;
         }
 
         for (i = 0; i < CHANNELS_MAX; i++) {
@@ -1801,6 +1843,14 @@ void process_level_music_dynamics(void) {
             if (sMusicDynamics[musicDynIndex].bits2 & conditionBits) {
                 fade_channel_volume_scale(SEQ_PLAYER_LEVEL, i, sMusicDynamics[musicDynIndex].volScale2,
                                           dur2);
+            }
+            if (sMusicDynamics[musicDynIndex].bits3 & conditionBits) {
+                fade_channel_volume_scale(SEQ_PLAYER_LEVEL, i, sMusicDynamics[musicDynIndex].volScale3,
+                                          dur3);
+            }
+            if (sMusicDynamics[musicDynIndex].bits4 & conditionBits) {
+                fade_channel_volume_scale(SEQ_PLAYER_LEVEL, i, sMusicDynamics[musicDynIndex].volScale4,
+                                          dur4);
             }
             tempBits = conditionBits << 1;
         }

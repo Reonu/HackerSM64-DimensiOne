@@ -48,11 +48,11 @@ static struct OneChallengeLevel sChallengeLevels[sizeof(u32)*8] = {
         (CHALLENGE_FLAG_COLLECT_LIFE), // Requirements
         (CHALLENGE_FLAG_COLLECT_LIFE), // Enforcements
     }, { /*12*/
-        (CHALLENGE_FLAG_NONE), // Requirements
-        (CHALLENGE_FLAG_NONE), // Enforcements
+        (CHALLENGE_FLAG_A_PRESS), // Requirements
+        (CHALLENGE_FLAG_A_PRESS | CHALLENGE_FLAG_SLEEPING_PIRANHA), // Enforcements
     }, { /*13*/
-        (CHALLENGE_FLAG_NONE), // Requirements
-        (CHALLENGE_FLAG_NONE), // Enforcements
+        (CHALLENGE_FLAG_KILL_WHOMP_KING), // Requirements
+        (CHALLENGE_FLAG_KILL_WHOMP_KING), // Enforcements
     }, { /*14*/
         (CHALLENGE_FLAG_NONE), // Requirements
         (CHALLENGE_FLAG_NONE), // Enforcements
@@ -144,6 +144,7 @@ static u8 sKoopasKilled = 0;
 static u8 sBombsKilled = 0;
 static u8 sPiranhasDisturbed = 0;
 static u8 sGoombasKilledWithBombs = 0;
+static u8 sLivesCollected = 0;
 
 
 static void can_win_challenge(void) {
@@ -166,6 +167,33 @@ static void lose_challenge(void) {
     // Star collect gets priority, so be careful with any cutscene effects here; maybe delay execution by a frame with a status check?
 
     // ONE_TODO: more loser stuffs
+}
+
+static void process_kill_flags(void) {
+    if (sGoombasKilled > 0) {
+        sGoombasKilled--;
+        add_challenge_flags(CHALLENGE_FLAG_KILL_GOOMBA);
+    }
+    if (sKoopasKilled > 0) {
+        sKoopasKilled--;
+        add_challenge_flags(CHALLENGE_FLAG_KILL_KOOPA);
+    }
+    if (sBombsKilled > 0) {
+        sBombsKilled--;
+        add_challenge_flags(CHALLENGE_FLAG_KILL_BOMB);
+    }
+    if (sPiranhasDisturbed > 0) {
+        sPiranhasDisturbed--;
+        add_challenge_flags(CHALLENGE_FLAG_SLEEPING_PIRANHA);
+    }
+    if (sGoombasKilledWithBombs > 0) {
+        sGoombasKilledWithBombs--;
+        add_challenge_flags(CHALLENGE_FLAG_KILL_GOOMBA_WITH_BOMB);
+    }
+    if (sLivesCollected > 0) {
+        sLivesCollected--;
+        add_challenge_flags(CHALLENGE_FLAG_COLLECT_LIFE);
+    }
 }
 
 static void check_flag_conditions(void) {
@@ -214,27 +242,7 @@ static void check_flag_conditions(void) {
         }
     }
 
-    // Kill Flags
-    if (sGoombasKilled > 0) {
-        sGoombasKilled--;
-        add_challenge_flags(CHALLENGE_FLAG_KILL_GOOMBA);
-    }
-    if (sKoopasKilled > 0) {
-        sKoopasKilled--;
-        add_challenge_flags(CHALLENGE_FLAG_KILL_KOOPA);
-    }
-    if (sBombsKilled > 0) {
-        sBombsKilled--;
-        add_challenge_flags(CHALLENGE_FLAG_KILL_BOMB);
-    }
-    if (sPiranhasDisturbed > 0) {
-        sPiranhasDisturbed--;
-        add_challenge_flags(CHALLENGE_FLAG_SLEEPING_PIRANHA);
-    }
-    if (sGoombasKilledWithBombs > 0) {
-        sGoombasKilledWithBombs--;
-        add_challenge_flags(CHALLENGE_FLAG_KILL_GOOMBA_WITH_BOMB);
-    }
+    process_kill_flags();
 }
 
 // Apply internal challenge flags at end of frame for when a condition or conditions is/are met; overall challenge success/failure can be determined here automatically.
@@ -336,10 +344,11 @@ void reset_challenge(void) {
     sBombsKilled = 0;
     sPiranhasDisturbed = 0;
     sGoombasKilledWithBombs = 0;
+    sLivesCollected = 0;
 
     if (gChallengeStatus == CHALLENGE_STATUS_NOT_PLAYING) {
         gChallengeStatus = CHALLENGE_STATUS_PLAYING;
-        set_background_music(0, SEQ_LEVEL_UNDERGROUND, 0);
+        set_background_music(0, SEQ_CUSTOM_MAINLOOP, 0);
     }
 
     gChallengeStatus = CHALLENGE_STATUS_NOT_PLAYING;
@@ -391,6 +400,8 @@ void add_challenge_kill_flags(u32 flags) {
         sPiranhasDisturbed++;
     if (flags & CHALLENGE_FLAG_KILL_GOOMBA_WITH_BOMB)
         sGoombasKilledWithBombs++;
+    if (flags & CHALLENGE_FLAG_COLLECT_LIFE)
+        sLivesCollected++;
 }
 
 #define ALL_LETTERS "!\"#$%&'()*+,-./\n0123456789:;<=>?@\nABCDEFGHIJKLMNOPQRSTUVWXYZ\n[\\]^_`\nabcdefghijklmnopqrstuvwxyz{|}~"
@@ -444,7 +455,10 @@ void challenge_update(void) {
 
     check_flag_conditions();
 
-    add_challenge_flags_internal();
+    while (internalFlagsForFrame) {
+        add_challenge_flags_internal();
+        process_kill_flags();
+    }
 
     print_challenge_types();
 

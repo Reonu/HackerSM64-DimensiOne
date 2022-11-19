@@ -8,12 +8,12 @@
 #define TEXT_CHALLENGE_6        HEAD("7")   BODY("FFFF3F", "Collect the star")
 #define TEXT_CHALLENGE_7        HEAD("8")   BODY("FFFF3F", "Collect the star")
 #define TEXT_CHALLENGE_8        HEAD("9")   BODY("FFFF3F", "Collect the star")
-#define TEXT_CHALLENGE_9        HEAD("10")  BODY("1FFF1F", "TODO" PP_COL_RESET)
-#define TEXT_CHALLENGE_10       HEAD("11")  BODY("1FFF1F", "TODO" PP_COL_RESET)
-#define TEXT_CHALLENGE_11       HEAD("12")  BODY("1FFF1F", "TODO" PP_COL_RESET)
-#define TEXT_CHALLENGE_12       HEAD("13")  BODY("1FFF1F", "TODO" PP_COL_RESET)
-#define TEXT_CHALLENGE_13       HEAD("14")  BODY("1FFF1F", "TODO" PP_COL_RESET)
-#define TEXT_CHALLENGE_14       HEAD("15")  BODY("1FFF1F", "TODO" PP_COL_RESET)
+#define TEXT_CHALLENGE_9        HEAD("10")  BODY("FFFF3F", "Collect the star")
+#define TEXT_CHALLENGE_10       HEAD("11")  BODY("FFFF3F", "Collect the star")
+#define TEXT_CHALLENGE_11       HEAD("12")  BODY("FFFF3F", "Collect the star")
+#define TEXT_CHALLENGE_12       HEAD("13")  BODY("FFFF3F", "Collect the star")
+#define TEXT_CHALLENGE_13       HEAD("14")  BODY("FFFF3F", "Collect the star")
+#define TEXT_CHALLENGE_14       HEAD("15")  BODY("FFFF3F", "Collect the star")
 #define TEXT_CHALLENGE_15       HEAD("16")  BODY("1FFF1F", "TODO" PP_COL_RESET)
 #define TEXT_CHALLENGE_16       HEAD("17")  BODY("1FFF1F", "TODO" PP_COL_RESET)
 #define TEXT_CHALLENGE_17       HEAD("18")  BODY("1FFF1F", "TODO" PP_COL_RESET)
@@ -50,6 +50,7 @@
 #define TEXT_CHALLENGE_TYPE_KILL_BOMB             "By blowing up" _ "Bob-omb!"
 #define TEXT_CHALLENGE_TYPE_KILL_ALL_BOMBS        "By blowing up all but" INVERSE "Bob-omb!"
 #define TEXT_CHALLENGE_TYPE_KILL_GOOMBA_WITH_BOMB "By killing" _ "Goomba with a Bob-omb!"
+#define TEXT_CHALLENGE_TYPE_KILL_WHOMP_KING       "By killing" _ "Traitor!"
 #define TEXT_CHALLENGE_TYPE_SMOOCH                "By receiving" _ "smooch!"
 
 // Increase this array whenever adding challenge types!
@@ -71,6 +72,7 @@
     TEXT_CHALLENGE_TYPE_KILL_BOMB, \
     TEXT_CHALLENGE_TYPE_KILL_ALL_BOMBS, \
     TEXT_CHALLENGE_TYPE_KILL_GOOMBA_WITH_BOMB, \
+    TEXT_CHALLENGE_TYPE_KILL_WHOMP_KING, \
     TEXT_CHALLENGE_TYPE_SMOOCH,
 
 

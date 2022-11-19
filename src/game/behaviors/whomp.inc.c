@@ -30,6 +30,9 @@ void whomp_init(void) {
             } else {
                 cur_obj_set_pos_to_home();
                 o->oHealth = 3;
+                if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING) {
+                    o->oHealth = 1;
+                }
             }
         } else if (cur_obj_update_dialog_with_cutscene(MARIO_DIALOG_LOOK_UP, 
             DIALOG_FLAG_TURN_TO_MARIO, CUTSCENE_DIALOG, DIALOG_114)) {
@@ -242,7 +245,8 @@ void whomp_die(void) {
             spawn_triangle_break_particles(20, MODEL_DIRT_ANIMATION, 3.0f, 4);
             cur_obj_shake_screen(SHAKE_POS_SMALL);
             o->oPosY += 100.0f;
-            spawn_default_star(180.0f, 3880.0f, 340.0f);
+            add_challenge_flags(CHALLENGE_FLAG_KILL_WHOMP_KING);
+            spawn_default_star(12.0f, 389.0f, 6.0f);
             cur_obj_play_sound_2(SOUND_OBJ_KING_WHOMP_DEATH);
             o->oAction = 9;
         }
