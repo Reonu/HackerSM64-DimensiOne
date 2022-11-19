@@ -30,7 +30,7 @@
 #include "one_challenges.h"
 
 static struct Object *sIntroWarpPipeObj;
-static struct Object *sEndPeachObj;
+struct Object *sEndPeachObj;
 static struct Object *sEndRightToadObj;
 static struct Object *sEndLeftToadObj;
 static struct Object *sEndJumboStarObj;

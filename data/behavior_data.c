@@ -6135,9 +6135,10 @@ const BehaviorScript bhvStaticObjectCustom[] = {
     CALL_NATIVE(load_object_static_model),
     BREAK(),
 };
-
 const BehaviorScript bhvPeach[] = {
     BEGIN(OBJ_LIST_GENACTOR),
+    LOAD_ANIMATIONS(oAnimations, peach_seg5_anims_0501C41C),
+    ANIMATE(PEACH_ANIM_0),
     OR_INT(oFlags, (OBJ_FLAG_COMPUTE_ANGLE_TO_MARIO | OBJ_FLAG_COMPUTE_DIST_TO_MARIO | OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
     SET_INTERACT_TYPE(INTERACT_TEXT),
     DROP_TO_FLOOR(),

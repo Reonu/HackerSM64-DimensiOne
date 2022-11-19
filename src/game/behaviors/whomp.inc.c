@@ -234,6 +234,8 @@ void whomp_on_ground_general(void) {
     }
 }
 
+extern struct Object *sEndPeachObj;
+
 void whomp_die(void) {
     if (o->oBehParams2ndByte != 0) {
         // if (cur_obj_update_dialog_with_cutscene(MARIO_DIALOG_LOOK_UP, 
@@ -251,6 +253,9 @@ void whomp_die(void) {
             o->oNumLootCoins = 2;
             obj_spawn_loot_yellow_coins(o, 2, 50.0f);
             o->oAction = 9;
+            sEndPeachObj = spawn_object_relative(0, 0, 0, 0, o, MODEL_PEACH, bhvPeach);
+            // sEndPeachObj = spawn_object_abs_with_rot(o, 0, MODEL_PEACH, bhvPeach, 0, 2428,
+            //                                      -1300, 0, 0, 0);
         // }
     } else {
         spawn_mist_particles_variable(0, 0, 100.0f);
