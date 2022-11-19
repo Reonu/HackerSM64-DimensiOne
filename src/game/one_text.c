@@ -22,6 +22,10 @@ u32 gChallengesPrintTimer = -1U;
 
 
 static void update_timer(void) {
+    if (sCurrPlayMode == PLAY_MODE_PAUSED) {
+        return;
+    }
+
     if (!((get_challenge_required_flags() | get_challenge_enforced_flags()) & CHALLENGE_FLAG_TIMER)) {
         return;
     }

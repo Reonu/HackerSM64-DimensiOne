@@ -151,6 +151,8 @@ s8 gNeverEnteredCastle;
 struct MarioState *gMarioState = &gMarioStates[0];
 s8 sWarpCheckpointActive = FALSE;
 
+u8 sFreezeFrames = 0;
+
 u16 level_control_timer(s32 timerOp) {
     switch (timerOp) {
         case TIMER_CONTROL_SHOW:
@@ -938,6 +940,11 @@ void initiate_delayed_warp(void) {
                     initiate_warp(gCurrCreditsEntry->levelNum, gCurrCreditsEntry->areaIndex, destWarpNode, WARP_FLAGS_NONE);
                     break;
 
+                case WARP_OP_STAR_EXIT:
+                    if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING) {
+                        sFreezeFrames = 10;
+                    }
+                    // fallthrough
                 default:
                     tmpChallengeWarpID = sSourceWarpNodeId;
                     warpNode = area_get_warp_node(sSourceWarpNodeId);
@@ -1265,6 +1272,11 @@ UNUSED static s32 play_mode_unused(void) {
 
 s32 update_level(void) {
     s32 changeLevel = FALSE;
+
+    if (sFreezeFrames > 0) {
+        sFreezeFrames--;
+        return changeLevel;
+    }
 
     switch (sCurrPlayMode) {
         case PLAY_MODE_NORMAL:
