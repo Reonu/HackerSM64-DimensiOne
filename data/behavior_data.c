@@ -6105,6 +6105,15 @@ const BehaviorScript bhvSplinePlatform[] = {
     END_LOOP(),
 };
 
+const BehaviorScript bhvSplineFollower[] = {
+    BEGIN(OBJ_LIST_SURFACE),
+    OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
+    CALL_NATIVE(init_obj_spline),
+    BEGIN_LOOP(),
+        CALL_NATIVE(bhv_follow_spline),
+    END_LOOP(),
+};
+
 const BehaviorScript bhvSpring[] = {
     BEGIN(OBJ_LIST_GENACTOR),
     OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
