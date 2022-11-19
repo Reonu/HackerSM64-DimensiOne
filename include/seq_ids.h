@@ -32,7 +32,7 @@ enum SeqId {
     SEQ_EVENT_MERRY_GO_ROUND,         // 0x13
     SEQ_EVENT_RACE,                   // 0x14
     SEQ_EVENT_CUTSCENE_STAR_SPAWN,    // 0x15
-    SEQ_EVENT_BOSS,                   // 0x16
+    SEQ_EVENT_BOSS_OLD,               // 0x16
     SEQ_EVENT_CUTSCENE_COLLECT_KEY,   // 0x17
     SEQ_EVENT_ENDLESS_STAIRS,         // 0x18
     SEQ_LEVEL_BOSS_KOOPA_FINAL,       // 0x19
@@ -46,6 +46,7 @@ enum SeqId {
     SEQ_MENU_FILE_SELECT,             // 0x21
     SEQ_EVENT_CUTSCENE_LAKITU,        // 0x22 (not in JP)
     SEQ_CUSTOM_MAINLOOP,              // 0x23
+    SEQ_EVENT_BOSS,                   // 0x24
     SEQ_COUNT
 };
 

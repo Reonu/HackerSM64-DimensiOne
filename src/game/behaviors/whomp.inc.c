@@ -143,7 +143,9 @@ void whomp_jump(void) {
 
 void whomp_land(void) {
     if (o->oSubAction == 0 && o->oMoveFlags & OBJ_MOVE_LANDED) {
-        cur_obj_play_sound_2(SOUND_OBJ_WHOMP);
+        // cur_obj_play_sound_2(SOUND_OBJ_WHOMP);
+        cur_obj_play_sound_2(SOUND_OBJ_POUNDING1);
+        cur_obj_play_sound_2(SOUND_OBJ2_SIMPLEFLIPS_TWOO);
         cur_obj_shake_screen(SHAKE_POS_SMALL);
         o->oVelY = 0.0f;
         o->oSubAction++;
@@ -159,8 +161,9 @@ void king_whomp_on_ground(void) {
         if (cur_obj_is_mario_ground_pounding_platform()) {
             Vec3f pos;
             o->oHealth--;
-            cur_obj_play_sound_2(SOUND_OBJ2_WHOMP_SOUND_SHORT);
-            cur_obj_play_sound_2(SOUND_OBJ_KING_WHOMP_DEATH);
+            // cur_obj_play_sound_2(SOUND_OBJ2_WHOMP_SOUND_SHORT);
+            // cur_obj_play_sound_2(SOUND_OBJ_KING_WHOMP_DEATH);
+            cur_obj_play_sound_2(SOUND_OBJ_SIMPLEFLIPS_BRUH);
             if (o->oHealth == 0) {
                 o->oAction = 8;
             } else {
@@ -246,8 +249,9 @@ void whomp_die(void) {
             cur_obj_shake_screen(SHAKE_POS_LARGE);
             o->oPosY += 100.0f;
             add_challenge_flags(CHALLENGE_FLAG_KILL_WHOMP_KING);
-            // spawn_default_star(12.0f, 389.0f, 6.0f);
-            cur_obj_play_sound_2(SOUND_OBJ_KING_WHOMP_DEATH);
+            // spawn_default_star(o->oHomeX, o->oHomeY + 350.0f, o->oHomeZ);
+            // cur_obj_play_sound_2(SOUND_OBJ_KING_WHOMP_DEATH);
+            cur_obj_play_sound_2(SOUND_OBJ_SIMPLEFLIPS_BRUH);
             o->oNumLootCoins = 2;
             obj_spawn_loot_yellow_coins(o, 2, 50.0f);
             o->oAction = 9;

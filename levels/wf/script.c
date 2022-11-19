@@ -92,6 +92,7 @@ const LevelScript level_wf_entry[] = {
 		AREA_SPLINE(wf_area_1_spline_ASplineChallenge11),
 		AREA_SPLINE(wf_area_1_spline_ASplineChallenge11_001),
 		/* Fast64 begin persistent block [area commands] */
+		SET_ECHO(0x22, 0x22),
 		/* Fast64 end persistent block [area commands] */
 	END_AREA(),
 
