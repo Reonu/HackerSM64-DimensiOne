@@ -33,3 +33,5 @@
 #include "lantern/model.inc.c"
 
 #include "spring/model.inc.c"
+
+#include "bullet_bill/model.inc.c"

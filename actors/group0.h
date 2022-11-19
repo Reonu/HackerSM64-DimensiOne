@@ -331,6 +331,13 @@ extern const Gfx white_particle_small_dl_end[];
 extern const Gfx white_particle_small_dl[];
 extern const Gfx white_particle_small_unused_dl[];
 
+// bullet_bill
+extern const GeoLayout bullet_bill_geo[];
+extern const Gfx bullet_bill_seg5_dl_0500E5E8[];
+extern const Gfx bullet_bill_seg5_dl_0500E678[];
+extern const Gfx bullet_bill_seg5_dl_0500E730[];
+extern const Gfx bullet_bill_seg5_dl_0500E8A8[];
+
 #include "mario/geo_header.h"
 
 #include "lantern/geo_header.h"
