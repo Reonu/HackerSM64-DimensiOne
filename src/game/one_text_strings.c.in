@@ -51,6 +51,7 @@
 #define TEXT_CHALLENGE_TYPE_KILL_ALL_BOMBS        "By blowing up all but" INVERSE "Bob-omb!"
 #define TEXT_CHALLENGE_TYPE_KILL_GOOMBA_WITH_BOMB "By killing" _ "Goomba with a Bob-omb!"
 #define TEXT_CHALLENGE_TYPE_KILL_WHOMP_KING       "By killing" _ "Traitor!"
+#define TEXT_CHALLENGE_TYPE_KILL_MONEYBAG         "By killing" _ "Moneybag!"
 #define TEXT_CHALLENGE_TYPE_TIMER                 TIMER_EXCEPTION // Must be last
 
 // Increase this array whenever adding challenge types!
@@ -73,6 +74,7 @@
     TEXT_CHALLENGE_TYPE_KILL_ALL_BOMBS, \
     TEXT_CHALLENGE_TYPE_KILL_GOOMBA_WITH_BOMB, \
     TEXT_CHALLENGE_TYPE_KILL_WHOMP_KING, \
+    TEXT_CHALLENGE_TYPE_KILL_MONEYBAG, \
     TEXT_CHALLENGE_TYPE_TIMER, // Must be last
 
 
