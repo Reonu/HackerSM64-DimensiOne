@@ -813,6 +813,8 @@ void bhv_koopa_update(void) {
         }
     }
 
+    obj_resolve_object_collisions(&o->oMoveAngleYaw);
+
     obj_face_yaw_approach(o->oMoveAngleYaw, 0x600);
 }
 

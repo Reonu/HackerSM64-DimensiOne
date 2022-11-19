@@ -1,3 +1,6 @@
+#define LOSER_STRING PP_COL("FF4F4FFF") "Challenge Failed!\n" PP_WAVE PP_COL("FFFFFFFF") "Press " PP_COL("FF00FFFF") "L" PP_COL("FFFFFFFF") " to restart!" PP_COL_RESET PP_WAVE
+
+
 // Yeah yeah, this is stupid, but at least it gives us the option to add to this text if we need to later for a unique description or something
 #define TEXT_CHALLENGE_0        HEAD("1")   BODY("FFFF3F", "Collect the star")
 #define TEXT_CHALLENGE_1        HEAD("2")   BODY("FFFF3F", "Collect the star")
@@ -42,8 +45,7 @@
 #define TEXT_CHALLENGE_TYPE_WALLKICK              "While performing" _ "wallkick!"
 #define TEXT_CHALLENGE_TYPE_TRIPLE_JUMP           "While performing" _ "triple jump!"
 #define TEXT_CHALLENGE_TYPE_COLLECT_LIFE          "While collecting" _ "1-Up mushroom!"
-#define TEXT_CHALLENGE_TYPE_KNOCKED_KOOPA         "After being bumped by" _ "Koopa!"
-#define TEXT_CHALLENGE_TYPE_SLEEPING_PIRANHA     "After disturbing" _ "Piranha Plant!"
+#define TEXT_CHALLENGE_TYPE_SLEEPING_PIRANHA      "After disturbing" _ "Piranha Plant!"
 #define TEXT_CHALLENGE_TYPE_KILL_GOOMBA           "By killing" _ "Goomba!"
 #define TEXT_CHALLENGE_TYPE_KILL_KOOPA            "By killing" _ "Koopa!"
 #define TEXT_CHALLENGE_TYPE_KILL_PENGUIN          "By killing" _ "Penguin!" // TODO: Implementation depends on challenge structure
@@ -52,6 +54,7 @@
 #define TEXT_CHALLENGE_TYPE_KILL_GOOMBA_WITH_BOMB "By killing" _ "Goomba with a Bob-omb!"
 #define TEXT_CHALLENGE_TYPE_KILL_WHOMP_KING       "By killing" _ "Traitor!"
 #define TEXT_CHALLENGE_TYPE_KILL_MONEYBAG         "By killing" _ "Moneybag!"
+#define TEXT_CHALLENGE_TYPE_KNOCKED_KOOPA         "After being bumped by" _ "Koopa!"
 #define TEXT_CHALLENGE_TYPE_TIMER                 TIMER_EXCEPTION // Must be last
 
 // Increase this array whenever adding challenge types!
@@ -65,7 +68,6 @@
     TEXT_CHALLENGE_TYPE_WALLKICK, \
     TEXT_CHALLENGE_TYPE_TRIPLE_JUMP, \
     TEXT_CHALLENGE_TYPE_COLLECT_LIFE, \
-    TEXT_CHALLENGE_TYPE_KNOCKED_KOOPA, \
     TEXT_CHALLENGE_TYPE_SLEEPING_PIRANHA, \
     TEXT_CHALLENGE_TYPE_KILL_GOOMBA, \
     TEXT_CHALLENGE_TYPE_KILL_KOOPA, \
@@ -75,6 +77,7 @@
     TEXT_CHALLENGE_TYPE_KILL_GOOMBA_WITH_BOMB, \
     TEXT_CHALLENGE_TYPE_KILL_WHOMP_KING, \
     TEXT_CHALLENGE_TYPE_KILL_MONEYBAG, \
+    TEXT_CHALLENGE_TYPE_KNOCKED_KOOPA, \
     TEXT_CHALLENGE_TYPE_TIMER, // Must be last
 
 
