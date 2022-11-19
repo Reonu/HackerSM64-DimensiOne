@@ -51,10 +51,10 @@ static struct OneChallengeLevel sChallengeLevels[sizeof(u32)*8] = {
         (CHALLENGE_FLAG_A_PRESS), // Requirements
         (CHALLENGE_FLAG_A_PRESS | CHALLENGE_FLAG_SLEEPING_PIRANHA), // Enforcements
     }, { /*13*/
-        (CHALLENGE_FLAG_NONE), // Requirements
-        (CHALLENGE_FLAG_NONE), // Enforcements
+        (CHALLENGE_FLAG_A_PRESS), // Requirements
+        (CHALLENGE_FLAG_A_PRESS), // Enforcements
     }, { /*14*/
-        (CHALLENGE_FLAG_NONE), // Requirements
+        (CHALLENGE_FLAG_TIMER), // Requirements
         (CHALLENGE_FLAG_NONE), // Enforcements
     }, { /*15*/
         (CHALLENGE_FLAG_NONE), // Requirements
@@ -66,11 +66,11 @@ static struct OneChallengeLevel sChallengeLevels[sizeof(u32)*8] = {
         (CHALLENGE_FLAG_NONE), // Requirements
         (CHALLENGE_FLAG_NONE), // Enforcements
     }, { /*18*/
-        (CHALLENGE_FLAG_KILL_WHOMP_KING), // Requirements
-        (CHALLENGE_FLAG_KILL_WHOMP_KING), // Enforcements
+        (CHALLENGE_FLAG_NONE), // Requirements
+        (CHALLENGE_FLAG_NONE), // Enforcements
     }, { /*19*/
-        (CHALLENGE_FLAG_SMOOCH), // Requirements
-        (CHALLENGE_FLAG_SMOOCH), // Enforcements
+        (CHALLENGE_FLAG_KILL_WHOMP_KING | CHALLENGE_FLAG_SMOOCH), // Requirements
+        (CHALLENGE_FLAG_KILL_WHOMP_KING | CHALLENGE_FLAG_SMOOCH), // Enforcements
     }, { /*20*/
         (CHALLENGE_FLAG_NONE), // Requirements
         (CHALLENGE_FLAG_NONE), // Enforcements

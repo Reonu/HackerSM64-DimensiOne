@@ -12,6 +12,7 @@ enum OneChallengeStatus {
 };
 
 enum OneChallengeEntries {
+    CHALLENGE_NAME_SMOOCH,
     CHALLENGE_NAME_JUMP,
     CHALLENGE_NAME_COIN,
     CHALLENGE_NAME_GROUND,
@@ -29,7 +30,6 @@ enum OneChallengeEntries {
     CHALLENGE_NAME_KILL_ALL_BOMBS,
     CHALLENGE_NAME_KILL_GOOMBA_WITH_BOMB,
     CHALLENGE_NAME_KILL_WHOMP_KING,
-    CHALLENGE_NAME_SMOOCH,
 
     CHALLENGE_NAME_TIMER, // Must be last
     CHALLENGE_NAME_TOTAL,
@@ -40,6 +40,7 @@ STATIC_ASSERT(CHALLENGE_NAME_TOTAL <= sizeof(u32) * 8, "Too many challenges! Ple
 enum OneChallengeFlags {
     CHALLENGE_FLAG_NONE                  = 0,
 
+    CHALLENGE_FLAG_SMOOCH                = (1U << CHALLENGE_NAME_SMOOCH), // TODO: Everything lol
     CHALLENGE_FLAG_JUMP                  = (1U << CHALLENGE_NAME_JUMP),
     CHALLENGE_FLAG_COIN                  = (1U << CHALLENGE_NAME_COIN),
     CHALLENGE_FLAG_GROUND                = (1U << CHALLENGE_NAME_GROUND),
@@ -57,7 +58,6 @@ enum OneChallengeFlags {
     CHALLENGE_FLAG_KILL_ALL_BOMBS        = (1U << CHALLENGE_NAME_KILL_ALL_BOMBS),
     CHALLENGE_FLAG_KILL_GOOMBA_WITH_BOMB = (1U << CHALLENGE_NAME_KILL_GOOMBA_WITH_BOMB),
     CHALLENGE_FLAG_KILL_WHOMP_KING       = (1U << CHALLENGE_NAME_KILL_WHOMP_KING),
-    CHALLENGE_FLAG_SMOOCH                = (1U << CHALLENGE_NAME_SMOOCH), // TODO: Everything lol
 
     CHALLENGE_FLAG_TIMER                 = (1U << CHALLENGE_NAME_TIMER), // Must be last
 };

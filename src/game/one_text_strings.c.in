@@ -33,6 +33,7 @@
 #define TEXT_CHALLENGE_31       HEAD("32")  BODY("1FFF1F", "TODO" PP_COL_RESET)
 
 
+#define TEXT_CHALLENGE_TYPE_SMOOCH                "By receiving" _ "smooch!"
 #define TEXT_CHALLENGE_TYPE_JUMP                  "With" _ "jump!"
 #define TEXT_CHALLENGE_TYPE_COIN                  "While collecting" _ "coin!"
 #define TEXT_CHALLENGE_TYPE_GROUND                "While touching the ground" _ "time!" // Why would you ever use AT LEAST here lol (okay actually it could be done well, huh wait that's actually kinda brilliant)
@@ -50,11 +51,11 @@
 #define TEXT_CHALLENGE_TYPE_KILL_ALL_BOMBS        "By blowing up all but" INVERSE "Bob-omb!"
 #define TEXT_CHALLENGE_TYPE_KILL_GOOMBA_WITH_BOMB "By killing" _ "Goomba with a Bob-omb!"
 #define TEXT_CHALLENGE_TYPE_KILL_WHOMP_KING       "By killing" _ "Traitor!"
-#define TEXT_CHALLENGE_TYPE_SMOOCH                "By receiving" _ "smooch!"
 #define TEXT_CHALLENGE_TYPE_TIMER                 TIMER_EXCEPTION // Must be last
 
 // Increase this array whenever adding challenge types!
 #define CHALLENGE_TYPE_ARRAY \
+    TEXT_CHALLENGE_TYPE_SMOOCH, \
     TEXT_CHALLENGE_TYPE_JUMP, \
     TEXT_CHALLENGE_TYPE_COIN, \
     TEXT_CHALLENGE_TYPE_GROUND, \
@@ -72,7 +73,6 @@
     TEXT_CHALLENGE_TYPE_KILL_ALL_BOMBS, \
     TEXT_CHALLENGE_TYPE_KILL_GOOMBA_WITH_BOMB, \
     TEXT_CHALLENGE_TYPE_KILL_WHOMP_KING, \
-    TEXT_CHALLENGE_TYPE_SMOOCH, \
     TEXT_CHALLENGE_TYPE_TIMER, // Must be last
 
 
