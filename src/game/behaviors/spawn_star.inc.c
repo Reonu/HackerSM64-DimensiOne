@@ -59,6 +59,14 @@ void bhv_collect_star_init(void) {
         }
         cur_obj_become_intangible();
     }
+
+    if (BPARAM3 == 0x14) {
+        f32 dist;
+        o->oSpline = cur_obj_find_nearest_object_with_behavior(bhvSplineFollower, &dist);
+        if (o->oSpline && dist > 2000) {
+            o->oSpline = NULL;
+        }
+    }
 }
 
 void bhv_collect_star_loop(void) {
@@ -79,6 +87,8 @@ void bhv_collect_star_loop(void) {
     if (o->oInteractStatus & INT_STATUS_INTERACTED) {
         obj_mark_for_deletion(o);
         o->oInteractStatus = INT_STATUS_NONE;
+    } else if (o->oSpline != NULL) {
+        vec3f_copy(&o->oPosVec, &o->oSpline->oPosVec);
     }
 }
 
