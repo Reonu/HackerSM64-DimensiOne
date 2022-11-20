@@ -4235,6 +4235,7 @@ const BehaviorScript bhvMoneybagHidden[] = {
     SET_HITBOX(/*Radius*/ 110, /*Height*/ 100),
     SET_INT(oIntangibleTimer, 0),
     SET_INT(oAnimState, OBJ_ANIM_STATE_INIT_ANIM),
+    CALL_NATIVE(bhv_moneybag_hidden_init),
     BEGIN_LOOP(),
         ADD_INT(oAnimState, 1),
         CALL_NATIVE(bhv_moneybag_hidden_loop),
