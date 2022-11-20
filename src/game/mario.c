@@ -1283,6 +1283,20 @@ void update_mario_joystick_inputs(struct MarioState *m) {
     if (m->intendedMag > 0.0f) {
         m->intendedYaw = atan2s(-controller->stickY, controller->stickX) + m->area->camera->yaw;
         m->input |= INPUT_NONZERO_ANALOG;
+
+        if (m->intendedMag > 4.0f && m->controller->buttonDown & (GCN_X_BUTTON | GCN_Y_BUTTON)) {
+            switch (m->controller->buttonDown & (GCN_X_BUTTON | GCN_Y_BUTTON)) {
+                case (GCN_X_BUTTON | GCN_Y_BUTTON):
+                case (GCN_Y_BUTTON):
+                    // tiptoe
+                    m->intendedMag = 4.0f;
+                    break;
+                case (GCN_X_BUTTON):
+                    // half speed
+                    m->intendedMag = MIN(m->intendedMag, (32.0f/2.0f));
+                    break;
+            }
+        }
     } else {
         m->intendedYaw = m->faceAngle[1];
     }
