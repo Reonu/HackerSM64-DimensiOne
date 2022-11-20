@@ -19,6 +19,7 @@ void bhv_spring_loop(void) {
     if (o->oAction == 1) {
         if (o->oTimer == 1){
                 gMarioState->action = ACT_DOUBLE_JUMP;
+                mario_drop_held_object(gMarioState);
             }
         if (o->oTimer < 4) {
             o->header.gfx.scale[1] -= 0.125f;
