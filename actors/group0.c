@@ -44,3 +44,8 @@
 #include "moneybag/model.inc.c"
 #include "moneybag/anims/data.inc.c"
 #include "moneybag/anims/table.inc.c"
+
+#include "penguin/model.inc.c"
+#include "penguin/anims/data.inc.c"
+#include "penguin/anims/table.inc.c"
+#include "penguin/collision.inc.c"

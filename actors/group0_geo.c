@@ -25,3 +25,5 @@
 #include "peach/geo.inc.c"
 
 #include "moneybag/geo.inc.c"
+
+#include "penguin/geo.inc.c"
