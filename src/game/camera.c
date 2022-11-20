@@ -9977,7 +9977,7 @@ struct Cutscene sCutsceneEnding[] = {
 //     { cutscene_ending_peach_wakeup, 425 },
 //     { cutscene_ending_dialog, 236 },
 // #endif
-    { cutscene_ending_kiss, 300+140 },
+    { cutscene_ending_kiss, 300+140+1000 },
     // { cutscene_ending_cake_for_mario, CUTSCENE_LOOP },
     { cutscene_ending_stop, 0 }
 };

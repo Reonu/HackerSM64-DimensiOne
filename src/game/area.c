@@ -395,6 +395,7 @@ void play_transition_after_delay(s16 transType, s16 time, u8 red, u8 green, u8 b
 u32 sCreditsState = 0;
 u32 sCreditsTimer = 0;
 u32 sCreditsFadeTimer = 0;
+extern u8 sFreezeFrames;
 
 ALWAYS_INLINE u8 clampfu(f32 f) {
     f = CLAMP(f, 0, 255);
@@ -408,13 +409,20 @@ ALWAYS_INLINE u8 clampfu(f32 f) {
 #define CRED_STR1 "The End"
 #define CRED_STR2 "Created by:\nArcticJaguar725\nReonu\nthecozies"
 #define CRED_STR3 "Shoutouts to\n\nWiseguy"
+#define CRED_STR4 "And thanks to\nYoshiMilkman\nfor the Mario model"
+#define LAST_CREDITS_MESSAGE 4
 
 void credits_overlay(void) {
     sCreditsFadeTimer++;
     Vtx *verts = alloc_display_list(4 * sizeof(*verts));
-    u8 r = END_MOTION_BLUR_R_BASE;
-    u8 g = END_MOTION_BLUR_G_BASE;
-    u8 b = END_MOTION_BLUR_B_BASE;
+    static u8 r = END_MOTION_BLUR_R_BASE;
+    static u8 g = END_MOTION_BLUR_G_BASE;
+    static u8 b = END_MOTION_BLUR_B_BASE;
+    if (sCreditsState > LAST_CREDITS_MESSAGE) {
+        r = clampfu(approach_f32_asymptotic(r, 0, 0.06f));
+        g = clampfu(approach_f32_asymptotic(g, 0, 0.06f));
+        b = clampfu(approach_f32_asymptotic(b, 0, 0.06f));
+    }
     u8 alpha = 255;
     if (sCreditsFadeTimer < CRED_FADE_OUT_START) {
         alpha = clampfu(remap(sCreditsFadeTimer, 0, CRED_FADE_OUT_START, 0, 255));
@@ -474,8 +482,15 @@ void credits_text(void) {
         print_small_text(SCREEN_WIDTH/2, SCREEN_HEIGHT/3, CRED_STR3, PRINT_TEXT_ALIGN_CENTER, PRINT_ALL, FONT_DEFAULT);
         break;
     }
+    case LAST_CREDITS_MESSAGE: {
+        print_small_text(SCREEN_WIDTH/2, SCREEN_HEIGHT/3, CRED_STR4, PRINT_TEXT_ALIGN_CENTER, PRINT_ALL, FONT_DEFAULT);
+        break;
+    }
+    case 5:
+        break;
     
     default:
+        sFreezeFrames = 255;
         break;
     }
 }
