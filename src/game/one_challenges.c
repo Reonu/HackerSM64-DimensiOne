@@ -436,11 +436,11 @@ void add_challenge_kill_flags(u32 flags) {
 
 void challenge_update(void) {
     // ONE_TODO: Delete this
-    if (gChallengeLevel == 0xFF) {
-        print_set_envcolour(0xFF, 0xFF, 0xFF, 0xFF);
-        print_small_text(16, SCREEN_HEIGHT - 24, PRESS_L_TO_RESTART, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_DEFAULT);
-        // print_small_text(16, SCREEN_HEIGHT - 64, ALL_LETTERS, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_DEFAULT);
-    }
+    // if (gChallengeLevel == 0xFF) {
+    //     print_set_envcolour(0xFF, 0xFF, 0xFF, 0xFF);
+    //     print_small_text(16, SCREEN_HEIGHT - 24, PRESS_L_TO_RESTART, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_DEFAULT);
+    //     // print_small_text(16, SCREEN_HEIGHT - 64, ALL_LETTERS, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_DEFAULT);
+    // }
 
 #ifdef USE_PROFILER
     if ((gPlayer1Controller->buttonPressed & L_TRIG) && !(gPlayer1Controller->buttonDown & U_JPAD)) {
