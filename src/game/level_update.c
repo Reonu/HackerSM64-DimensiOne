@@ -404,7 +404,10 @@ void init_mario_after_warp(void) {
 #ifdef BETTER_REVERB
         gBetterReverbPreset = gCurrentArea->betterReverbPreset;
 #endif
-        if (gChallengeStatus == CHALLENGE_STATUS_NOT_PLAYING) {
+        if (gSetChallengeMusic) {
+            gSetChallengeMusic = FALSE;
+            set_background_music(0, SEQ_CUSTOM_MAINLOOP, 0);
+        } else if (gChallengeStatus == CHALLENGE_STATUS_NOT_PLAYING) {
             set_background_music(gCurrentArea->musicParam, gCurrentArea->musicParam2, 0);
         }
 
@@ -524,7 +527,10 @@ void warp_credits(void) {
 #ifdef BETTER_REVERB
         gBetterReverbPreset = gCurrentArea->betterReverbPreset;
 #endif
-        if (gChallengeStatus == CHALLENGE_STATUS_NOT_PLAYING) {
+        if (gSetChallengeMusic) {
+            gSetChallengeMusic = FALSE;
+            set_background_music(0, SEQ_CUSTOM_MAINLOOP, 0);
+        } else if (gChallengeStatus == CHALLENGE_STATUS_NOT_PLAYING) {
             set_background_music(gCurrentArea->musicParam, gCurrentArea->musicParam2, 0);
         }
     }
@@ -1373,7 +1379,10 @@ s32 init_level(void) {
 #ifdef BETTER_REVERB
             gBetterReverbPreset = gCurrentArea->betterReverbPreset;
 #endif
-            if (gChallengeStatus == CHALLENGE_STATUS_NOT_PLAYING) {
+            if (gSetChallengeMusic) {
+                gSetChallengeMusic = FALSE;
+                set_background_music(0, SEQ_CUSTOM_MAINLOOP, 0);
+            } else if (gChallengeStatus == CHALLENGE_STATUS_NOT_PLAYING) {
                 set_background_music(gCurrentArea->musicParam, gCurrentArea->musicParam2, 0);
             }
         }

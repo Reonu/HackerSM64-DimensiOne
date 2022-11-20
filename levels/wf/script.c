@@ -127,6 +127,7 @@ const LevelScript level_wf_entry[] = {
 		SET_BACKGROUND_MUSIC(0x00, SEQ_LEVEL_GRASS),
 		TERRAIN_TYPE(TERRAIN_GRASS),
 		/* Fast64 begin persistent block [area commands] */
+		SET_ECHO(0x22, 0x22),
 		/* Fast64 end persistent block [area commands] */
 	END_AREA(),
 

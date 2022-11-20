@@ -15,6 +15,7 @@
 #include "seq_ids.h"
 #include "sm64.h"
 #include "title_screen.h"
+#include "game/one_challenges.h"
 
 /**
  * @file title_screen.c
@@ -273,4 +274,9 @@ s32 lvl_intro_update(s16 arg, UNUSED s32 unusedArg) {
         case LVL_INTRO_LEVEL_SELECT:        return intro_level_select();
         default: return LEVEL_NONE;
     }
+}
+
+s32 start_challenges(UNUSED s16 arg, UNUSED s32 unusedArg) {
+    start_next_challenge_level();
+    return TRUE;
 }

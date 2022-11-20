@@ -147,6 +147,9 @@ u32 sFailureFlags = CHALLENGE_FLAG_NONE;
 u32 internalFlagsForFrame = CHALLENGE_FLAG_NONE;
 
 
+u8 gSetChallengeMusic = FALSE;
+
+
 static u8 freshlyTouchedGround = FALSE;
 static u16 sBombsSpawnedLast = 0;
 
@@ -377,7 +380,7 @@ void reset_challenge(void) {
 
     if (gChallengeStatus == CHALLENGE_STATUS_NOT_PLAYING) {
         gChallengeStatus = CHALLENGE_STATUS_PLAYING;
-        set_background_music(0, SEQ_CUSTOM_MAINLOOP, 0);
+        gSetChallengeMusic = TRUE;
     }
 
     gChallengeStatus = CHALLENGE_STATUS_NOT_PLAYING;
@@ -442,11 +445,11 @@ void add_challenge_kill_flags(u32 flags) {
 
 void challenge_update(void) {
     // ONE_TODO: Delete this
-    if (gChallengeLevel == 0xFF) {
-        print_set_envcolour(0xFF, 0xFF, 0xFF, 0xFF);
-        print_small_text(16, SCREEN_HEIGHT - 24, PRESS_L_TO_RESTART, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_DEFAULT);
-        // print_small_text(16, SCREEN_HEIGHT - 64, ALL_LETTERS, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_DEFAULT);
-    }
+    // if (gChallengeLevel == 0xFF) {
+    //     print_set_envcolour(0xFF, 0xFF, 0xFF, 0xFF);
+    //     print_small_text(16, SCREEN_HEIGHT - 24, PRESS_L_TO_RESTART, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_DEFAULT);
+    //     // print_small_text(16, SCREEN_HEIGHT - 64, ALL_LETTERS, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_DEFAULT);
+    // }
 
     if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING) {
         if (gWaitingToStart) {
