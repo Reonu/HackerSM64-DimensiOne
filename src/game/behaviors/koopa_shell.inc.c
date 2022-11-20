@@ -13,7 +13,9 @@ struct ObjectHitbox sKoopaShellHitbox = {
 };
 
 void shell_despawn(void) {
-    if (o->oTimer > 300) obj_flicker_and_disappear(o, 300);
+    if (gChallengeStatus == CHALLENGE_STATUS_NOT_PLAYING) {
+        if (o->oTimer > 300) obj_flicker_and_disappear(o, 300);
+    }
 }
 
 void koopa_shell_spawn_water_drop(void) {
