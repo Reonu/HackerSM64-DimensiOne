@@ -457,7 +457,9 @@ void challenge_update(void) {
             if (gPlayer1Controller->buttonPressed) {
                 gWaitingToStart = FALSE;
                 clear_time_stop_flags(TIME_STOP_ENABLED | TIME_STOP_ALL_OBJECTS);
+                gPlayer1Controller->buttonPressed = 0;
             } else {
+                gPlayer1Controller->buttonPressed = 0;
                 set_motion_blur(150);
                 set_fb_effect_col(gGlobalFog.r, gGlobalFog.g, gGlobalFog.b);
                 set_fb_effect_type(FBE_EFFECT_MULT);
