@@ -48,7 +48,7 @@
 #define TEXT_CHALLENGE_TYPE_SLEEPING_PIRANHA      "After disturbing" _ "Piranha Plant!"
 #define TEXT_CHALLENGE_TYPE_KILL_GOOMBA           "By killing" _ "Goomba!"
 #define TEXT_CHALLENGE_TYPE_KILL_KOOPA            "By killing" _ "Koopa!"
-#define TEXT_CHALLENGE_TYPE_KILL_PENGUIN          "By killing" _ "Penguin!" // TODO: Implementation depends on challenge structure
+#define TEXT_CHALLENGE_TYPE_KILL_PENGUIN          "By brutally murdering" _ "Penguin!"
 #define TEXT_CHALLENGE_TYPE_KILL_BOMB             "By blowing up" _ "Bob-omb!"
 #define TEXT_CHALLENGE_TYPE_KILL_ALL_BOMBS        "By blowing up all but" INVERSE "Bob-omb!"
 #define TEXT_CHALLENGE_TYPE_KILL_GOOMBA_WITH_BOMB "By killing" _ "Goomba with a Bob-omb!"

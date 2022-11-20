@@ -60,11 +60,11 @@ static struct OneChallengeLevel sChallengeLevels[sizeof(u32)*8] = {
         (CHALLENGE_FLAG_COIN), // Requirements
         (CHALLENGE_FLAG_COIN | CHALLENGE_FLAG_KILL_MONEYBAG), // Enforcements
     }, { /*16*/
-        (CHALLENGE_NAME_KILL_PENGUIN), // Requirements
-        (CHALLENGE_NAME_KILL_PENGUIN), // Enforcements
-    }, { /*17*/
         (CHALLENGE_FLAG_A_PRESS), // Requirements
         (CHALLENGE_FLAG_A_PRESS), // Enforcements
+    }, { /*17*/
+        (CHALLENGE_NAME_KILL_PENGUIN), // Requirements
+        (CHALLENGE_NAME_KILL_PENGUIN), // Enforcements
     }, { /*18*/
         (CHALLENGE_FLAG_NONE), // Requirements
         (CHALLENGE_FLAG_NONE), // Enforcements
