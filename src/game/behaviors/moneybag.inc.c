@@ -24,12 +24,32 @@ static struct ObjectHitbox sMoneybagHiddenHitbox = {
     /* hurtboxHeight:     */ 50,
 };
 
+void bhv_moneybag_hidden_init(void) {
+    if (gMoneybagCount == gMoneybagSwap) {
+        o->oAction = 0x7F; // Do nothing
+        o->oHomeY += 27;
+        o->oPosY += 27;
+        spawn_object(o, MODEL_YELLOW_COIN, bhvYellowCoin);
+        obj_mark_for_deletion(o);
+    }
+    gMoneybagCount++; 
+}
+
 void bhv_moneybag_init(void) {
     o->oGravity = 3.0f;
     o->oFriction = 1.0f;
     o->oBuoyancy = 2.0f;
     cur_obj_init_animation(0);
     o->oOpacity = 0;
+
+    if (gMoneybagCount == gMoneybagSwap) {
+        o->oAction = 6; // Do nothing
+        o->oHomeY += 27;
+        o->oPosY += 27;
+        spawn_object(o, MODEL_YELLOW_COIN, bhvYellowCoin);
+        obj_mark_for_deletion(o);
+    }
+    gMoneybagCount++; 
 }
 
 void moneybag_check_mario_collision(void) {

@@ -73,6 +73,8 @@ extern u8 gChallengeLevel;
 extern u16 gBombsSpawned;
 extern u32 gChallengeStatus;
 extern s32 gChallengeTimer;
+extern s32 gMoneybagSwap;
+extern s32 gMoneybagCount;
 
 u8 is_challenge_active(void);
 u32 get_challenge_obtained_flags(void);
