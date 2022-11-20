@@ -2519,6 +2519,7 @@ const BehaviorScript bhvTuxiesMother[] = {
     SET_OBJ_PHYSICS(/*Wall hitbox radius*/ 30, /*Gravity*/ -400, /*Bounciness*/ -50, /*Drag strength*/ 0, /*Friction*/ 0, /*Buoyancy*/ 0, /*Unused*/ 0, 0),
     SET_HOME(),
     SET_INTERACT_TYPE(INTERACT_TEXT),
+    SET_INT(oAction, MOTHER_PENGUIN_ACT_RECEIVED_BABY),
     SET_HITBOX(/*Radius*/ 200, /*Height*/ 300),
     SET_INT(oIntangibleTimer, 0),
     BEGIN_LOOP(),

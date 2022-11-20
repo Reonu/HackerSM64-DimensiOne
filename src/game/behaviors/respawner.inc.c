@@ -10,7 +10,7 @@ void bhv_respawner_loop(void) {
 }
 
 void create_respawner(ModelID32 model, const BehaviorScript *behToSpawn, s32 minSpawnDist) {
-    if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING && gChallengeLevel != 14 && behToSpawn == bhvBobomb) {
+    if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING && behToSpawn == bhvBobomb) {
         return;
     }
 

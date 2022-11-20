@@ -34,7 +34,7 @@ static struct OneChallengeLevel sChallengeLevels[sizeof(u32)*8] = {
         (CHALLENGE_FLAG_WALLKICK | CHALLENGE_FLAG_GROUND), // Enforcements
     }, { /*07*/
         (CHALLENGE_FLAG_KILL_GOOMBA_WITH_BOMB), // Requirements
-        (CHALLENGE_FLAG_KILL_GOOMBA_WITH_BOMB), // Enforcements
+        (CHALLENGE_FLAG_KILL_GOOMBA_WITH_BOMB | CHALLENGE_FLAG_KILL_GOOMBA), // Enforcements
     }, { /*08*/
         (CHALLENGE_FLAG_KNOCKED_KOOPA), // Requirements  TODO: for this challenge only, add on timer flag after meeting knocked Koopa condition
         (CHALLENGE_FLAG_KNOCKED_KOOPA | CHALLENGE_FLAG_GROUND | CHALLENGE_FLAG_KILL_KOOPA), // Enforcements
@@ -60,11 +60,11 @@ static struct OneChallengeLevel sChallengeLevels[sizeof(u32)*8] = {
         (CHALLENGE_FLAG_COIN), // Requirements
         (CHALLENGE_FLAG_COIN | CHALLENGE_FLAG_KILL_MONEYBAG), // Enforcements
     }, { /*16*/
-        (CHALLENGE_FLAG_NONE), // Requirements
-        (CHALLENGE_FLAG_NONE), // Enforcements
+        (CHALLENGE_NAME_KILL_PENGUIN), // Requirements
+        (CHALLENGE_NAME_KILL_PENGUIN), // Enforcements
     }, { /*17*/
-        (CHALLENGE_FLAG_NONE), // Requirements
-        (CHALLENGE_FLAG_NONE), // Enforcements
+        (CHALLENGE_FLAG_A_PRESS), // Requirements
+        (CHALLENGE_FLAG_A_PRESS), // Enforcements
     }, { /*18*/
         (CHALLENGE_FLAG_NONE), // Requirements
         (CHALLENGE_FLAG_NONE), // Enforcements

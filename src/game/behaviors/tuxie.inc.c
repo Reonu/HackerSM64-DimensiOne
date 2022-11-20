@@ -11,34 +11,45 @@ void play_penguin_walking_sound(s32 walk) {
 }
 
 void tuxies_mother_act_received_baby(void) {
-    f32 dist;
-    struct Object *smallPenguinObj = cur_obj_find_nearest_object_with_behavior(bhvSmallPenguin, &dist);
+    // f32 dist;
+    // struct Object *smallPenguinObj = cur_obj_find_nearest_object_with_behavior(bhvSmallPenguin, &dist);
+    cur_obj_scale(4.0f);
 
-    if (cur_obj_find_nearby_held_actor(bhvSmallPenguinReturned, 1000.0f) != NULL) {
+    if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING && get_challenge_obtained_flags() & CHALLENGE_FLAG_KILL_PENGUIN) {
+        o->oSubAction = MOTHER_PENGUIN_SUB_ACT_CHASE_MARIO;
+    } else {
+        o->oSubAction = MOTHER_PENGUIN_SUB_ACT_STOP_CHASING_MARIO;
+    }
+
+    // if (cur_obj_find_nearby_held_actor(bhvSmallPenguinReturned, 1000.0f) != NULL) {
+    if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING) {
         if (o->oSubAction == MOTHER_PENGUIN_SUB_ACT_CHASE_MARIO) {
             cur_obj_init_animation_with_sound(PENGUIN_ANIM_WALK);
-            o->oForwardVel = 10.0f;
-            if (cur_obj_lateral_dist_from_mario_to_home() > 800.0f) {
-                o->oSubAction = MOTHER_PENGUIN_SUB_ACT_STOP_CHASING_MARIO;
-            }
-            cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x400);
+            o->oForwardVel = 18.0f;
+            cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x600);
+            // o->oForwardVel = 10.0f;
+            // if (cur_obj_lateral_dist_from_mario_to_home() > 800.0f) {
+            //     o->oSubAction = MOTHER_PENGUIN_SUB_ACT_STOP_CHASING_MARIO;
+            // }
+            // cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x400);
         } else {
             o->oForwardVel = 0.0f;
             cur_obj_init_animation_with_sound(PENGUIN_ANIM_IDLE);
-            if (cur_obj_lateral_dist_from_mario_to_home() < 700.0f) {
-                o->oSubAction = MOTHER_PENGUIN_SUB_ACT_CHASE_MARIO;
-            }
+            // if (cur_obj_lateral_dist_from_mario_to_home() < 700.0f) {
+            //     o->oSubAction = MOTHER_PENGUIN_SUB_ACT_CHASE_MARIO;
+            // }
         }
     } else {
         o->oForwardVel = 0.0f;
         cur_obj_init_animation_with_sound(PENGUIN_ANIM_IDLE);
     }
-
+/*
     if (smallPenguinObj != NULL && dist < 300.0f && smallPenguinObj->oHeldState != HELD_FREE) {
         o->oAction = MOTHER_PENGUIN_ACT_RECEIVE_BABY;
         smallPenguinObj->oSmallPenguinReturnedToMother = TRUE;
         o->prevObj = smallPenguinObj;
     }
+*/
 }
 
 void tuxies_mother_act_receiving_baby(void) {
@@ -217,9 +228,9 @@ void small_penguin_act_walking(void) {
     if (nearMother) {
         o->oAction = SMALL_PENGUIN_ACT_NEAR_MOTHER;
     }
-    if (cur_obj_mario_far_away()) {
-        cur_obj_set_pos_to_home();
-    }
+    // if (cur_obj_mario_far_away()) {
+    //     cur_obj_set_pos_to_home();
+    // }
 }
 
 void small_penguin_act_near_mother(void) {
@@ -263,6 +274,14 @@ void small_penguin_free_actions(void) {
     play_penguin_walking_sound(PENGUIN_SOUND_WALK_BABY);
 }
 
+u8 check_penguin_on_lava(void) {
+    if (o->oFloorType == SURFACE_BURNING && o->oFloorHeight >= o->oPosY) {
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
 void bhv_small_penguin_loop(void) {
     switch (o->oHeldState) {
         case HELD_FREE:
@@ -284,6 +303,14 @@ void bhv_small_penguin_loop(void) {
         case HELD_DROPPED:
             cur_obj_get_dropped();
             break;
+    }
+
+    if (check_penguin_on_lava()) {
+        // TODO: sound effects
+        play_puzzle_jingle();
+        add_challenge_flags(CHALLENGE_FLAG_KILL_PENGUIN);
+        spawn_mist_particles();
+        obj_mark_for_deletion(o);
     }
 }
 

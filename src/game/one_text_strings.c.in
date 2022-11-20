@@ -21,7 +21,7 @@
 #define TEXT_CHALLENGE_16       HEAD("17")  BODY("FFFF3F", "Collect the star")
 #define TEXT_CHALLENGE_17       HEAD("18")  BODY("FFFF3F", "Collect the star")
 #define TEXT_CHALLENGE_18       HEAD("19")  BODY("FFFF3F", "Collect the star")
-#define TEXT_CHALLENGE_19       HEAD("20")  BODY("FFAFAF", "Rescue Peach!")
+#define TEXT_CHALLENGE_19       HEAD("20")  BODY("FFAFAF", "Rescue Peach")
 #define TEXT_CHALLENGE_20       HEAD("21")  BODY("1FFF1F", "TODO" PP_COL_RESET)
 #define TEXT_CHALLENGE_21       HEAD("22")  BODY("1FFF1F", "TODO" PP_COL_RESET)
 #define TEXT_CHALLENGE_22       HEAD("23")  BODY("1FFF1F", "TODO" PP_COL_RESET)
