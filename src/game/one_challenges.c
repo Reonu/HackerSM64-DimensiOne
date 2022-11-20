@@ -7,8 +7,11 @@
 #include "one_text.h"
 #include "puppyprint.h"
 #include "sound_init.h"
+#include "object_list_processor.h"
 #include "audio/external.h"
 #include "engine/math_util.h"
+#include "fb_effects.h"
+#include "rendering_graph_node.h"
 
 // Actual data for all challenges
 static struct OneChallengeLevel sChallengeLevels[sizeof(u32)*8] = {
@@ -154,6 +157,7 @@ static u8 sPiranhasDisturbed = 0;
 static u8 sGoombasKilledWithBombs = 0;
 static u8 sMoneybagsKilled = 0;
 static u8 sLivesCollected = 0;
+u8 gWaitingToStart = TRUE;
 
 
 static void can_win_challenge(void) {
@@ -400,6 +404,8 @@ void start_next_challenge_level(void) {
 
 // Start up a new challenge level
 void start_challenge(void) {
+    gWaitingToStart = TRUE;
+
     if (gChallengeLevel == 0xFF) {
         start_next_challenge_level();
         return;
@@ -440,6 +446,25 @@ void challenge_update(void) {
         print_set_envcolour(0xFF, 0xFF, 0xFF, 0xFF);
         print_small_text(16, SCREEN_HEIGHT - 24, PRESS_L_TO_RESTART, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_DEFAULT);
         // print_small_text(16, SCREEN_HEIGHT - 64, ALL_LETTERS, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_DEFAULT);
+    }
+
+    if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING) {
+        if (gWaitingToStart) {
+            set_time_stop_flags(TIME_STOP_ENABLED | TIME_STOP_ALL_OBJECTS);
+            if (gPlayer1Controller->buttonPressed) {
+                gWaitingToStart = FALSE;
+                clear_time_stop_flags(TIME_STOP_ENABLED | TIME_STOP_ALL_OBJECTS);
+            } else {
+                set_motion_blur(150);
+                set_fb_effect_col(gGlobalFog.r, gGlobalFog.g, gGlobalFog.b);
+                set_fb_effect_type(FBE_EFFECT_MULT);
+                print_set_envcolour(0xFF, 0xFF, 0xFF, 0xFF);
+                print_small_text(SCREEN_WIDTH-12, 24+24, "Press ONE button to start", PRINT_TEXT_ALIGN_RIGHT, PRINT_ALL, FONT_DEFAULT);
+                print_challenge_types();
+                update_last_print_vars(sObtainedChallengeFlags, sFailureFlags);
+                return;
+            }
+        }
     }
 
 #ifdef USE_PROFILER
