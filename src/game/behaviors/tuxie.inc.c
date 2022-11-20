@@ -15,10 +15,13 @@ void tuxies_mother_act_received_baby(void) {
     // struct Object *smallPenguinObj = cur_obj_find_nearest_object_with_behavior(bhvSmallPenguin, &dist);
     cur_obj_scale(4.0f);
 
+    f32 diffY = ABS(gMarioState->pos[1] - 250.0f - o->oPosY);
+
     if (
         gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING &&
         get_challenge_obtained_flags() & CHALLENGE_FLAG_KILL_PENGUIN &&
-        o->oDistanceToMario <= 1750.0f // REONU CHANGE THIS
+        o->oDistanceToMario <= 1750.0f && // REONU CHANGE THIS
+        diffY < 500.0f
     ) {
         o->oSubAction = MOTHER_PENGUIN_SUB_ACT_CHASE_MARIO;
     } else {
