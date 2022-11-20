@@ -419,7 +419,11 @@ s32 obj_resolve_object_collisions(s32 *targetYaw) {
         for (i = 0; i < o->numCollidedObjs; i++) {
             otherObject = o->collidedObjs[i];
             if (otherObject == gMarioObject) {
-                if (o->behavior == segmented_to_virtual(bhvTuxiesMother)) {
+                if (
+                    gChallengeStatus == CHALLENGE_STATUS_NOT_PLAYING &&
+                    o->behavior == segmented_to_virtual(bhvTuxiesMother) &&
+                    (get_challenge_obtained_flags() & CHALLENGE_FLAG_KILL_PENGUIN)
+                ) {
                     o->oDamageOrCoinValue = 1;
                     take_damage_and_knock_back(gMarioState, o);
                 }
