@@ -29,9 +29,9 @@ FBEffects sFBEffects = {
 #define FUNNY_FBE_COLOR 0xFF00
 #define MOTION_BLUR_APP_RATE 8
 
+static u8 checkingFBE = 0;
+static u8 checkedFBE = FALSE;
 s32 check_fbe(void) {
-    static u8 checkingFBE = 0;
-    static u8 checkedFBE = FALSE;
 
     if (checkedFBE) return gFBE;
     else if (!checkedFBE && (gIsConsole || gCacheEmulated)) {
@@ -241,6 +241,7 @@ void render_motion_blur(void) {
 
 void render_fb_effects(void) {
     check_fbe();
+    if (!checkedFBE) return;
     // if (!check_fbe()) {
     //     return;
     // }
