@@ -183,7 +183,12 @@ u32 pressed_pause(void) {
     u32 dialogActive = get_dialog_id() >= 0;
     u32 intangible = (gMarioState->action & ACT_FLAG_INTANGIBLE) != 0;
 
-    if (!intangible && !dialogActive && !gWarpTransition.isActive && sDelayedWarpOp == WARP_OP_NONE
+    if (
+        !intangible
+        && !dialogActive
+        && !gWarpTransition.isActive
+        && sDelayedWarpOp == WARP_OP_NONE
+        && !gWaitingToStart
         && (gPlayer1Controller->buttonPressed & START_BUTTON)) {
         return TRUE;
     }
