@@ -5959,13 +5959,18 @@ layer_end
 .sound_obj_baby_penguin_yell:
 chan_setbank 7
 chan_setinstr 10
+chan_setvibratorate 0x40
+chan_setvibratoextent 32
 chan_setenvelope .envelope_3344
 chan_setlayer 0, .layer_24FD
+chan_setval 0x30
+chan_call .delay
+chan_setvibratoextent 0xFF
 chan_end
 
 .layer_24FD:
 layer_note1 50, 0x8, 105
-layer_portamento 0x82, 46, 255
+layer_portamento 0x82, 36, 255
 layer_note1 50, 0x30, 105
 layer_end
 

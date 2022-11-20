@@ -32,7 +32,6 @@ extern const GeoLayout bob_area_7_geo[];
 extern const GeoLayout bob_area_7[];
 extern const Collision bob_area_7_collision[];
 extern const MacroObject bob_area_7_macro_objs[];
-extern const Trajectory bob_area_7_spline_ASplineChallenge0B_001[];
 extern const GeoLayout bob_area_8_geo[];
 extern const GeoLayout bob_area_8[];
 extern const Collision bob_area_8_collision[];

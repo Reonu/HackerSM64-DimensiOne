@@ -20,21 +20,26 @@ static u32 sObtainedChallengeFlagsLast = CHALLENGE_FLAG_NONE;
 static u32 sFailureFlagsLast = CHALLENGE_FLAG_NONE;
 u32 gChallengesPrintTimer = -1U;
 
-
-static void update_timer(void) {
-    if (sCurrPlayMode == PLAY_MODE_PAUSED) {
+static void loser_text(void) {
+    if (gChallengeStatus != CHALLENGE_STATUS_LOSE) {
         return;
     }
 
+    print_small_text(SCREEN_WIDTH / 2, 12, LOSER_STRING, PRINT_TEXT_ALIGN_CENTER, PRINT_ALL, FONT_DEFAULT);
+}
+
+static void update_timer(void) {
     if (!((get_challenge_required_flags() | get_challenge_enforced_flags()) & CHALLENGE_FLAG_TIMER)) {
         return;
     }
+    
+    if (sCurrPlayMode != PLAY_MODE_PAUSED && is_challenge_active()) {
+        gChallengeTimer--;
 
-    gChallengeTimer--;
-
-    if (gChallengeTimer < 0) {
-        add_challenge_flags(CHALLENGE_FLAG_TIMER);
-        gChallengeTimer = 0;
+        if (gChallengeTimer < 0) {
+            add_challenge_flags(CHALLENGE_FLAG_TIMER);
+            gChallengeTimer = 0;
+        }
     }
 
     s32 seconds = gChallengeTimer / 30;
@@ -43,7 +48,7 @@ static void update_timer(void) {
     char str[16];
     sprintf(str, "%d.%d", seconds, decaseconds);
 
-    print_small_text(16, 16, str, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_DEFAULT);
+    print_small_text(16, 12, str, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_DEFAULT);
 }
 
 static char* get_challenge_type_text_entry(u8 typeIndex) {
@@ -215,10 +220,15 @@ void print_challenge_types(void) {
         y -= lineSpacing;
     }
 
-    print_set_envcolour(0xFF, 0xFF, 0xFF, 0xFF);
-    print_small_text(SCREEN_WIDTH / 2, 12, gChallengeHeaderText[gChallengeLevel], PRINT_TEXT_ALIGN_CENTER, PRINT_ALL, FONT_DEFAULT);
-    print_set_envcolour(0xFF, 0xFF, 0xFF, alpha);
-    print_small_text(SCREEN_WIDTH / 2, 29, gChallengeHeaderBodyText[gChallengeLevel], PRINT_TEXT_ALIGN_CENTER, PRINT_ALL, FONT_DEFAULT);
+    if (gChallengeStatus == CHALLENGE_STATUS_LOSE) {
+        print_set_envcolour(0xFF, 0xFF, 0xFF, 0xFF);
+        loser_text();
+    } else {
+        print_set_envcolour(0xFF, 0xFF, 0xFF, 0xFF);
+        print_small_text(SCREEN_WIDTH / 2, 12, gChallengeHeaderText[gChallengeLevel], PRINT_TEXT_ALIGN_CENTER, PRINT_ALL, FONT_DEFAULT);
+        print_set_envcolour(0xFF, 0xFF, 0xFF, alpha);
+        print_small_text(SCREEN_WIDTH / 2, 29, gChallengeHeaderBodyText[gChallengeLevel], PRINT_TEXT_ALIGN_CENTER, PRINT_ALL, FONT_DEFAULT);
+    }
 
     update_timer();
 }

@@ -8,6 +8,7 @@
 #include "puppyprint.h"
 #include "sound_init.h"
 #include "audio/external.h"
+#include "engine/math_util.h"
 
 // Actual data for all challenges
 static struct OneChallengeLevel sChallengeLevels[sizeof(u32)*8] = {
@@ -34,7 +35,7 @@ static struct OneChallengeLevel sChallengeLevels[sizeof(u32)*8] = {
         (CHALLENGE_FLAG_WALLKICK | CHALLENGE_FLAG_GROUND), // Enforcements
     }, { /*07*/
         (CHALLENGE_FLAG_KILL_GOOMBA_WITH_BOMB), // Requirements
-        (CHALLENGE_FLAG_KILL_GOOMBA_WITH_BOMB), // Enforcements
+        (CHALLENGE_FLAG_KILL_GOOMBA_WITH_BOMB | CHALLENGE_FLAG_KILL_GOOMBA), // Enforcements
     }, { /*08*/
         (CHALLENGE_FLAG_KNOCKED_KOOPA), // Requirements  TODO: for this challenge only, add on timer flag after meeting knocked Koopa condition
         (CHALLENGE_FLAG_KNOCKED_KOOPA | CHALLENGE_FLAG_GROUND | CHALLENGE_FLAG_KILL_KOOPA), // Enforcements
@@ -60,14 +61,14 @@ static struct OneChallengeLevel sChallengeLevels[sizeof(u32)*8] = {
         (CHALLENGE_FLAG_COIN), // Requirements
         (CHALLENGE_FLAG_COIN | CHALLENGE_FLAG_KILL_MONEYBAG), // Enforcements
     }, { /*16*/
-        (CHALLENGE_FLAG_NONE), // Requirements
-        (CHALLENGE_FLAG_NONE), // Enforcements
+        (CHALLENGE_FLAG_A_PRESS), // Requirements
+        (CHALLENGE_FLAG_A_PRESS), // Enforcements
     }, { /*17*/
-        (CHALLENGE_FLAG_NONE), // Requirements
-        (CHALLENGE_FLAG_NONE), // Enforcements
+        (CHALLENGE_FLAG_KILL_PENGUIN), // Requirements
+        (CHALLENGE_FLAG_KILL_PENGUIN), // Enforcements
     }, { /*18*/
-        (CHALLENGE_FLAG_NONE), // Requirements
-        (CHALLENGE_FLAG_NONE), // Enforcements
+        (CHALLENGE_FLAG_COLLECT_LIFE), // Requirements
+        (CHALLENGE_FLAG_COLLECT_LIFE), // Enforcements
     }, { /*19*/
         (CHALLENGE_FLAG_KILL_WHOMP_KING | CHALLENGE_FLAG_SMOOCH), // Requirements
         (CHALLENGE_FLAG_KILL_WHOMP_KING | CHALLENGE_FLAG_SMOOCH), // Enforcements
@@ -122,6 +123,10 @@ u16 gBombsSpawned = 0xFFFF;
 
 // One-minute timer used for the challenges that need it
 s32 gChallengeTimer;
+
+// Randomly selected moneybag becomes coin
+s32 gMoneybagSwap = 0;
+s32 gMoneybagCount = 0;
 
 // Flags of which challenge conditions have been met by the player
 u32 sObtainedChallengeFlags = CHALLENGE_FLAG_NONE;
@@ -360,6 +365,9 @@ void reset_challenge(void) {
     sGoombasKilledWithBombs = 0;
     sMoneybagsKilled = 0;
     sLivesCollected = 0;
+
+    gMoneybagSwap = random_u16() % 22;
+    gMoneybagCount = 0;
 
     gChallengeTimer = 60 * 30; // 1 minute
 

@@ -11,6 +11,7 @@
 #define MODEL_BULLET_BILL                      0x101        // bullet_bill_geo
 #define MODEL_PEACH                            0x102       // peach_geo
 #define MODEL_MONEYBAG                         0x103
+#define MODEL_PENGUIN                          0x104        // penguin_geo
 
 /* Various static level geometry, the geo layout differs but terrain object presets treat them the same.*/
 
@@ -358,7 +359,7 @@
 #define MODEL_SPINDRIFT                   0x54        // spindrift_geo
 #define MODEL_MR_BLIZZARD_HIDDEN          0x55        // mr_blizzard_hidden_geo
 #define MODEL_MR_BLIZZARD                 0x56        // mr_blizzard_geo
-#define MODEL_PENGUIN                     0x57        // penguin_geo
+
 
 // group 8
 #define MODEL_CAP_SWITCH_EXCLAMATION      0x54        // cap_switch_exclamation_seg5_dl_05002E00

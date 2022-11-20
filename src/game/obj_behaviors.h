@@ -16,6 +16,8 @@ enum ObjCollisionFlags {
     OBJ_COL_FLAGS_LANDED    = (OBJ_COL_FLAG_GROUNDED | OBJ_COL_FLAG_NO_Y_VEL)
 };
 
+extern struct Surface *sObjFloor;
+
 //! Lots of these are duplicates
 void set_yoshi_as_not_dead(void);
 s32 coin_step(s16 *collisionFlagsPtr);
@@ -146,6 +148,7 @@ void bhv_large_bomp_loop(void);
 void bhv_wf_sliding_platform_init(void);
 void bhv_wf_sliding_platform_loop(void);
 void bhv_moneybag_init(void);
+void bhv_moneybag_hidden_init(void);
 void moneybag_check_mario_collision(void);
 void moneybag_jump(s16 collisionFlags);
 void moneybag_act_move_around(void);
@@ -171,5 +174,7 @@ void bhv_free_bowling_ball_loop(void); /* likely unused */
 void bhv_rr_cruiser_wing_init(void);
 void bhv_rr_cruiser_wing_loop(void);
 void spawn_default_star(f32 x, f32 y, f32 z);
+
+s16 object_step(void);
 
 #endif // OBJ_BEHAVIORS_H
