@@ -32,8 +32,10 @@ static void update_timer(void) {
     if (!((get_challenge_required_flags() | get_challenge_enforced_flags()) & CHALLENGE_FLAG_TIMER)) {
         return;
     }
+
     
-    if (sCurrPlayMode != PLAY_MODE_PAUSED && is_challenge_active()) {
+    
+    if (sCurrPlayMode != PLAY_MODE_PAUSED && is_challenge_active() && !((gTimeStopState & (TIME_STOP_ENABLED | TIME_STOP_ALL_OBJECTS)) == (TIME_STOP_ENABLED | TIME_STOP_ALL_OBJECTS))) {
         gChallengeTimer--;
 
         if (gChallengeTimer < 0) {

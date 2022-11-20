@@ -462,7 +462,7 @@ void challenge_update(void) {
                 set_fb_effect_col(gGlobalFog.r, gGlobalFog.g, gGlobalFog.b);
                 set_fb_effect_type(FBE_EFFECT_MULT);
                 print_set_envcolour(0xFF, 0xFF, 0xFF, 0xFF);
-                print_small_text(SCREEN_WIDTH-12, 24+24, "Press ONE button to start", PRINT_TEXT_ALIGN_RIGHT, PRINT_ALL, FONT_DEFAULT);
+                print_small_text(SCREEN_WIDTH / 2, 24+36, "Press ONE button to start", PRINT_TEXT_ALIGN_CENTER, PRINT_ALL, FONT_DEFAULT);
                 print_challenge_types();
                 update_last_print_vars(sObtainedChallengeFlags, sFailureFlags);
                 return;
