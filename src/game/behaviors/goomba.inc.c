@@ -120,6 +120,10 @@ void bhv_goomba_init(void) {
 
     o->oGravity = -8.0f / 3.0f * o->oGoombaScale;
 
+    if (o->behavior == segmented_to_virtual(bhvFloombaStartup)) {
+        o->oIsFloomba = TRUE;
+    }
+
 #ifdef FLOOMBAS
     if (o->oIsFloomba) {
         o->oAnimState += FLOOMBA_ANIM_STATE_EYES_OPEN;
