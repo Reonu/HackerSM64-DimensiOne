@@ -53,8 +53,6 @@ const LevelScript level_bob_entry[] = {
 		WARP_NODE(0x02, LEVEL_BOB, 0x02, 0x02, WARP_NO_CHECKPOINT),
 		OBJECT(MODEL_NONE, 372, -3445, 150, 0, -90, 0, (0x01), bhvCoinFormation),
 		MARIO_POS(0x01, 90, -309, -3445, 195),
-		OBJECT(MODEL_SPRING, 321, -3445, -776, 0, -90, 0, (0x01 << 16) | (0x01), bhvSpring),
-		OBJECT(MODEL_SPRING, 321, -3445, -1173, 0, -90, 0, (0x02 << 16) | (0x01), bhvSpring),
 		OBJECT(MODEL_STAR, 1320, -3134, 165, 0, -90, 0, (0x01 << 24) | (0x01), bhvStar),
 		OBJECT(MODEL_NONE, -314, -3445, 197, 0, 90, 0, (0x01 << 16) | (0x01), bhvInstantActiveWarp),
 		TERRAIN(bob_area_1_collision),
