@@ -1,0 +1,10 @@
+extern Vtx dimensione_Text_mesh_vtx_cull[8];
+extern Vtx dimensione_Text_mesh_vtx_0[316];
+extern Gfx dimensione_Text_mesh_tri_0[];
+extern Vtx dimensione_Text_mesh_vtx_1[1239];
+extern Gfx dimensione_Text_mesh_tri_1[];
+extern Gfx mat_dimensione_f3dlite_material_003[];
+extern Gfx mat_revert_dimensione_f3dlite_material_003[];
+extern Gfx mat_dimensione_f3dlite_material_001[];
+extern Gfx mat_revert_dimensione_f3dlite_material_001[];
+extern Gfx dimensione_Text_mesh[];

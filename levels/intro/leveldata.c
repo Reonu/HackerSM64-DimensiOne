@@ -6,6 +6,8 @@
 
 #include "make_const_nonconst.h"
 
+#include "dimensione/model.inc.c"
+
 // 0x07000000 - 0x07000100
 static const Vtx intro_seg7_vertex_07000000[] = {
     {{{   498,    -74,     90}, 0, {   760,    796}, {0x00, 0xf1, 0x00, 0xff}}},

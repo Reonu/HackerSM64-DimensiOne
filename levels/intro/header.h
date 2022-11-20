@@ -2,6 +2,7 @@
 #define INTRO_HEADER_H
 
 #include "types.h"
+#include "dimensione/header.h"
 
 // geo
 extern const GeoLayout intro_geo_splash_screen[];

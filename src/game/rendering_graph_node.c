@@ -21,6 +21,7 @@
 #include "render_fog.h"
 #include "geo_misc.h"
 #include "segment2.h"
+#include "one_challenges.h"
 
 #include "config.h"
 #include "config/config_world.h"
@@ -1228,11 +1229,19 @@ void geo_process_background(struct GraphNodeBackground *node) {
 
         gDPPipeSync(gfx++);
         gDPSetCycleType(gfx++, G_CYC_FILL);
-        u32 fill = GPACK_RGBA5551(gGlobalFog.r, gGlobalFog.g, gGlobalFog.b, 1);
-        gDPSetFillColor(
-            gfx++,
-            (fill << 16) | fill
-        );
+
+        if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING) {
+            u32 fill = GPACK_RGBA5551(gGlobalFog.r, gGlobalFog.g, gGlobalFog.b, 1);
+            gDPSetFillColor(
+                gfx++,
+                (fill << 16) | fill
+            );
+        } else {
+            gDPSetFillColor(
+                gfx++,
+                node->background
+            );
+        }
         gDPFillRectangle(gfx++, GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(0), gBorderHeight,
         GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(0) - 1, SCREEN_HEIGHT - gBorderHeight - 1);
         gDPPipeSync(gfx++);
