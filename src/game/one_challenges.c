@@ -144,6 +144,9 @@ u32 sFailureFlags = CHALLENGE_FLAG_NONE;
 u32 internalFlagsForFrame = CHALLENGE_FLAG_NONE;
 
 
+u8 gSetChallengeMusic = FALSE;
+
+
 static u8 freshlyTouchedGround = FALSE;
 static u16 sBombsSpawnedLast = 0;
 
@@ -373,7 +376,7 @@ void reset_challenge(void) {
 
     if (gChallengeStatus == CHALLENGE_STATUS_NOT_PLAYING) {
         gChallengeStatus = CHALLENGE_STATUS_PLAYING;
-        set_background_music(0, SEQ_CUSTOM_MAINLOOP, 0);
+        gSetChallengeMusic = TRUE;
     }
 
     gChallengeStatus = CHALLENGE_STATUS_NOT_PLAYING;
