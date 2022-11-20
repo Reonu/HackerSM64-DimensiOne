@@ -420,7 +420,7 @@ s32 obj_resolve_object_collisions(s32 *targetYaw) {
             otherObject = o->collidedObjs[i];
             if (otherObject == gMarioObject) {
                 if (
-                    gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING &&
+                    is_challenge_active() &&
                     o->behavior == segmented_to_virtual(bhvTuxiesMother) &&
                     (get_challenge_obtained_flags() & CHALLENGE_FLAG_KILL_PENGUIN)
                 ) {
