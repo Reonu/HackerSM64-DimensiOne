@@ -7329,7 +7329,7 @@ chan_setlayer 2, .layer_2E34
 chan_setval 70
 chan_call .delay
 chan_setbank 10
-chan_setinstr 8
+chan_setinstr 3
 chan_setval 0x7f
 chan_call .delay
 chan_setval 0x7f
@@ -7343,13 +7343,13 @@ chan_end
 layer_call .layer_11E4
 layer_delay 0x12
 layer_transpose 0
-layer_note1 39, 0xc8, 120
+layer_note1 39, 0xe6, 120
 layer_end
 
 .layer_2E34:
 layer_delay 0x6e
 layer_transpose 0
-layer_note1 39, 0xc8, 31
+layer_note1 39, 0xe6, 31
 layer_end
 
 .layer_2E3D:

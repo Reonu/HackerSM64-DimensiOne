@@ -133,13 +133,18 @@
             "release_rate": 208,
             "envelope": "envelope0",
             "sound": "16_peach_mario2"
+        },
+        "inst23": {
+            "release_rate": 208,
+            "envelope": "envelope0",
+            "sound": "17_custom_mario_title"
         }
     },
     "instrument_list": [
         "inst0",
         "inst1",
         "inst2",
-        null,
+        "inst23",
         "inst3",
         "inst4",
         "inst5",
