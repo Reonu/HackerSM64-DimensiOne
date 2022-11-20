@@ -424,7 +424,7 @@ const LevelScript level_bob_entry[] = {
 		WARP_NODE(0x0F, LEVEL_BOB, 0x09, 0x0F, WARP_NO_CHECKPOINT),
 		WARP_NODE(0x14, LEVEL_BOB, 0x09, 0x14, WARP_NO_CHECKPOINT),
 		OBJECT(MODEL_PEACH, 2193, 39, -10, 0, 0, 0, 0x00000000, bhvPeach),
-		OBJECT(MODEL_NONE, -2039, 39, 49, 0, 0, 0, (0x12 << 16), bhvInstantActiveWarp),
+		OBJECT(MODEL_NONE, -2039, 39, 49, 0, 0, 0, (0x14 << 16), bhvInstantActiveWarp),
 		OBJECT(MODEL_WHOMP, 12, 39, 6, 0, 0, 0, (0x12), bhvWhompKingBoss),
 		TERRAIN(bob_area_9_collision),
 		MACRO_OBJECTS(bob_area_9_macro_objs),
