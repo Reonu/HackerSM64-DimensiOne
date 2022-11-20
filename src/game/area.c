@@ -27,6 +27,7 @@
 #include "engine/colors.h"
 #include "profiling.h"
 #include "one_challenges.h"
+#include "geo_misc.h"
 
 struct SpawnInfo gPlayerSpawnInfos[1];
 struct GraphNode *gGraphNodePointers[MODEL_ID_COUNT];
@@ -391,6 +392,94 @@ void play_transition_after_delay(s16 transType, s16 time, u8 red, u8 green, u8 b
     play_transition(transType, time, red, green, blue);
 }
 
+u32 sCreditsState = 0;
+u32 sCreditsTimer = 0;
+u32 sCreditsFadeTimer = 0;
+
+ALWAYS_INLINE u8 clampfu(f32 f) {
+    f = CLAMP(f, 0, 255);
+    return (u8)roundf(f);
+}
+
+#define CRED_FADE_LEN 60 
+#define CRED_HOLD_LEN 60
+#define CRED_FADE_OUT_START (CRED_FADE_LEN+CRED_HOLD_LEN)
+#define CRED_FADE_OUT_END (CRED_FADE_LEN+CRED_FADE_OUT_START)
+#define CRED_STR1 "The End"
+#define CRED_STR2 "Created by:\nArcticJaguar725\nReonu\nthecozies"
+#define CRED_STR3 "Shoutouts to\n\nWiseguy"
+
+void credits_overlay(void) {
+    sCreditsFadeTimer++;
+    Vtx *verts = alloc_display_list(4 * sizeof(*verts));
+    u8 r = END_MOTION_BLUR_R_BASE;
+    u8 g = END_MOTION_BLUR_G_BASE;
+    u8 b = END_MOTION_BLUR_B_BASE;
+    u8 alpha = 255;
+    if (sCreditsFadeTimer < CRED_FADE_OUT_START) {
+        alpha = clampfu(remap(sCreditsFadeTimer, 0, CRED_FADE_OUT_START, 0, 255));
+    }
+
+    if (verts != NULL) {
+        make_vertex(verts, 0, GFX_DIMENSIONS_FROM_LEFT_EDGE(0), 0, -1, 0, 0, r, g, b, alpha);
+        make_vertex(verts, 1, GFX_DIMENSIONS_FROM_RIGHT_EDGE(0), 0, -1, 0, 0, r, g, b, alpha);
+        make_vertex(verts, 2, GFX_DIMENSIONS_FROM_RIGHT_EDGE(0), SCREEN_HEIGHT, -1, 0, 0, r, g, b, alpha);
+        make_vertex(verts, 3, GFX_DIMENSIONS_FROM_LEFT_EDGE(0), SCREEN_HEIGHT, -1, 0, 0, r, g, b, alpha);
+    }
+
+    gSPDisplayList(gDisplayListHead++, dl_proj_mtx_fullscreen);
+    gDPSetCombineMode(gDisplayListHead++, G_CC_SHADE, G_CC_SHADE);
+    gDPSetRenderMode(gDisplayListHead++, G_RM_AA_XLU_SURF, G_RM_AA_XLU_SURF2);
+    gSPVertex(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(verts), 4, 0);
+    gSPDisplayList(gDisplayListHead++, dl_draw_quad_verts_0123);
+    gSPDisplayList(gDisplayListHead++, dl_screen_transition_end);
+}
+
+void credits_text(void) {
+    if (sCreditsState == 0) {
+        sCreditsTimer = sCreditsFadeTimer = 0;
+        return;
+    }
+
+    // struct MarioState *m = gMarioState;
+    
+    sCreditsTimer++;
+    
+    if (sCreditsState > 0 && sCreditsTimer > CRED_FADE_OUT_END) {
+        sCreditsTimer = 0;
+        sCreditsState++;
+    }
+
+    credits_overlay();
+
+    u8 alpha = 255;
+    if (sCreditsTimer < CRED_FADE_LEN)
+        alpha = clampfu(remap(sCreditsTimer, 0, CRED_FADE_LEN, 0, 255));
+    else if (sCreditsTimer > CRED_FADE_LEN + CRED_HOLD_LEN)
+        alpha = clampfu(remap(sCreditsTimer, CRED_FADE_OUT_START, CRED_FADE_OUT_END, 255, 0));
+    print_set_envcolour(0xFF, 0xFF, 0xFF, alpha);
+    // osSyncPrintf("%4d | %4d | %4d\n", sCreditsState, alpha, sCreditsTimer);
+
+    switch (sCreditsState)
+    {
+    case 1: {
+        print_small_text(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, CRED_STR1, PRINT_TEXT_ALIGN_CENTER, PRINT_ALL, FONT_DEFAULT);
+        break;
+    }
+    case 2: {
+        print_small_text(SCREEN_WIDTH/2, SCREEN_HEIGHT/3, CRED_STR2, PRINT_TEXT_ALIGN_CENTER, PRINT_ALL, FONT_DEFAULT);
+        break;
+    }
+    case 3: {
+        print_small_text(SCREEN_WIDTH/2, SCREEN_HEIGHT/3, CRED_STR3, PRINT_TEXT_ALIGN_CENTER, PRINT_ALL, FONT_DEFAULT);
+        break;
+    }
+    
+    default:
+        break;
+    }
+}
+
 void render_game(void) {
     PROFILER_GET_SNAPSHOT_TYPE(PROFILER_DELTA_COLLISION);
     if (gCurrentArea != NULL && !gWarpTransition.pauseRendering) {
@@ -407,7 +496,11 @@ void render_game(void) {
                       SCREEN_HEIGHT - gBorderHeight);
         render_hud();
 
-        challenge_update();
+        if (gMarioState->action != ACT_END_PEACH_CUTSCENE) {
+            sCreditsState = sCreditsTimer = 0;
+            challenge_update();
+        }
+        else credits_text();
 
         gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         render_text_labels();

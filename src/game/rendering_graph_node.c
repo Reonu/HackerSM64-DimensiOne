@@ -1228,7 +1228,11 @@ void geo_process_background(struct GraphNodeBackground *node) {
 
         gDPPipeSync(gfx++);
         gDPSetCycleType(gfx++, G_CYC_FILL);
-        gDPSetFillColor(gfx++, node->background);
+        u32 fill = GPACK_RGBA5551(gGlobalFog.r, gGlobalFog.g, gGlobalFog.b, 1);
+        gDPSetFillColor(
+            gfx++,
+            (fill << 16) | fill
+        );
         gDPFillRectangle(gfx++, GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(0), gBorderHeight,
         GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(0) - 1, SCREEN_HEIGHT - gBorderHeight - 1);
         gDPPipeSync(gfx++);

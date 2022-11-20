@@ -9,5 +9,6 @@ float cosf(float);
 double cos(double);
 
 float sqrtf(float);
+float floorf(float);
 
 #endif

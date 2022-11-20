@@ -8,6 +8,16 @@
 
 #define MARIO_MAX_HEALTH ((gChallengeStatus == CHALLENGE_STATUS_NOT_PLAYING) ? 0x880 : 0x100)
 
+#define END_MOTION_FOG_NEAR 860
+#define END_MOTION_FOG_FAR 940
+#define END_MOTION_BLUR_MAX 180
+#define END_MOTION_BLUR_R_BASE (171)
+#define END_MOTION_BLUR_G_BASE (110)
+#define END_MOTION_BLUR_B_BASE (158)
+#define END_MOTION_BLUR_R (END_MOTION_BLUR_R_BASE*.4f)
+#define END_MOTION_BLUR_G (END_MOTION_BLUR_G_BASE*.4f)
+#define END_MOTION_BLUR_B (END_MOTION_BLUR_B_BASE*.4f)
+
 s32 is_anim_at_end(struct MarioState *m);
 s32 is_anim_past_end(struct MarioState *m);
 s16 set_mario_animation(struct MarioState *m, s32 targetAnimID);

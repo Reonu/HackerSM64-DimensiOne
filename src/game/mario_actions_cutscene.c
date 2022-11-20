@@ -30,6 +30,7 @@
 #include "one_challenges.h"
 #include "fb_effects.h"
 #include "render_fog.h"
+#include "mario.h"
 
 static struct Object *sIntroWarpPipeObj;
 struct Object *sEndPeachObj;
@@ -180,12 +181,12 @@ enum {
 // #define END_MOTION_BLUR_G 10
 // #define END_MOTION_BLUR_B 15
 // [171.47095173597336, 133.88899236917496, 157.93373733758926]
-#define END_MOTION_FOG_NEAR 860
-#define END_MOTION_FOG_FAR 940
-#define END_MOTION_BLUR_MAX 180
-#define END_MOTION_BLUR_R (171*.4f)
-#define END_MOTION_BLUR_G (134*.4f)
-#define END_MOTION_BLUR_B (158*.4f)
+
+
+
+
+
+
 
 void bhv_end_peach_loop(void) {
     if (o->oAction == 0) {
@@ -224,7 +225,10 @@ void bhv_end_peach_loop(void) {
         }
         return;
     }
-    run_motion_blur(END_MOTION_BLUR_MAX);
+
+    if (o->oTimer < 400) {
+        run_motion_blur(END_MOTION_BLUR_MAX);
+    }
     update_global_fog_override(
         20, 20, 20, 0,
         END_MOTION_FOG_NEAR,
@@ -2455,6 +2459,8 @@ static void end_peach_cutscene_kiss_from_peach(struct MarioState *m) {
     }
 }
 
+extern u32 sCreditsState;
+
 static void end_peach_cutscene_star_dance(struct MarioState *m) {
     s32 animFrame = set_mario_animation(m, MARIO_ANIM_CREDITS_PEACE_SIGN);
 
@@ -2471,6 +2477,7 @@ static void end_peach_cutscene_star_dance(struct MarioState *m) {
     if (m->actionTimer < 52) {
         m->marioBodyState->eyeState = MARIO_EYES_HALF_CLOSED;
     }
+    // osSyncPrintf("time %d\n", m->actionTimer);
 
     switch (m->actionTimer) {
         case  70: sPeachManualBlinkTime = 1; break;
@@ -2483,11 +2490,14 @@ static void end_peach_cutscene_star_dance(struct MarioState *m) {
 //             seq_player_unlower_volume(SEQ_PLAYER_LEVEL, 60);
 // #endif
 //             play_cutscene_music(SEQUENCE_ARGS(15, SEQ_EVENT_CUTSCENE_CREDITS));
+            // play_transition(WARP_TRANSITION_FADE_INTO_COLOR, 60, END_MOTION_BLUR_R, END_MOTION_BLUR_G, END_MOTION_BLUR_B);
+            sCreditsState++;
             break;
 
         case 300:
-            set_mario_action(m, ACT_IDLE, 0);
+            // set_mario_action(m, ACT_IDLE, 0);
             // advance_cutscene_step(m);
+            // while(TRUE) {};
             break;
     }
 }
