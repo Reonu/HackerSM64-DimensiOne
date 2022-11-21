@@ -153,15 +153,15 @@ void render_tiled_screen_effect(Texture *image, s32 width, s32 height, s32 mode)
             0
         );
         gSPScisTextureRectangle(gDisplayListHead++,
-            posW << 2,
-            posH << 2,
-            ((posW + imW) - mOne) << 2,
-            ((posH + imH) - mOne) << 2,
+            qs102(posW),
+            qs102(posH),
+            qs102((posW + imW) - mOne),
+            qs102((posH + imH) - mOne),
             G_TX_RENDERTILE,
             0,
             0,
-            1 << 10,
-            1 << 10
+            qs510(1),
+            qs510(1)
         );
     }
     // If there's a remainder on the vertical side, then it will cycle through that too.
@@ -177,10 +177,10 @@ void render_tiled_screen_effect(Texture *image, s32 width, s32 height, s32 mode)
                 G_IM_SIZ_16b,
                 width,
                 height,
-                posW,
-                posH,
-                ((posW + imW) - 1),
-                (height - 1),
+                posW, // uls
+                posH, // ult
+                ((posW + imW) - 1), // lrs
+                gIsConsole ? (height - 1) : ((posH + imH) - 1), // lrt
                 0,
                 (G_TX_NOMIRROR | G_TX_WRAP),
                 (G_TX_NOMIRROR | G_TX_WRAP),
@@ -190,13 +190,15 @@ void render_tiled_screen_effect(Texture *image, s32 width, s32 height, s32 mode)
                 0
             );
             gSPScisTextureRectangle(gDisplayListHead++,
-                posW << 2,
-                posH << 2,
-                ((posW + imW) - mOne) << 2,
-                ((posH + imH) - mOne) << 2,
-                G_TX_RENDERTILE, 0, 0,
-                1 << 10,
-                1 << 10
+                qs102(posW),
+                qs102(posH),
+                qs102((posW + imW) - mOne),
+                qs102((posH + imH) - mOne),
+                G_TX_RENDERTILE,
+                0,
+                0,
+                qs510(1),
+                qs510(1)
             );
         }
     }
