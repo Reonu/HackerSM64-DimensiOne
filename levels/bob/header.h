@@ -48,4 +48,8 @@ extern const LevelScript level_bob_entry[];
 
 #include "levels/bob/BulletBillCannon/collision_header.h"
 
+#include "levels/bob/moving_platform_geo_challenge_10_larger/geo_header.h"
+
+#include "levels/bob/moving_platform_geo_challenge_10_larger/collision_header.h"
+
 #endif
