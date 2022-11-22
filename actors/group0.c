@@ -49,3 +49,4 @@
 #include "penguin/anims/data.inc.c"
 #include "penguin/anims/table.inc.c"
 #include "penguin/collision.inc.c"
+#include "koopa_without_shell_custom/model.inc.c"

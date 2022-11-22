@@ -438,4 +438,6 @@ extern const Collision penguin_seg5_collision_05008B88[];
 
 #include "spring/geo_header.h"
 
+#include "koopa_without_shell_custom/geo_header.h"
+
 #endif
