@@ -460,6 +460,23 @@ void challenge_update(void) {
     //     // print_small_text(16, SCREEN_HEIGHT - 64, ALL_LETTERS, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_DEFAULT);
     // }
 
+#ifdef ENABLE_DEBUG_FREE_MOVE
+    if (
+        (gPlayer1Controller->buttonDown & (Z_TRIG | R_TRIG)) == (Z_TRIG | R_TRIG) &&
+        (gPlayer1Controller->buttonPressed & (Z_TRIG | R_TRIG))
+    ) {
+        if (
+            gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING &&
+            sDelayedWarpOp == WARP_OP_NONE &&
+            !gWarpTransition.isActive &&
+            sCurrPlayMode == PLAY_MODE_NORMAL
+        ) {
+            gChallengeStatus = CHALLENGE_STATUS_WIN;
+            level_trigger_warp(gMarioState, WARP_OP_DEBUG_CHALLENGE_SKIP); // warp to next challenge
+        }
+    }
+#endif
+
     if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING) {
         if (gWaitingToStart) {
             set_time_stop_flags(TIME_STOP_ENABLED | TIME_STOP_ALL_OBJECTS);
@@ -488,7 +505,7 @@ void challenge_update(void) {
 #endif
         if (
             // ONE_TODO: future conditions
-            // gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING &&
+            gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING &&
             gChallengeStatus != CHALLENGE_STATUS_WIN &&
             !gWarpTransition.isActive &&
             sCurrPlayMode == PLAY_MODE_NORMAL
@@ -496,23 +513,6 @@ void challenge_update(void) {
             level_trigger_warp(gMarioState, WARP_OP_START_CHALLENGES); // reset level
         }
     }
-
-#ifdef ENABLE_DEBUG_FREE_MOVE
-    if (
-        (gPlayer1Controller->buttonDown & (Z_TRIG | R_TRIG)) == (Z_TRIG | R_TRIG) &&
-        (gPlayer1Controller->buttonPressed & (Z_TRIG | R_TRIG))
-    ) {
-        if (
-            gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING &&
-            sDelayedWarpOp == WARP_OP_NONE &&
-            !gWarpTransition.isActive &&
-            sCurrPlayMode == PLAY_MODE_NORMAL
-        ) {
-            gChallengeStatus = CHALLENGE_STATUS_WIN;
-            level_trigger_warp(gMarioState, WARP_OP_DEBUG_CHALLENGE_SKIP); // warp to next challenge
-        }
-    }
-#endif
 
     if (gChallengeStatus == CHALLENGE_STATUS_NOT_PLAYING) {
         update_last_print_vars(sObtainedChallengeFlags, sFailureFlags);

@@ -958,9 +958,11 @@ void initiate_delayed_warp(void) {
                     // fallthrough
                 default:
                     if (gChallengeStatus == CHALLENGE_STATUS_WIN && sDelayedWarpOp != WARP_OP_STAR_EXIT) {
+                        if (sDelayedWarpOp != WARP_OP_DEBUG_CHALLENGE_SKIP) {
+                            sFreezeFrames = 10;
+                        }
                         sDelayedWarpOp = WARP_OP_STAR_EXIT;
                         sSourceWarpNodeId = WARP_NODE_DEFAULT;
-                        sFreezeFrames = 10;
                     }
 
                     tmpChallengeWarpID = sSourceWarpNodeId;
