@@ -3785,6 +3785,7 @@ const BehaviorScript bhvMessagePanel[] = {
     DROP_TO_FLOOR(),
     SET_HITBOX(/*Radius*/ 150, /*Height*/ 80),
     SET_INT(oWoodenPostTotalMarioAngle, 0),
+    CALL_NATIVE(bhv_despawn_on_console),
     CALL_NATIVE(bhv_init_room),
     CALL_NATIVE(load_object_static_model),
     BEGIN_LOOP(),

@@ -2605,3 +2605,9 @@ Gfx *geo_set_spring_color(s32 callContext, struct GraphNode *node, UNUSED void *
     }
     return dlStart;
 }
+
+void bhv_despawn_on_console(void) {
+    if (gIsConsole && BPARAM1 == 0xFF) {
+        obj_mark_for_deletion(o);
+    }
+}
