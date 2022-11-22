@@ -957,6 +957,12 @@ void initiate_delayed_warp(void) {
                     }
                     // fallthrough
                 default:
+                    if (gChallengeStatus == CHALLENGE_STATUS_WIN && sDelayedWarpOp != WARP_OP_STAR_EXIT) {
+                        sDelayedWarpOp = WARP_OP_STAR_EXIT;
+                        sSourceWarpNodeId = WARP_NODE_DEFAULT;
+                        sFreezeFrames = 10;
+                    }
+
                     tmpChallengeWarpID = sSourceWarpNodeId;
                     warpNode = area_get_warp_node(sSourceWarpNodeId);
 
@@ -965,7 +971,6 @@ void initiate_delayed_warp(void) {
                     }
 
                     if (sDelayedWarpOp == WARP_OP_START_CHALLENGES && gChallengeStatus == CHALLENGE_STATUS_NOT_PLAYING) {
-                        gChallengeStatus = CHALLENGE_STATUS_PLAYING;
                         warpNode = area_get_warp_node(WARP_NODE_DEATH);
                         if (warpNode != NULL) {
                             gChallengeLevel = warpNode->node.destNode - 1;
