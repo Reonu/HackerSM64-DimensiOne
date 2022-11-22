@@ -342,8 +342,11 @@ static void koopa_unshelled_act_run(void) {
 
         // If shell exists, then turn toward shell
         if (
-            gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING &&
-            ((get_challenge_obtained_flags() & get_challenge_obtained_flags()) & CHALLENGE_FLAG_KNOCKED_KOOPA)
+            gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING && gChallengeLevel != 18 &&
+            (
+                gChallengeLevel == 14 ||
+                ((get_challenge_obtained_flags() & get_challenge_obtained_flags()) & CHALLENGE_FLAG_INTERACTED_KOOPA)
+            )
         ) {
             shell = cur_obj_find_nearest_object_with_behavior(bhvMario, &distToShell); // Chase Mario instead of shell
             shouldAttackMario = TRUE;
@@ -809,7 +812,7 @@ void bhv_koopa_update(void) {
     } else {
         o->oAnimState = 1;
         if (o->oKoopaMovementType == KOOPA_BP_UNSHELLED && o->activeFlags == ACTIVE_FLAG_DEACTIVATED) {
-            add_challenge_kill_flags(CHALLENGE_FLAG_KILL_KOOPA);
+            add_challenge_kill_flags(CHALLENGE_FLAG_KILL_KOOPA); // Covers interacted with Koopa
         }
     }
 

@@ -27,6 +27,7 @@
 #include "spawn_object.h"
 #include "spawn_sound.h"
 #include "puppylights.h"
+#include "one_challenges.h"
 
 #include "levels/bob/header.h"
 
@@ -2246,7 +2247,7 @@ s32 obj_attack_collided_from_other_object(struct Object *obj) {
     if (obj->numCollidedObjs != 0) {
         struct Object *other = obj->collidedObjs[0];
 
-        if (other != gMarioObject) {
+        if (other != gMarioObject && !(other->behavior == segmented_to_virtual(bhvKoopa) && gChallengeLevel == 14)) {
             s32 oneIsBobOmb = obj_has_behavior(obj, bhvBobomb) || obj_has_behavior(other, bhvBobomb);
             if (oneIsBobOmb) {
                 if (check_obj_is_LIT(obj) || check_obj_is_LIT(other)) {

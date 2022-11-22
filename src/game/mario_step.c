@@ -9,6 +9,7 @@
 #include "game_init.h"
 #include "interaction.h"
 #include "mario_step.h"
+#include "one_challenges.h"
 
 #include "config.h"
 
@@ -405,6 +406,7 @@ struct Surface *check_ledge_grab(struct MarioState *m, struct Surface *prevWall,
         || ledgePos[1] < nextPos[1] + 100.0f
 #ifdef DONT_LEDGE_GRAB_STEEP_SLOPES
         || (*ledgeFloor)->normal.y < COS25 // H64 TODO: check if floor is actually slippery
+        || (SURFACE_IS_QUICKSAND((*ledgeFloor)->type) && gChallengeLevel == 14)
 #endif
     ) {
         return NULL;

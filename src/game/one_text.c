@@ -16,8 +16,8 @@ u32 typeTimerArray[CHALLENGE_NAME_TOTAL] = {0};
 
 u32 challengeTypeDisplayTimer = -1U;
 
-static u32 sObtainedChallengeFlagsLast = CHALLENGE_FLAG_NONE;
-static u32 sFailureFlagsLast = CHALLENGE_FLAG_NONE;
+static oneflags_t sObtainedChallengeFlagsLast = CHALLENGE_FLAG_NONE;
+static oneflags_t sFailureFlagsLast = CHALLENGE_FLAG_NONE;
 u32 gChallengesPrintTimer = -1U;
 
 static void loser_text(void) {
@@ -32,8 +32,6 @@ static void update_timer(void) {
     if (!((get_challenge_required_flags() | get_challenge_enforced_flags()) & CHALLENGE_FLAG_TIMER)) {
         return;
     }
-
-    
     
     if (sCurrPlayMode != PLAY_MODE_PAUSED && is_challenge_active() && !((gTimeStopState & (TIME_STOP_ENABLED | TIME_STOP_ALL_OBJECTS)) == (TIME_STOP_ENABLED | TIME_STOP_ALL_OBJECTS))) {
         gChallengeTimer--;
@@ -55,14 +53,14 @@ static void update_timer(void) {
 
 static char* get_challenge_type_text_entry(u8 typeIndex) {
     s32 arrayVal = 0;
-    u32 enforcedFlags = get_challenge_enforced_flags();
-    u32 requiredFlags = get_challenge_required_flags();
+    oneflags_t enforcedFlags = get_challenge_enforced_flags();
+    oneflags_t requiredFlags = get_challenge_required_flags();
 
     // Stupid way of getting an array index, but it works for 2 entries that combine into a third...
-    if (enforcedFlags & (1U << typeIndex)) {
+    if (enforcedFlags & (1ULL << typeIndex)) {
         arrayVal |= (1 << 0);
     }
-    if (requiredFlags & (1U << typeIndex)) {
+    if (requiredFlags & (1ULL << typeIndex)) {
         arrayVal |= (1 << 1);
     }
     arrayVal--;
@@ -80,11 +78,11 @@ static void print_challenge_type_images(s32 x, s32 y, u8 typeIndex, u8 alphaFram
 
     ColorRGBA color = {0xFF, 0xFF, 0xFF, 0xFF};
 
-    u32 typeFlag = (1U << typeIndex);
-    u32 obtainedFlags = get_challenge_obtained_flags();
-    u32 enforcedFlags = get_challenge_enforced_flags();
-    u32 requiredFlags = get_challenge_required_flags();
-    u32 failureFlags = get_challenge_failure_flags();
+    oneflags_t typeFlag = (1ULL << typeIndex);
+    oneflags_t obtainedFlags = get_challenge_obtained_flags();
+    oneflags_t enforcedFlags = get_challenge_enforced_flags();
+    oneflags_t requiredFlags = get_challenge_required_flags();
+    oneflags_t failureFlags = get_challenge_failure_flags();
 
     if (challengeTypeDisplayTimer < alphaFrames) {
         color[3] = 255.0f * (challengeTypeDisplayTimer / (f32) alphaFrames); // Fade in
@@ -238,7 +236,7 @@ void print_challenge_types(void) {
 #undef FADE_OUT_FRAMES
 #undef FADE_OUT_AFTER_FRAMES
 
-void update_last_print_vars(u32 obtained, u32 failure) {
+void update_last_print_vars(oneflags_t obtained, oneflags_t failure) {
     sObtainedChallengeFlagsLast = obtained;
     sFailureFlagsLast = failure;
 }

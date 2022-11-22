@@ -501,12 +501,12 @@ static void level_cmd_place_object(void) {
         u32 bparams = CMD_GET(u32, 16);
         if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING) {
             u8 level = gChallengeLevel;
-            if (level >= sizeof(u32) * 8) {
-                level = (sizeof(u32) * 8) - 1;
+            if (level >= sizeof(oneflags_t) * 8) {
+                level = (sizeof(oneflags_t) * 8) - 1;
             }
 
             // Mario vs Wario Ware system
-            if (!(CMD_GET(u32, 0x1C) & (1 << level))) {
+            if (!(CMD_GET(u64, 0x18) & (1ULL << level))) { // Assumed to be u64 here
                 sCurrentCmd = CMD_NEXT;
                 return;
             }
@@ -518,7 +518,7 @@ static void level_cmd_place_object(void) {
             }
         }
 
-        ModelID16 model = CMD_GET(u32, 0x18);
+        ModelID16 model = CMD_GET(u32, 0x20);
         struct SpawnInfo *spawnInfo = alloc_only_pool_alloc(sLevelPool, sizeof(struct SpawnInfo));
 
         vec3s_set(spawnInfo->startPos, CMD_GET(s16, 4),
@@ -954,8 +954,8 @@ static void level_cmd_moving_platform(void) {
         u32 bparams = CMD_GET(u32, 16);
         if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING) {
             u8 level = gChallengeLevel;
-            if (level >= sizeof(u32) * 8) {
-                level = (sizeof(u32) * 8) - 1;
+            if (level >= sizeof(oneflags_t) * 8) {
+                level = (sizeof(oneflags_t) * 8) - 1;
             }
 
             // bparam4 overrides (1-indexed)
