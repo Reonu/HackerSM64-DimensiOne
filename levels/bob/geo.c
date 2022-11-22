@@ -23,3 +23,4 @@
 #include "levels/bob/moving_platform_geo/geo.inc.c"
 #include "levels/bob/moving_platform_geo_challenge_10/geo.inc.c"
 #include "levels/bob/BulletBillCannon/geo.inc.c"
+#include "levels/bob/moving_platform_geo_challenge_10_larger/geo.inc.c"

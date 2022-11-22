@@ -294,7 +294,6 @@ void bhv_1up_hidden_in_pole_loop(void) {
                 o->oVelY = 40.0f;
                 o->oAction = MUSHROOM_ACT_LOOP_IN_AIR;
                 o->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
-                play_sound(SOUND_GENERAL2_1UP_APPEAR, gGlobalSoundSource);
             }
             break;
 
@@ -305,8 +304,13 @@ void bhv_1up_hidden_in_pole_loop(void) {
 
         case MUSHROOM_ACT_LOOP_IN_AIR:
             object_step();
+            if (o->oTimer == 1) {
+                play_sound(SOUND_GENERAL2_1UP_APPEAR, gGlobalSoundSource);
+            }
             if (o->oTimer > 17) {
-                spawn_object(o, MODEL_NONE, bhvSparkleSpawn);
+                if (!gIsConsole || (o->oTimer % 3) == 0) { // RDP Lag!
+                    spawn_object(o, MODEL_NONE, bhvSparkleSpawn);
+                }
             }
 
             one_up_loop_in_air();

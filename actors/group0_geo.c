@@ -27,3 +27,6 @@
 #include "moneybag/geo.inc.c"
 
 #include "penguin/geo.inc.c"
+#include "koopa_without_shell_custom/geo.inc.c"
+#include "shell_custom/geo.inc.c"
+#include "koopa_with_shell_custom/geo.inc.c"

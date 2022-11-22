@@ -9,17 +9,20 @@
 #define CMD_BBH(a, b, c) ((uintptr_t)(_SHIFTL(a, 24, 8) | _SHIFTL(b, 16, 8) | _SHIFTL(c, 0, 16)) << 32)
 #define CMD_HH(a, b) ((uintptr_t)(_SHIFTL(a, 16, 16) | _SHIFTL(b, 0, 16)) << 32)
 #define CMD_W(a) ((uintptr_t)(a) << 32)
+#define CMD_LL(a) ((u64)(a))
 #else
 #define CMD_BBBB(a, b, c, d) (_SHIFTL(a, 24, 8) | _SHIFTL(b, 16, 8) | _SHIFTL(c, 8, 8) | _SHIFTL(d, 0, 8))
 #define CMD_BBH(a, b, c) (_SHIFTL(a, 24, 8) | _SHIFTL(b, 16, 8) | _SHIFTL(c, 0, 16))
 #define CMD_HH(a, b) (_SHIFTL(a, 16, 16) | _SHIFTL(b, 0, 16))
 #define CMD_W(a) (a)
+#define CMD_LL(a) ((u32)((u64)a >> 32)), ((u32)a)
 #endif
 #else
 #define CMD_BBBB(a, b, c, d) (_SHIFTL(a, 0, 8) | _SHIFTL(b, 8, 8) | _SHIFTL(c, 16, 8) | _SHIFTL(d, 24, 8))
 #define CMD_BBH(a, b, c) (_SHIFTL(a, 0, 8) | _SHIFTL(b, 8, 8) | _SHIFTL(c, 16, 16))
 #define CMD_HH(a, b) (_SHIFTL(a, 0, 16) | _SHIFTL(b, 16, 16))
 #define CMD_W(a) (a)
+#define CMD_LL(a) (CMD_W((u32)a)), CMD_W((u32)((u64)a >> 32))
 #endif
 #define CMD_PTR(a) ((uintptr_t)(a))
 

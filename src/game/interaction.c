@@ -1381,8 +1381,8 @@ u32 interact_bounce_top(struct MarioState *m, u32 interactType, struct Object *o
         }
     } else if (take_damage_and_knock_back(m, obj)) {
         if (interactType == INTERACT_KOOPA) {
-            add_challenge_flags(CHALLENGE_FLAG_KNOCKED_KOOPA);
-            if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING && (get_challenge_enforced_flags() & CHALLENGE_FLAG_KNOCKED_KOOPA)) {
+            add_challenge_flags(CHALLENGE_FLAG_INTERACTED_KOOPA);
+            if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING && (get_challenge_enforced_flags() & CHALLENGE_FLAG_INTERACTED_KOOPA)) {
                 m->actionArg = -1; // Invincibility timer
             }
         }

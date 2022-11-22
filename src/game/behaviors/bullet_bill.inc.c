@@ -20,10 +20,20 @@ void bullet_bill_act_0(void) {
 }
 
 void bullet_bill_act_1(void) {
+    if (o->oTimer == 0) {
+        o->oBulletBillWaitTime = random_u16() % 90;
+    }
+
+    if (o->oTimer >= o->oBulletBillWaitTime) {
+        o->oAction = 2;
+    }
+
+/*
     s16 sp1E = abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw);
     if (sp1E < 0x2000 && 400.0f < o->oDistanceToMario && o->oDistanceToMario < 1500.0f) {
         o->oAction = 2;
     }
+*/
 }
 
 void bullet_bill_act_2(void) {
@@ -40,7 +50,10 @@ void bullet_bill_act_2(void) {
             cur_obj_update_floor_and_walls();
         }
 
-        spawn_object(o, MODEL_SMOKE, bhvWhitePuffSmoke);
+        if (!gIsConsole) { // RDP Lag!
+            spawn_object(o, MODEL_SMOKE, bhvWhitePuffSmoke);
+        }
+
         o->oForwardVel = 30.0f;
 
         if (o->oDistanceToMario > 300.0f) {
@@ -52,7 +65,7 @@ void bullet_bill_act_2(void) {
             cur_obj_shake_screen(SHAKE_POS_SMALL);
         }
 
-        if (o->oTimer > 150 || o->oMoveFlags & OBJ_MOVE_HIT_WALL) {
+        if (o->oTimer > 210 || o->oMoveFlags & OBJ_MOVE_HIT_WALL) {
             o->oAction = 3;
             spawn_mist_particles();
         }

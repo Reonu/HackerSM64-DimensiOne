@@ -14,7 +14,7 @@
 #include "rendering_graph_node.h"
 
 // Actual data for all challenges
-static struct OneChallengeLevel sChallengeLevels[sizeof(u32)*8] = {
+static struct OneChallengeLevel sChallengeLevels[sizeof(oneflags_t)*8] = {
     {    /*00*/
         (CHALLENGE_FLAG_COIN), // Requirements (i.e. "At least one of")
         (CHALLENGE_FLAG_COIN), // Enforcements (i.e. "No more than one of")
@@ -40,8 +40,8 @@ static struct OneChallengeLevel sChallengeLevels[sizeof(u32)*8] = {
         (CHALLENGE_FLAG_KILL_GOOMBA_WITH_BOMB), // Requirements
         (CHALLENGE_FLAG_KILL_GOOMBA_WITH_BOMB | CHALLENGE_FLAG_KILL_GOOMBA), // Enforcements
     }, { /*08*/
-        (CHALLENGE_FLAG_KNOCKED_KOOPA), // Requirements  TODO: for this challenge only, add on timer flag after meeting knocked Koopa condition
-        (CHALLENGE_FLAG_KNOCKED_KOOPA | CHALLENGE_FLAG_GROUND | CHALLENGE_FLAG_KILL_KOOPA), // Enforcements
+        (CHALLENGE_FLAG_INTERACTED_KOOPA), // Requirements
+        (CHALLENGE_FLAG_INTERACTED_KOOPA | CHALLENGE_FLAG_GROUND), // Enforcements
     }, { /*09*/
         (CHALLENGE_FLAG_TRIPLE_JUMP | CHALLENGE_FLAG_COIN), // Requirements
         (CHALLENGE_FLAG_TRIPLE_JUMP), // Enforcements
@@ -59,7 +59,7 @@ static struct OneChallengeLevel sChallengeLevels[sizeof(u32)*8] = {
         (CHALLENGE_FLAG_A_PRESS), // Enforcements
     }, { /*14*/
         (CHALLENGE_FLAG_TIMER), // Requirements
-        (CHALLENGE_FLAG_KILL_KOOPA), // Enforcements
+        (CHALLENGE_FLAG_INTERACTED_KOOPA), // Enforcements
     }, { /*15*/
         (CHALLENGE_FLAG_COIN), // Requirements
         (CHALLENGE_FLAG_COIN | CHALLENGE_FLAG_KILL_MONEYBAG), // Enforcements
@@ -112,6 +112,7 @@ static struct OneChallengeLevel sChallengeLevels[sizeof(u32)*8] = {
         (CHALLENGE_FLAG_NONE), // Requirements
         (CHALLENGE_FLAG_NONE), // Enforcements
     }
+    // ... (up to 64 entries if using u64 typedef)
 };
 
 
@@ -132,19 +133,19 @@ s32 gMoneybagSwap = 0;
 s32 gMoneybagCount = 0;
 
 // Flags of which challenge conditions have been met by the player
-u32 sObtainedChallengeFlags = CHALLENGE_FLAG_NONE;
+oneflags_t sObtainedChallengeFlags = CHALLENGE_FLAG_NONE;
 
 // Which challenges are being enforced? (i.e. if one of these conditions is met more than once e.g. pressing A twice, automatically fail the challenge)
-u32 sEnforcedChallengeFlags = CHALLENGE_FLAG_NONE;
+oneflags_t sEnforcedChallengeFlags = CHALLENGE_FLAG_NONE;
 
 // Which of these challenges are required in order to beat the level? (e.g. must collect one coin, or must kill one goomba)
-u32 sRequiredChallengeFlags = CHALLENGE_FLAG_NONE;
+oneflags_t sRequiredChallengeFlags = CHALLENGE_FLAG_NONE;
 
 // Which flags have been overacquired?
-u32 sFailureFlags = CHALLENGE_FLAG_NONE;
+oneflags_t sFailureFlags = CHALLENGE_FLAG_NONE;
 
 // Temporary set of flags to be applied at end of frame
-u32 internalFlagsForFrame = CHALLENGE_FLAG_NONE;
+oneflags_t internalFlagsForFrame = CHALLENGE_FLAG_NONE;
 
 
 u8 gSetChallengeMusic = FALSE;
@@ -155,6 +156,7 @@ static u16 sBombsSpawnedLast = 0;
 
 static u8 sGoombasKilled = 0;
 static u8 sKoopasKilled = 0;
+static u8 sKoopasInteracted = 0;
 static u8 sBombsKilled = 0;
 static u8 sPiranhasDisturbed = 0;
 static u8 sGoombasKilledWithBombs = 0;
@@ -199,6 +201,10 @@ static void process_kill_flags(void) {
     if (sKoopasKilled > 0) {
         sKoopasKilled--;
         add_challenge_flags(CHALLENGE_FLAG_KILL_KOOPA);
+    }
+    if (sKoopasInteracted > 0) {
+        sKoopasInteracted--;
+        add_challenge_flags(CHALLENGE_FLAG_INTERACTED_KOOPA);
     }
     if (sBombsKilled > 0) {
         sBombsKilled--;
@@ -273,8 +279,8 @@ static void check_flag_conditions(void) {
 
 // Apply internal challenge flags at end of frame for when a condition or conditions is/are met; overall challenge success/failure can be determined here automatically.
 static void add_challenge_flags_internal(void) {
-    u32 existingFlags;
-    u32 existingRequiredFlags;
+    oneflags_t existingFlags;
+    oneflags_t existingRequiredFlags;
 
     // Don't set a flag if challenge is not currently active
     if (!is_challenge_active()) {
@@ -332,22 +338,22 @@ u8 is_challenge_active(void) {
 }
 
 // What is the current status of the challenge?
-u32 get_challenge_obtained_flags(void) {
+oneflags_t get_challenge_obtained_flags(void) {
     return sObtainedChallengeFlags;
 }
 
 // Flags of which challenge conditions have been met by the player
-u32 get_challenge_enforced_flags(void) {
+oneflags_t get_challenge_enforced_flags(void) {
     return sEnforcedChallengeFlags;
 }
 
 // Which challenges are being enforced? (i.e. if one of these conditions is met more than once e.g. pressing A twice, automatically fail the challenge)
-u32 get_challenge_required_flags(void) {
+oneflags_t get_challenge_required_flags(void) {
     return sRequiredChallengeFlags;
 }
 
 // Which of these challenges are required in order to beat the level? (e.g. must collect one coin, or must kill one goomba)
-u32 get_challenge_failure_flags(void) {
+oneflags_t get_challenge_failure_flags(void) {
     return sFailureFlags;
 }
 
@@ -367,6 +373,7 @@ void reset_challenge(void) {
     
     sGoombasKilled = 0;
     sKoopasKilled = 0;
+    sKoopasInteracted = 0;
     sBombsKilled = 0;
     sPiranhasDisturbed = 0;
     sGoombasKilledWithBombs = 0;
@@ -398,8 +405,8 @@ void reset_challenge(void) {
 void start_next_challenge_level(void) {
     gChallengeLevel++;
 
-    if (gChallengeLevel >= sizeof(u32) * 8) {
-        gChallengeLevel = (sizeof(u32) * 8) - 1;
+    if (gChallengeLevel >= sizeof(oneflags_t) * 8) {
+        gChallengeLevel = (sizeof(oneflags_t) * 8) - 1;
     }
 
     start_challenge();
@@ -418,16 +425,18 @@ void start_challenge(void) {
 }
 
 // Apply a challenge flag or flags when a condition is met; updated automatically at end of frame.
-void add_challenge_flags(u32 flags) {
+void add_challenge_flags(oneflags_t flags) {
     internalFlagsForFrame |= flags;
 }
 
 // add_challenge_flags(), but allows case stacking, particularly for killing of multiple enemies on the same frame.
-void add_challenge_kill_flags(u32 flags) {
+void add_challenge_kill_flags(oneflags_t flags) {
+    if (flags & CHALLENGE_FLAG_KILL_KOOPA) {
+        sKoopasInteracted++; // Special case here
+        sKoopasKilled++;
+    }
     if (flags & CHALLENGE_FLAG_KILL_GOOMBA)
         sGoombasKilled++;
-    if (flags & CHALLENGE_FLAG_KILL_KOOPA)
-        sKoopasKilled++;
     if (flags & CHALLENGE_FLAG_KILL_BOMB)
         sBombsKilled++;
     if (flags & CHALLENGE_FLAG_SLEEPING_PIRANHA)
@@ -450,6 +459,23 @@ void challenge_update(void) {
     //     print_small_text(16, SCREEN_HEIGHT - 24, PRESS_L_TO_RESTART, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_DEFAULT);
     //     // print_small_text(16, SCREEN_HEIGHT - 64, ALL_LETTERS, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_DEFAULT);
     // }
+
+#ifdef ENABLE_DEBUG_FREE_MOVE
+    if (
+        (gPlayer1Controller->buttonDown & (Z_TRIG | R_TRIG)) == (Z_TRIG | R_TRIG) &&
+        (gPlayer1Controller->buttonPressed & (Z_TRIG | R_TRIG))
+    ) {
+        if (
+            gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING &&
+            sDelayedWarpOp == WARP_OP_NONE &&
+            !gWarpTransition.isActive &&
+            sCurrPlayMode == PLAY_MODE_NORMAL
+        ) {
+            gChallengeStatus = CHALLENGE_STATUS_WIN;
+            level_trigger_warp(gMarioState, WARP_OP_DEBUG_CHALLENGE_SKIP); // warp to next challenge
+        }
+    }
+#endif
 
     if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING) {
         if (gWaitingToStart) {
@@ -479,7 +505,7 @@ void challenge_update(void) {
 #endif
         if (
             // ONE_TODO: future conditions
-            // gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING &&
+            gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING &&
             gChallengeStatus != CHALLENGE_STATUS_WIN &&
             !gWarpTransition.isActive &&
             sCurrPlayMode == PLAY_MODE_NORMAL
@@ -487,23 +513,6 @@ void challenge_update(void) {
             level_trigger_warp(gMarioState, WARP_OP_START_CHALLENGES); // reset level
         }
     }
-
-#ifdef ENABLE_DEBUG_FREE_MOVE
-    if (
-        (gPlayer1Controller->buttonDown & (Z_TRIG | R_TRIG)) == (Z_TRIG | R_TRIG) &&
-        (gPlayer1Controller->buttonPressed & (Z_TRIG | R_TRIG))
-    ) {
-        if (
-            gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING &&
-            sDelayedWarpOp == WARP_OP_NONE &&
-            !gWarpTransition.isActive &&
-            sCurrPlayMode == PLAY_MODE_NORMAL
-        ) {
-            gChallengeStatus = CHALLENGE_STATUS_WIN;
-            level_trigger_warp(gMarioState, WARP_OP_DEBUG_CHALLENGE_SKIP); // warp to next challenge
-        }
-    }
-#endif
 
     if (gChallengeStatus == CHALLENGE_STATUS_NOT_PLAYING) {
         update_last_print_vars(sObtainedChallengeFlags, sFailureFlags);

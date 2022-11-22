@@ -16,8 +16,8 @@ const Trajectory bob_area_6_spline_ASplineChallenge0A_002[] = {
 	TRAJECTORY_END(),
 };
 const Trajectory bob_area_6_spline_ASplineChallenge0A_003[] = {
-	TRAJECTORY_POS( 0, 767, 156, 3277),
-	TRAJECTORY_POS( 1, 767, 156, 2010),
+	TRAJECTORY_POS( 0, 767, 16, 3676),
+	TRAJECTORY_POS( 1, 767, 16, 2410),
 	TRAJECTORY_END(),
 };
 const Trajectory bob_area_6_spline_ASplineChallenge0B[] = {
