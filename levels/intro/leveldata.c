@@ -3500,3 +3500,7 @@ const f32 intro_seg7_table_scale_2[] = {
     0.048600f, 0.048600f, 0.012800f, 0.012800f,
     0.012800f, 0.000000f, 0.000000f, 0.000000f,
 };
+
+ALIGNED64 const u8 fbe_warning[] = {
+#include "levels/intro/fbe_warning.rgba16.inc.c"
+};

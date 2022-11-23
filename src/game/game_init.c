@@ -701,6 +701,7 @@ void init_controllers(void) {
     gSramProbe = nuPiInitSram();
 #endif
 
+    s32 maxPort = 0;
     // Loop over the 4 ports and link the controller structs to the appropriate
     // status and pad. Interestingly, although there are pointers to 3 controllers,
     // only 2 are connected here. The third seems to have been reserved for debug
@@ -718,8 +719,12 @@ void init_controllers(void) {
 #endif
             gControllers[cont].statusData = &gControllerStatuses[port];
             gControllers[cont++].controllerData = &gControllerPads[port];
+            maxPort = port;
         }
     }
+
+    if (gIsConsole) osContSetCh(MIN(2, maxPort+1));
+
     if ((__osControllerTypes[1] == CONT_TYPE_GCN) && (gIsConsole)) {
         gGamecubeControllerPort = 1;
         gPlayer1Controller = &gControllers[1];

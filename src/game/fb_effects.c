@@ -10,6 +10,7 @@
 #include "engine/math_util.h"
 #include "segment2.h"
 #include "print.h"
+#include "levels/intro/header.h"
 
 
 extern u16 sRenderedFramebuffer;
@@ -241,12 +242,11 @@ void render_motion_blur(void) {
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255);
 }
 
+static s32 sVerifiedFBE = FALSE; 
+
 void render_fb_effects(void) {
     check_fbe();
     if (!checkedFBE) return;
-    // if (!check_fbe()) {
-    //     return;
-    // }
 
     if (sGoalBlur > 200) {
         sFBEffects.a = approach_s16_asymptotic(sFBEffects.a, sGoalBlur, 18);
@@ -258,4 +258,54 @@ void render_fb_effects(void) {
         render_motion_blur();
     }
     sGoalBlur = 0;
+    if (!sVerifiedFBE) {
+        render_fbe_warning();
+    }
+}
+
+s32 render_fbe_warning(void) {
+    if (gFBE || !checkedFBE) return FALSE;
+
+    f32 s = sins(gGlobalTimer*DEGREES(4));
+    s = 1.0f - sqr(sqr(s));
+    s32 bloob = roundf(120 - ((s / 2.0f) * 120.0f));
+
+    gDPSetEnvColor(gDisplayListHead++, bloob, 0, 0, 255);
+
+    gDPSetCombineLERP(gDisplayListHead++,
+        NOISE, 0, ENVIRONMENT, TEXEL0,
+        0, 0, 0, 1,
+        NOISE, 0, ENVIRONMENT, TEXEL0,
+        0, 0, 0, 1
+    );
+
+    gDPPipeSync(gDisplayListHead++);
+    gDPSetTextureFilter(gDisplayListHead++, G_TF_BILERP);
+    gDPSetColorDither(gDisplayListHead++, G_CD_NOISE);
+    gDPSetAlphaDither(gDisplayListHead++, G_AD_NOISE);
+    gDPSetTexturePersp(gDisplayListHead++, G_TP_NONE);
+
+    u8 *emu_tex = segmented_to_virtual(fbe_warning);
+    render_tiled_screen_effect(emu_tex, SCREEN_WIDTH, SCREEN_HEIGHT, G_CYC_1CYCLE);
+
+    gDPSetColorDither(gDisplayListHead++, G_CD_MAGICSQ);
+    gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255);
+    return FALSE;
+}
+
+s32 script_check_fbe_warning(UNUSED s16 arg) {
+    if (!checkedFBE) return FALSE;
+    if (gFBE) {
+        sVerifiedFBE = TRUE;
+        return TRUE;
+    }
+    if (
+        (gPlayer1Controller->buttonDown & (Z_TRIG | A_BUTTON | START_BUTTON)) == (Z_TRIG | A_BUTTON | START_BUTTON) &&
+        (gPlayer1Controller->buttonPressed & (Z_TRIG | A_BUTTON | START_BUTTON))
+    ) {
+        sVerifiedFBE = TRUE;
+        return TRUE;
+    }
+
+    return FALSE;
 }

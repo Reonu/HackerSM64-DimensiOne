@@ -24,6 +24,7 @@
 #include "game/print.h"
 
 #include "game/object_list_processor.h"
+#include "game/fb_effects.h"
 
 const LevelScript level_intro_splash_screen[] = {
 #ifdef SKIP_TITLE_SCREEN
@@ -33,6 +34,7 @@ const LevelScript level_intro_splash_screen[] = {
     LOAD_GODDARD(),
     LOAD_BEHAVIOR_DATA(),
     LOAD_LEVEL_DATA(intro),
+    CALL_LOOP(0, script_check_fbe_warning),
 #if defined(FLOOMBAS) && defined(INTRO_FLOOMBAS)
     LOAD_COMMON0(),
 

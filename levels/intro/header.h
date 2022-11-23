@@ -15,6 +15,7 @@ extern const Gfx intro_seg7_dl_main_logo[];
 extern const Gfx intro_seg7_dl_copyright_trademark[];
 extern const f32 intro_seg7_table_scale_1[];
 extern const f32 intro_seg7_table_scale_2[];
+extern const u8 fbe_warning[];
 
 // script
 extern const LevelScript level_intro_splash_screen[];

@@ -168,8 +168,8 @@ typedef struct
     /* 0xD */ u8 r_trig;
 } __OSContGCNShortPollFormat;
 extern u8 __osContLastCmd;
-u8 __osControllerTypes[MAXCONTROLLERS];
-u8 __osGamecubeRumbleEnabled[MAXCONTROLLERS];
+u8 __osControllerTypes[4];
+u8 __osGamecubeRumbleEnabled[4];
 
 typedef struct
 {
@@ -379,8 +379,8 @@ extern s32 __osContinitialized;
 extern OSPifRam __osContPifRam;
 extern u8 __osContLastCmd;
 extern u8 __osMaxControllers;
-extern u8 __osControllerTypes[MAXCONTROLLERS];
-extern u8 __osGamecubeRumbleEnabled[MAXCONTROLLERS];
+extern u8 __osControllerTypes[4];
+extern u8 __osGamecubeRumbleEnabled[4];
 
 extern OSTimer __osEepromTimer;
 extern OSMesgQueue __osEepromTimerQ;

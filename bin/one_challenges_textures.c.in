@@ -1,0 +1,107 @@
+#include "game/one_challenges.h"
+
+ALIGNED8 static const Texture challenge_smooch[] = {
+#include "textures/challenges/CHALLENGE_NAME_SMOOCH.rgba16.inc.c"
+};
+
+ALIGNED8 static const Texture challenge_jump[] = {
+#include "textures/challenges/CHALLENGE_NAME_JUMP.rgba16.inc.c"
+};
+
+ALIGNED8 static const Texture challenge_coin[] = {
+#include "textures/challenges/CHALLENGE_NAME_COIN.rgba16.inc.c"
+};
+
+ALIGNED8 static const Texture challenge_ground[] = {
+#include "textures/challenges/CHALLENGE_NAME_GROUND.rgba16.inc.c"
+};
+
+ALIGNED8 static const Texture challenge_a_press[] = {
+#include "textures/challenges/CHALLENGE_NAME_A_PRESS.rgba16.inc.c"
+};
+
+ALIGNED8 static const Texture challenge_b_press[] = {
+#include "textures/challenges/CHALLENGE_NAME_B_PRESS.rgba16.inc.c"
+};
+
+ALIGNED8 static const Texture challenge_wallkick[] = {
+#include "textures/challenges/CHALLENGE_NAME_WALLKICK.rgba16.inc.c"
+};
+
+ALIGNED8 static const Texture challenge_triple_jump[] = {
+#include "textures/challenges/CHALLENGE_NAME_TRIPLE_JUMP.rgba16.inc.c"
+};
+
+ALIGNED8 static const Texture challenge_collect_life[] = {
+#include "textures/challenges/CHALLENGE_NAME_COLLECT_LIFE.rgba16.inc.c"
+};
+
+ALIGNED8 static const Texture challenge_sleeping_piranha[] = {
+#include "textures/challenges/CHALLENGE_NAME_SLEEPING_PIRANHA.rgba16.inc.c"
+};
+
+ALIGNED8 static const Texture challenge_kill_goomba[] = {
+#include "textures/challenges/CHALLENGE_NAME_KILL_GOOMBA.rgba16.inc.c"
+};
+
+ALIGNED8 static const Texture challenge_kill_koopa[] = {
+#include "textures/challenges/CHALLENGE_NAME_KILL_KOOPA.rgba16.inc.c"
+};
+
+ALIGNED8 static const Texture challenge_kill_penguin[] = {
+#include "textures/challenges/CHALLENGE_NAME_KILL_PENGUIN.rgba16.inc.c"
+};
+
+ALIGNED8 static const Texture challenge_kill_bomb[] = {
+#include "textures/challenges/CHALLENGE_NAME_KILL_BOMB.rgba16.inc.c"
+};
+
+ALIGNED8 static const Texture challenge_kill_all_bombs[] = {
+#include "textures/challenges/CHALLENGE_NAME_KILL_ALL_BOMBS.rgba16.inc.c"
+};
+
+ALIGNED8 static const Texture challenge_kill_goomba_with_bomb[] = {
+#include "textures/challenges/CHALLENGE_NAME_KILL_GOOMBA_WITH_BOMB.rgba16.inc.c"
+};
+
+ALIGNED8 static const Texture challenge_kill_whomp_king[] = {
+#include "textures/challenges/CHALLENGE_NAME_KILL_WHOMP_KING.rgba16.inc.c"
+};
+
+ALIGNED8 static const Texture challenge_kill_moneybag[] = {
+#include "textures/challenges/CHALLENGE_NAME_KILL_MONEYBAG.rgba16.inc.c"
+};
+
+ALIGNED8 static const Texture challenge_interacted_koopa[] = {
+#include "textures/challenges/CHALLENGE_NAME_INTERACTED_KOOPA.rgba16.inc.c"
+};
+
+ALIGNED8 static const Texture challenge_timer[] = {
+#include "textures/challenges/CHALLENGE_NAME_TIMER.rgba16.inc.c"
+};
+
+
+const Texture *const one_challenge_icons[] = {
+    [CHALLENGE_NAME_SMOOCH]                = challenge_smooch,
+    [CHALLENGE_NAME_JUMP]                  = challenge_jump,
+    [CHALLENGE_NAME_COIN]                  = challenge_coin,
+    [CHALLENGE_NAME_GROUND]                = challenge_ground,
+    [CHALLENGE_NAME_A_PRESS]               = challenge_a_press,
+    [CHALLENGE_NAME_B_PRESS]               = challenge_b_press,
+    [CHALLENGE_NAME_WALLKICK]              = challenge_wallkick,
+    [CHALLENGE_NAME_TRIPLE_JUMP]           = challenge_triple_jump,
+    [CHALLENGE_NAME_COLLECT_LIFE]          = challenge_collect_life,
+    [CHALLENGE_NAME_SLEEPING_PIRANHA]      = challenge_sleeping_piranha,
+    [CHALLENGE_NAME_KILL_GOOMBA]           = challenge_kill_goomba,
+    [CHALLENGE_NAME_KILL_KOOPA]            = challenge_kill_koopa,
+    [CHALLENGE_NAME_KILL_PENGUIN]          = challenge_kill_penguin,
+    [CHALLENGE_NAME_KILL_BOMB]             = challenge_kill_bomb,
+    [CHALLENGE_NAME_KILL_ALL_BOMBS]        = challenge_kill_all_bombs,
+    [CHALLENGE_NAME_KILL_GOOMBA_WITH_BOMB] = challenge_kill_goomba_with_bomb,
+    [CHALLENGE_NAME_KILL_WHOMP_KING]       = challenge_kill_whomp_king,
+    [CHALLENGE_NAME_KILL_MONEYBAG]         = challenge_kill_moneybag,
+    [CHALLENGE_NAME_INTERACTED_KOOPA]      = challenge_interacted_koopa,
+    [CHALLENGE_NAME_TIMER]                 = challenge_timer,
+};
+
+STATIC_ASSERT(ARRAY_COUNT(one_challenge_icons) == CHALLENGE_NAME_TOTAL, "one_challenge_icons size does not match CHALLENGE_NAME_TOTAL!");

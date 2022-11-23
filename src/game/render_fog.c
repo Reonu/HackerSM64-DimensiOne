@@ -155,11 +155,29 @@ void update_global_fog(void) {
         case 1:
         default:
             goalFog = &sSomethingFogArea1;
-            f32 hV = sins(gGlobalTimer * DEGREES(2)) * 0.05f;
 
-            hsl[0] = hsl[0] + ((f32)gChallengeLevel)*1.73f;
-            hsl[0] = hsl[0] + hV;
-            hsl[0] = hsl[0] - floorf(hsl[0]);
+            // kinda confusing how it only happens after getting a star?
+            // if (gChallengeStatus == CHALLENGE_STATUS_WIN) {
+            //     hsl[2] = 0.9f;
+            //     goalFog->low = 962;
+            //     goalFog->high = 980;
+            // } else
+            if (gChallengeStatus == CHALLENGE_STATUS_LOSE || gMarioState->health <= 0xFF) {
+                hsl[0] = 0;
+
+                f32 hV = sins((gGlobalTimer * DEGREES(12.0f)));
+                hV = cube(hV) * 0.08f;
+                hsl[2] = 0.3f + hV;
+                goalFog->low = 940;
+                goalFog->high = 970;
+            } else {
+                f32 hV = sins(gGlobalTimer * DEGREES(2)) * 0.05f;
+                hsl[0] = hsl[0] + ((f32)gChallengeLevel)*1.73f;
+                hsl[0] = hsl[0] + hV;
+                hsl[0] = hsl[0] - floorf(hsl[0]);
+                goalFog->low = 962;
+                goalFog->high = 980;
+            }
 
             hsl_to_rgb(hsl[0], hsl[1], hsl[2], goalFog);
             break;

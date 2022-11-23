@@ -191,6 +191,7 @@ $(BUILD_DIR)/levels/ending/cake.inc.c: levels/ending/cake.png
 
 # Others
 SEGMENT2_TEXTURES               := $(wildcard $(TEXTURE_DIR)/segment2/*.png)
+CHALLENGES_TEXTURES             := $(wildcard $(TEXTURE_DIR)/challenges/*.png)
 TITLE_SCREEN_BG_TEXTURES        := $(wildcard $(TEXTURE_DIR)/title_screen_bg/*.png)
 SPOOKY_TEXTURES                 := $(wildcard $(TEXTURE_DIR)/spooky/*.png)
 GENERIC_TEXTURES                := $(wildcard $(TEXTURE_DIR)/generic/*.png)
@@ -207,7 +208,7 @@ MOUNTAIN_TEXTURES               := $(wildcard $(TEXTURE_DIR)/mountain/*.png)
 GRASS_TEXTURES                  := $(wildcard $(TEXTURE_DIR)/grass/*.png)
 
 # Texture Files
-$(BUILD_DIR)/bin/segment2.o:        $(SEGMENT2_TEXTURES:%.png=$(BUILD_DIR)/%.inc.c)
+$(BUILD_DIR)/bin/segment2.o:        $(SEGMENT2_TEXTURES:%.png=$(BUILD_DIR)/%.inc.c) $(CHALLENGES_TEXTURES:%.png=$(BUILD_DIR)/%.inc.c)
 $(BUILD_DIR)/bin/title_screen_bg.o: $(TITLE_SCREEN_BG_TEXTURES:%.png=$(BUILD_DIR)/%.inc.c)
 $(BUILD_DIR)/bin/spooky.o:          $(SPOOKY_TEXTURES:%.png=$(BUILD_DIR)/%.inc.c)
 $(BUILD_DIR)/bin/generic.o:         $(GENERIC_TEXTURES:%.png=$(BUILD_DIR)/%.inc.c)

@@ -4,6 +4,7 @@
 #include <PR/ultratypes.h>
 #include <PR/gbi.h>
 
+extern void *one_challenge_icons[];
 extern void *puppyprint_font_lut[];
 extern void *puppyprint_kerning_lut[][94];
 extern void *puppyprint_offset_lut[][94];
