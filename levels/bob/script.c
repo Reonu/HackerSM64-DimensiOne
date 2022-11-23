@@ -405,7 +405,6 @@ const LevelScript level_bob_entry[] = {
 		OBJECT(MODEL_PIRANHA_PLANT, -5241, 389, -645, 0, 0, 0, (0x0D), bhvPiranhaPlant),
 		OBJECT(MODEL_PIRANHA_PLANT, -5439, 389, 294, 0, 0, 0, (0x0D), bhvPiranhaPlant),
 		OBJECT(MODEL_PIRANHA_PLANT, -3628, 389, -207, 0, 0, 0, (0x0D), bhvPiranhaPlant),
-		OBJECT(MODEL_WOODEN_SIGNPOST, 129, 61, 861, 0, 90, 0, (0xFF << 24) | (0x01 << 16), bhvMessagePanel),
 		OBJECT(MODEL_STAR, -6005, 533, 19, 0, 0, 0, (0x0D << 24) | (0x0D), bhvStar),
 		OBJECT(MODEL_NONE, 558, 53, 209, 0, 0, 0, (0x0D << 16), bhvInstantActiveWarp),
 		TERRAIN(bob_area_8_collision),
