@@ -1220,32 +1220,32 @@ void geo_process_background(struct GraphNodeBackground *node) {
     if (list != NULL) {
         geo_append_display_list((void *) VIRTUAL_TO_PHYSICAL(list), GET_GRAPH_NODE_LAYER(node->fnNode.node.flags));
     } else if (gCurGraphNodeMasterList != NULL) {
-#ifndef F3DEX_GBI_2E
-        Gfx *gfxStart = alloc_display_list(sizeof(Gfx) * 7);
-#else
-        Gfx *gfxStart = alloc_display_list(sizeof(Gfx) * 8);
-#endif
+        Gfx *gfxStart = gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING
+            ? alloc_display_list(sizeof(Gfx) * 8)
+            : alloc_display_list(sizeof(Gfx) * 7);
         Gfx *gfx = gfxStart;
 
-        gDPPipeSync(gfx++);
-        gDPSetCycleType(gfx++, G_CYC_FILL);
-
         if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING) {
-            u32 fill = GPACK_RGBA5551(gGlobalFog.r, gGlobalFog.g, gGlobalFog.b, 1);
-            gDPSetFillColor(
-                gfx++,
-                (fill << 16) | fill
-            );
+            gDPPipeSync(gfx++);
+            gDPSetRenderMode(gfx++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
+            gDPSetCycleType(gfx++, G_CYC_1CYCLE);
+            gDPSetPrimColor(gfx++, 0, 0, gGlobalFog.r, gGlobalFog.g, gGlobalFog.b, 255);
+            gDPSetCombineMode(gfx++, G_CC_PRIMITIVE, G_CC_PRIMITIVE);
+            gDPFillRectangle(gfx++, GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(0), gBorderHeight,
+                GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(0) - 1, SCREEN_HEIGHT - gBorderHeight - 1);
+            gDPPipeSync(gfx++);
         } else {
+            gDPPipeSync(gfx++);
+            gDPSetCycleType(gfx++, G_CYC_FILL);
             gDPSetFillColor(
                 gfx++,
                 node->background
             );
+            gDPFillRectangle(gfx++, GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(0), gBorderHeight,
+                GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(0) - 1, SCREEN_HEIGHT - gBorderHeight - 1);
+            gDPSetCycleType(gfx++, G_CYC_1CYCLE);
+            gDPPipeSync(gfx++);
         }
-        gDPFillRectangle(gfx++, GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(0), gBorderHeight,
-        GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(0) - 1, SCREEN_HEIGHT - gBorderHeight - 1);
-        gDPPipeSync(gfx++);
-        gDPSetCycleType(gfx++, G_CYC_1CYCLE);
         gSPEndDisplayList(gfx++);
 
         geo_append_display_list((void *) VIRTUAL_TO_PHYSICAL(gfxStart), LAYER_FORCE);
