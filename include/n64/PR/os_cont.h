@@ -213,7 +213,7 @@ typedef struct {
  *
  */
 
-extern u8 __osControllerTypes[MAXCONTROLLERS];
+extern u8 __osControllerTypes[4];
 
 /**************************************************************************
  *
