@@ -147,6 +147,7 @@ static void print_challenge_type_images(s32 x, s32 y, u8 typeIndex, u8 alphaFram
         0, 0, // s/t low
         qs510(1), qs510(1) 
     );
+    gDPPipeSync(gDisplayListHead++);
 
     if (obtainedFlags & typeFlag) {
         gDPSetPrimColor(gDisplayListHead++, 0, 0, 255, 255, 255, color[3]);
@@ -154,18 +155,36 @@ static void print_challenge_type_images(s32 x, s32 y, u8 typeIndex, u8 alphaFram
         gDPSetPrimColor(gDisplayListHead++, 0, 0, 127, 127, 127, (u8) (color[3] * 0.75f));
     }
 
-    // cozies TODO: I don't know what I'm doing! :D (NOTE: prim colors set immediately above should be applied exclusively to the icons, but also I don't know what these DLs do and don't have time to investigate thanks this attempt is probably mega cringe though)
+    gDPSetCombineLERP(
+        gDisplayListHead++,
+        0, 0, 0, TEXEL0,
+        TEXEL0, 0, PRIMITIVE, 0,
+        0, 0, 0, TEXEL0,
+        TEXEL0, 0, PRIMITIVE, 0
+    );
+
     Texture *(*icons)[] = segmented_to_virtual(&one_challenge_icons);
-    gSPDisplayList(gDisplayListHead++, dl_hud_img_begin);
+    gDPLoadTextureTile(
+        gDisplayListHead++,
+        (*icons)[typeIndex],
+        G_IM_FMT_RGBA,
+        G_IM_SIZ_16b,
+        24, 24, // w/h
+        0, 0, // uls,ult
+        24, 24, // lrs,lrt
+        0,
+        (G_TX_NOMIRROR | G_TX_CLAMP), (G_TX_NOMIRROR | G_TX_CLAMP),
+        0, 0,
+        G_TX_NOLOD, G_TX_NOLOD);
+    gSPScisTextureRectangle(
+        gDisplayListHead++,
+        qs102(x), qs102(y),
+        qs102(x + 24), qs102(y + 24),
+        G_TX_RENDERTILE,
+        0, 0, // s/t low
+        qs510(1), qs510(1) 
+    );
     gDPPipeSync(gDisplayListHead++);
-    gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_32b, 1, (*icons)[typeIndex]);
-    gDPSetTile(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_32b, 0, 0, G_TX_LOADTILE, 0, (G_TX_WRAP | G_TX_NOMIRROR), 5, G_TX_NOLOD, (G_TX_WRAP | G_TX_NOMIRROR), 5, G_TX_NOLOD);
-    gDPLoadSync(gDisplayListHead++);
-    gDPLoadBlock(gDisplayListHead++, G_TX_LOADTILE, 0, 0, ((24 * 24) - 1), CALC_DXT(24, G_IM_SIZ_32b_BYTES));
-    gDPSetTile(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_32b, 5, 0, G_TX_RENDERTILE, 0, (G_TX_WRAP | G_TX_NOMIRROR), 5, G_TX_NOLOD, (G_TX_WRAP | G_TX_NOMIRROR), 5, G_TX_NOLOD);
-    gDPSetTileSize(gDisplayListHead++, 0, 0, 0, ((24 - 1) << G_TEXTURE_IMAGE_FRAC), ((24 - 1) << G_TEXTURE_IMAGE_FRAC));
-    gSPTextureRectangle(gDisplayListHead++, x << 2, y << 2, (x + 23) << 2, (y + 23) << 2,
-                        G_TX_RENDERTILE, 0, 0, 5 << 10, 1 << 10);
 
     if (typeTimerArray[typeIndex] != -1U) {
         typeTimerArray[typeIndex]++;

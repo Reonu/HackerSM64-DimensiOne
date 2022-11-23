@@ -85,7 +85,7 @@ void render_tiled_screen_effect(Texture *image, s32 width, s32 height, s32 mode)
         mOne   = 1;
     } else {
         gDPSetCycleType( gDisplayListHead++, mode);
-        gDPSetRenderMode(gDisplayListHead++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
+        gDPSetRenderMode(gDisplayListHead++, G_RM_CLD_SURF, G_RM_CLD_SURF2);
         mOne   = 0;
     }
 
