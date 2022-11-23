@@ -2169,14 +2169,14 @@ Gfx bob_dl_Cube_001_mesh_layer_1_tri_0[] = {
 };
 
 Vtx bob_dl_Cube_mesh_layer_1_vtx_cull[8] = {
-	{{{-3260, -3132, 6525}, 0, {-16, -16}, {0x0, 0x0, 0x0, 0x0}}},
+	{{{-3260, -4117, 6525}, 0, {-16, -16}, {0x0, 0x0, 0x0, 0x0}}},
 	{{{-3260, 1980, 6525}, 0, {-16, -16}, {0x0, 0x0, 0x0, 0x0}}},
 	{{{-3260, 1980, -3814}, 0, {-16, -16}, {0x0, 0x0, 0x0, 0x0}}},
-	{{{-3260, -3132, -3814}, 0, {-16, -16}, {0x0, 0x0, 0x0, 0x0}}},
-	{{{3260, -3132, 6525}, 0, {-16, -16}, {0x0, 0x0, 0x0, 0x0}}},
+	{{{-3260, -4117, -3814}, 0, {-16, -16}, {0x0, 0x0, 0x0, 0x0}}},
+	{{{3260, -4117, 6525}, 0, {-16, -16}, {0x0, 0x0, 0x0, 0x0}}},
 	{{{3260, 1980, 6525}, 0, {-16, -16}, {0x0, 0x0, 0x0, 0x0}}},
 	{{{3260, 1980, -3814}, 0, {-16, -16}, {0x0, 0x0, 0x0, 0x0}}},
-	{{{3260, -3132, -3814}, 0, {-16, -16}, {0x0, 0x0, 0x0, 0x0}}},
+	{{{3260, -4117, -3814}, 0, {-16, -16}, {0x0, 0x0, 0x0, 0x0}}},
 };
 
 Vtx bob_dl_Cube_mesh_layer_1_vtx_0[18] = {
@@ -2837,28 +2837,31 @@ Gfx bob_dl_Cube_mesh_layer_1_tri_4[] = {
 	gsSPEndDisplayList(),
 };
 
-Vtx bob_dl_Cube_mesh_layer_1_vtx_5[4] = {
+Vtx bob_dl_Cube_mesh_layer_1_vtx_5[6] = {
 	{{{1969, 100, 1349}, 0, {-2433, 2624}, {0x0, 0x0, 0x7F, 0xFF}}},
 	{{{-1969, 100, 1349}, 0, {3120, 2624}, {0x0, 0x0, 0x7F, 0xFF}}},
 	{{{-1969, -2192, 1349}, 0, {3120, -608}, {0x0, 0x0, 0x7F, 0xFF}}},
 	{{{1969, -2192, 1349}, 0, {-2433, -608}, {0x0, 0x0, 0x7F, 0xFF}}},
+	{{{-1969, -4117, 1349}, 0, {3120, -3322}, {0x0, 0x0, 0x7F, 0xFF}}},
+	{{{1969, -4117, 1349}, 0, {-2433, -3322}, {0x0, 0x0, 0x7F, 0xFF}}},
 };
 
 Gfx bob_dl_Cube_mesh_layer_1_tri_5[] = {
-	gsSPVertex(bob_dl_Cube_mesh_layer_1_vtx_5 + 0, 4, 0),
+	gsSPVertex(bob_dl_Cube_mesh_layer_1_vtx_5 + 0, 6, 0),
 	gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
+	gsSP2Triangles(3, 2, 4, 0, 3, 4, 5, 0),
 	gsSPEndDisplayList(),
 };
 
 Vtx bob_dl_Cube_mesh_layer_5_vtx_cull[8] = {
-	{{{-3260, -3132, 6525}, 0, {-16, -16}, {0x0, 0x0, 0x0, 0x0}}},
+	{{{-3260, -4117, 6525}, 0, {-16, -16}, {0x0, 0x0, 0x0, 0x0}}},
 	{{{-3260, 1980, 6525}, 0, {-16, -16}, {0x0, 0x0, 0x0, 0x0}}},
 	{{{-3260, 1980, -3814}, 0, {-16, -16}, {0x0, 0x0, 0x0, 0x0}}},
-	{{{-3260, -3132, -3814}, 0, {-16, -16}, {0x0, 0x0, 0x0, 0x0}}},
-	{{{3260, -3132, 6525}, 0, {-16, -16}, {0x0, 0x0, 0x0, 0x0}}},
+	{{{-3260, -4117, -3814}, 0, {-16, -16}, {0x0, 0x0, 0x0, 0x0}}},
+	{{{3260, -4117, 6525}, 0, {-16, -16}, {0x0, 0x0, 0x0, 0x0}}},
 	{{{3260, 1980, 6525}, 0, {-16, -16}, {0x0, 0x0, 0x0, 0x0}}},
 	{{{3260, 1980, -3814}, 0, {-16, -16}, {0x0, 0x0, 0x0, 0x0}}},
-	{{{3260, -3132, -3814}, 0, {-16, -16}, {0x0, 0x0, 0x0, 0x0}}},
+	{{{3260, -4117, -3814}, 0, {-16, -16}, {0x0, 0x0, 0x0, 0x0}}},
 };
 
 Vtx bob_dl_Cube_mesh_layer_5_vtx_0[8] = {
@@ -7709,6 +7712,26 @@ Gfx mat_revert_bob_dl_cozies_noise_thing_layer1[] = {
 	gsSPEndDisplayList(),
 };
 
+Gfx mat_bob_dl_cozies_noise_thing_no_AA_layer1[] = {
+	gsDPPipeSync(),
+	gsDPSetCombineLERP(NOISE, 0, SHADE_ALPHA, ENVIRONMENT, 0, 0, 0, 1, PRIMITIVE, SHADE, COMBINED, SHADE, 0, 0, 0, 1),
+	gsSPGeometryMode(0, G_FOG),
+	gsDPSetCycleType(G_CYC_2CYCLE),
+	gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_ZB_OPA_SURF2),
+	gsSPTexture(65535, 65535, 0, 0, 1),
+	gsDPSetPrimColor(0, 36, 17, 66, 70, 255),
+	gsDPSetEnvColor(204, 224, 193, 255),
+	gsSPEndDisplayList(),
+};
+
+Gfx mat_revert_bob_dl_cozies_noise_thing_no_AA_layer1[] = {
+	gsDPPipeSync(),
+	gsSPGeometryMode(G_FOG, 0),
+	gsDPSetCycleType(G_CYC_1CYCLE),
+	gsDPSetRenderMode(G_RM_AA_ZB_OPA_SURF, G_RM_AA_ZB_OPA_SURF2),
+	gsSPEndDisplayList(),
+};
+
 Gfx mat_bob_dl_cozies_noise_thing_yellow_layer1[] = {
 	gsDPPipeSync(),
 	gsDPSetCombineLERP(NOISE, 0, SHADE_ALPHA, ENVIRONMENT, 0, 0, 0, 1, PRIMITIVE, SHADE, COMBINED, SHADE, 0, 0, 0, 1),
@@ -7819,9 +7842,9 @@ Gfx bob_dl_ColiseumVisual_mesh_layer_1[] = {
 	gsSPVertex(bob_dl_ColiseumVisual_mesh_layer_1_vtx_cull + 0, 8, 0),
 	gsSPSetGeometryMode(G_LIGHTING),
 	gsSPCullDisplayList(0, 7),
-	gsSPDisplayList(mat_bob_dl_cozies_noise_thing_layer1),
+	gsSPDisplayList(mat_bob_dl_cozies_noise_thing_no_AA_layer1),
 	gsSPDisplayList(bob_dl_ColiseumVisual_mesh_layer_1_tri_0),
-	gsSPDisplayList(mat_revert_bob_dl_cozies_noise_thing_layer1),
+	gsSPDisplayList(mat_revert_bob_dl_cozies_noise_thing_no_AA_layer1),
 	gsSPEndDisplayList(),
 };
 
