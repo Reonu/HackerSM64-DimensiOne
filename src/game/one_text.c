@@ -77,6 +77,7 @@ static void print_challenge_type_images(s32 x, s32 y, u8 typeIndex, u8 alphaFram
     y -= 6;
 
     ColorRGBA color = {0xFF, 0xFF, 0xFF, 0xFF};
+    Color alpha;
 
     oneflags_t typeFlag = (1ULL << typeIndex);
     oneflags_t obtainedFlags = get_challenge_obtained_flags();
@@ -88,6 +89,8 @@ static void print_challenge_type_images(s32 x, s32 y, u8 typeIndex, u8 alphaFram
         color[3] = 255.0f * (challengeTypeDisplayTimer / (f32) alphaFrames); // Fade in
     }
 
+    alpha = color[3];
+
     if (failureFlags & typeFlag) {
         if (!(sFailureFlagsLast & typeFlag)) {
             typeTimerArray[typeIndex] = 0;
@@ -96,7 +99,7 @@ static void print_challenge_type_images(s32 x, s32 y, u8 typeIndex, u8 alphaFram
         color[0] = 0xFF;
         color[1] = 0x00;
         color[2] = 0x00;
-        color[3] = color[3] * 0.8f;
+        alpha = alpha * 0.8f;
 
         if (typeTimerArray[typeIndex] < 14) {
             x += 0.5f + 1.0f * sins((0x10000 * typeTimerArray[typeIndex]) / 4);
@@ -110,12 +113,12 @@ static void print_challenge_type_images(s32 x, s32 y, u8 typeIndex, u8 alphaFram
             color[0] = 0xDF;
             color[1] = 0xDF;
             color[2] = 0x00;
-            color[3] = color[3] * 0.8f;
+            alpha = alpha * 0.8f;
         } else if (requiredFlags & typeFlag) {
             color[0] = 0x00;
             color[1] = 0xFF;
             color[2] = 0x00;
-            color[3] = color[3] * 0.8f;
+            alpha = alpha * 0.8f;
         } 
 
         if (typeTimerArray[typeIndex] < 6) {
@@ -125,16 +128,16 @@ static void print_challenge_type_images(s32 x, s32 y, u8 typeIndex, u8 alphaFram
         color[0] = 0x0F;
         color[1] = 0x0F;
         color[2] = 0x0F;
-        color[3] = color[3] * 0.67f;
+        alpha = alpha * 0.67f;
     } else if (enforcedFlags & typeFlag) {
         color[0] = 0xBF;
         color[1] = 0xBF;
         color[2] = 0xBF;
-        color[3] = color[3] * 0.8f;
+        alpha = alpha * 0.8f;
     }
 
     Gfx *circle = segmented_to_virtual(circle_init_dl);
-    gDPSetPrimColor(gDisplayListHead++, 0, 0, color[0], color[1], color[2], color[3]);
+    gDPSetPrimColor(gDisplayListHead++, 0, 0, color[0], color[1], color[2], alpha);
     gSPDisplayList(gDisplayListHead++, circle);
     gSPScisTextureRectangle(
         gDisplayListHead++,
@@ -145,10 +148,30 @@ static void print_challenge_type_images(s32 x, s32 y, u8 typeIndex, u8 alphaFram
         qs510(1), qs510(1) 
     );
 
+    if (obtainedFlags & typeFlag) {
+        gDPSetPrimColor(gDisplayListHead++, 0, 0, 255, 255, 255, color[3]);
+    } else {
+        gDPSetPrimColor(gDisplayListHead++, 0, 0, 127, 127, 127, (u8) (color[3] * 0.75f));
+    }
+
+    // cozies TODO: I don't know what I'm doing! :D (NOTE: prim colors set immediately above should be applied exclusively to the icons, but also I don't know what these DLs do and don't have time to investigate thanks this attempt is probably mega cringe though)
+    Texture *(*icons)[] = segmented_to_virtual(&one_challenge_icons);
+    gSPDisplayList(gDisplayListHead++, dl_hud_img_begin);
+    gDPPipeSync(gDisplayListHead++);
+    gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_32b, 1, (*icons)[typeIndex]);
+    gDPSetTile(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_32b, 0, 0, G_TX_LOADTILE, 0, (G_TX_WRAP | G_TX_NOMIRROR), 5, G_TX_NOLOD, (G_TX_WRAP | G_TX_NOMIRROR), 5, G_TX_NOLOD);
+    gDPLoadSync(gDisplayListHead++);
+    gDPLoadBlock(gDisplayListHead++, G_TX_LOADTILE, 0, 0, ((24 * 24) - 1), CALC_DXT(24, G_IM_SIZ_32b_BYTES));
+    gDPSetTile(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_32b, 5, 0, G_TX_RENDERTILE, 0, (G_TX_WRAP | G_TX_NOMIRROR), 5, G_TX_NOLOD, (G_TX_WRAP | G_TX_NOMIRROR), 5, G_TX_NOLOD);
+    gDPSetTileSize(gDisplayListHead++, 0, 0, 0, ((24 - 1) << G_TEXTURE_IMAGE_FRAC), ((24 - 1) << G_TEXTURE_IMAGE_FRAC));
+    gSPTextureRectangle(gDisplayListHead++, x << 2, y << 2, (x + 23) << 2, (y + 23) << 2,
+                        G_TX_RENDERTILE, 0, 0, 5 << 10, 1 << 10);
+
     if (typeTimerArray[typeIndex] != -1U) {
         typeTimerArray[typeIndex]++;
     }
     
+    gSPDisplayList(gDisplayListHead++, dl_hud_img_end);
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
     gDPPipeSync(gDisplayListHead++);
 }

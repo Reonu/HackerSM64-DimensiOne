@@ -8,6 +8,8 @@
 
 #include "make_const_nonconst.h"
 
+#include "one_challenges_textures.c.in"
+
 // SM64 (US/JP/EU/SH) Segment 02
 #ifdef PUPPYPRINT
 ALIGNED8 static const Texture small_font_default[] = {
