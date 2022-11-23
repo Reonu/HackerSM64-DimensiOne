@@ -149,10 +149,10 @@ static void print_challenge_type_images(s32 x, s32 y, u8 typeIndex, u8 alphaFram
     );
     gDPPipeSync(gDisplayListHead++);
 
-    if (obtainedFlags & typeFlag) {
+    if (obtainedFlags & typeFlag || !(requiredFlags & typeFlag)) {
         gDPSetPrimColor(gDisplayListHead++, 0, 0, 255, 255, 255, color[3]);
     } else {
-        gDPSetPrimColor(gDisplayListHead++, 0, 0, 127, 127, 127, (u8) (color[3] * 0.75f));
+        gDPSetPrimColor(gDisplayListHead++, 0, 0, 127, 127, 127, (u8) (color[3] * 0.5f));
     }
 
     gDPSetCombineLERP(
