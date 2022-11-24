@@ -240,7 +240,7 @@ const LevelScript level_bob_entry[] = {
 		OBJECT(MODEL_BLACK_BOBOMB, -265, -368, -1116, 0, 0, 0, (0x06), bhvBobomb),
 		OBJECT(MODEL_STAR, -16, -86, -5, 0, 0, 0, (0x06 << 24) | (0x06), bhvStar),
 		OBJECT(MODEL_NONE, -222, -368, -176, 0, 0, 0, (0x06 << 16), bhvInstantActiveWarp),
-		OBJECT(MODEL_BLACK_BOBOMB, -222, -368, -161, 0, 0, 0, (0x08), bhvBobomb),
+		OBJECT(MODEL_BLACK_BOBOMB, -421, -368, -351, 0, -133, 0, (0x08), bhvBobomb),
 		OBJECT(MODEL_GOOMBA, -65, -368, -1580, 0, 0, 0, (0x08), bhvGoomba),
 		OBJECT(MODEL_GOOMBA, -110, -368, -1527, 0, 0, 0, (0x08), bhvGoomba),
 		OBJECT(MODEL_GOOMBA, -245, -368, -1394, 0, 0, 0, (0x08), bhvGoomba),

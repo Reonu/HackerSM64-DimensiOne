@@ -1076,7 +1076,7 @@ Gfx mat_revert_wf_dl_cozies_noise_thing_layer1[] = {
 
 Gfx mat_wf_dl_f3dlite_material_005_layer1[] = {
 	gsDPPipeSync(),
-	gsDPSetCombineLERP(TEXEL1, TEXEL0, PRIM_LOD_FRAC, TEXEL0, TEXEL1, TEXEL0, PRIM_LOD_FRAC, TEXEL0, COMBINED, 0, SHADE, 0, COMBINED, 0, PRIMITIVE, 0),
+	gsDPSetCombineLERP(TEXEL1, TEXEL0, PRIM_LOD_FRAC, TEXEL0, TEXEL1, TEXEL0, PRIM_LOD_FRAC, TEXEL0, 0, 0, 0, COMBINED, COMBINED, 0, PRIMITIVE, 0),
 	gsDPSetCycleType(G_CYC_2CYCLE),
 	gsDPPipelineMode(G_PM_NPRIMITIVE),
 	gsDPSetRenderMode(G_RM_PASS, G_RM_AA_ZB_OPA_SURF2),
