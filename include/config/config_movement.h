@@ -114,7 +114,7 @@
 #define WALL_KICK_DEGREES 45
 
 /**
- * This is vanilla behavior, disable it to allow ledge grabbing regardless of floor pitch.
+ * Makes Mario unable to ledge grab steep slopes to prevent false ledge grabs.
  */
 #define DONT_LEDGE_GRAB_STEEP_SLOPES
 
