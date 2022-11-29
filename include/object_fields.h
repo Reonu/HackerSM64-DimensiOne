@@ -686,7 +686,7 @@
 #define /*0x0FC*/ oKoopaTargetYaw                   OBJECT_FIELD_S32(0x1D)
 #define /*0x100*/ oKoopaUnshelledTimeUntilTurn      OBJECT_FIELD_S32(0x1E)
 #define /*0x104*/ oKoopaTurningAwayFromWall         OBJECT_FIELD_S32(0x1F)
-#define /*0x108*/ oKoopaDistanceToMario             OBJECT_FIELD_F32(0x20)
+#define /*0x108*/ oKoopaAthleticism                 OBJECT_FIELD_F32(0x20)
 #define /*0x10C*/ oKoopaAngleToMario                OBJECT_FIELD_S32(0x21)
 #define /*0x110*/ oKoopaBlinkTimer                  OBJECT_FIELD_S32(0x22)
 #define /*0x1AC*/ oKoopaCountdown                   OBJECT_FIELD_S16(0x49, 0)
