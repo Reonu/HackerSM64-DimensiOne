@@ -7694,12 +7694,11 @@ Gfx mat_revert_bob_dl_cozies_noise_thing_green_layer1[] = {
 
 Gfx mat_bob_dl_cozies_noise_thing_layer1[] = {
 	gsDPPipeSync(),
-	gsDPSetCombineLERP(NOISE, 0, SHADE_ALPHA, ENVIRONMENT, 0, 0, 0, 1, PRIMITIVE, SHADE, COMBINED, SHADE, 0, 0, 0, 1),
+	gsDPSetCombineLERP(NOISE, 0, SHADE_ALPHA, ENVIRONMENT, 0, 0, 0, 1, SHADE, 0, COMBINED, 0, 0, 0, 0, 1),
 	gsSPGeometryMode(0, G_FOG),
 	gsDPSetCycleType(G_CYC_2CYCLE),
 	gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_OPA_SURF2),
 	gsSPTexture(65535, 65535, 0, 0, 1),
-	gsDPSetPrimColor(0, 36, 17, 66, 70, 255),
 	gsDPSetEnvColor(204, 224, 193, 255),
 	gsSPEndDisplayList(),
 };
@@ -7714,12 +7713,11 @@ Gfx mat_revert_bob_dl_cozies_noise_thing_layer1[] = {
 
 Gfx mat_bob_dl_cozies_noise_thing_no_AA_layer1[] = {
 	gsDPPipeSync(),
-	gsDPSetCombineLERP(NOISE, 0, SHADE_ALPHA, ENVIRONMENT, 0, 0, 0, 1, PRIMITIVE, SHADE, COMBINED, SHADE, 0, 0, 0, 1),
+	gsDPSetCombineLERP(NOISE, 0, SHADE_ALPHA, ENVIRONMENT, 0, 0, 0, 1, SHADE, 0, COMBINED, 0, 0, 0, 0, 1),
 	gsSPGeometryMode(0, G_FOG),
 	gsDPSetCycleType(G_CYC_2CYCLE),
 	gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_ZB_OPA_SURF2),
 	gsSPTexture(65535, 65535, 0, 0, 1),
-	gsDPSetPrimColor(0, 36, 17, 66, 70, 255),
 	gsDPSetEnvColor(204, 224, 193, 255),
 	gsSPEndDisplayList(),
 };

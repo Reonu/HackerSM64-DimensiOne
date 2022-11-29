@@ -35,6 +35,7 @@
 #include "puppylights.h"
 #include "level_commands.h"
 #include "one_challenges.h"
+#include "rendering_graph_node.h"
 
 #include "config.h"
 
@@ -1089,14 +1090,15 @@ void handle_lighting(void)  {
             lightPos[1] = 0.9f;
             lightPos[2] = 0.f;
             set_directional_light(lightPos, 255, 255, 150);
-            set_ambient_light(255/3, 255/3, 150/3);
+            set_ambient_light(gGlobalFog.r/3, gGlobalFog.g/3, gGlobalFog.b/3);
             break;
         default:
             lightPos[0] = 0.f;
-            lightPos[1] = 0.9f;
-            lightPos[2] = 0.f;
+            lightPos[1] = -1.f;
+            lightPos[2] = 0.9f;
+            vec3f_normalize(lightPos);
             set_directional_light(lightPos, 150, 150, 255);
-            set_ambient_light(150/3, 150/3, 255/3);
+            set_ambient_light(gGlobalFog.r/3, gGlobalFog.g/3, gGlobalFog.b/3);
             break;
     }
 }
