@@ -2560,6 +2560,34 @@ void bhv_follow_spline(void) {
     }
 }
 
+void bhv_clock_init(void) {
+    o->oMoveAnglePitch = -0x4000;
+    o->oGravity = 3.0f;
+    o->oFriction = 1.0f;
+    o->oBuoyancy = 1.0f;
+    o->oPosX = remap(random_float(), 0, 1, -1000, 1000);
+    o->oPosZ = remap(random_float(), 0, 1, -1000, 1000);
+
+}
+
+void bhv_clock_loop(void) {
+    o->oForwardVel = 8.0f;
+    o->oMoveAngleYaw = o->oAngleToMario + 0x8000;
+
+    bhv_1up_interact();
+}
+
+void bhv_clock_spawner_loop(void) {
+    if ((get_challenge_enforced_flags() & CHALLENGE_FLAG_TIMER) || (get_challenge_required_flags() & CHALLENGE_FLAG_TIMER)) {
+        if (o->oTimer == 250) {
+            spawn_object_abs_with_rot(o, 0, MODEL_CLOCK, bhvClock, remap(random_float(), 0, 1, -1000, 1000), 100, remap(random_float(), 0, 1, -1000, 1000), 0, 0, 0);
+            o->oTimer = 0;
+        }
+    } else {
+        o->oTimer = 0;
+    }
+}
+
 Gfx *geo_set_global_fog(s32 callContext, struct GraphNode *node, UNUSED Mat4 mtx) {
     struct GraphNodeGenerated *currentGraphNode;
     Gfx *dlStart, *dlHead;

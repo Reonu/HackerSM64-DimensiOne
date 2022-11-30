@@ -545,6 +545,7 @@ extern const BehaviorScript bhvSplineFollower[];
 extern const BehaviorScript bhvSpring[];
 extern const BehaviorScript bhvStaticObjectCustom[];
 extern const BehaviorScript bhvPeach[];
-
+extern const BehaviorScript bhvClock[];
+extern const BehaviorScript bhvClockSpawner[];
 
 #endif // BEHAVIOR_DATA_H

@@ -16,6 +16,9 @@ void bhv_1up_interact(void) {
 #if ENABLE_RUMBLE
         queue_rumble_data(5, 80);
 #endif
+    if (o->behavior == segmented_to_virtual(bhvClock))
+        gChallengeTimer -= (5 * 30); // 5 seconds
+    } else {
         add_challenge_kill_flags(CHALLENGE_FLAG_COLLECT_LIFE);
     }
 }
@@ -127,6 +130,9 @@ void bhv_1up_running_away_loop(void) {
 
     switch (o->oAction) {
         case MUSHROOM_ACT_INIT:
+            if (o->behavior == segmented_to_virtual(bhvClock)) {
+                o->oAction = MUSHROOM_ACT_MOVING;
+            }
             if (o->oTimer > 17) {
                 spawn_object(o, MODEL_NONE, bhvSparkleSpawn);
             }
@@ -147,6 +153,11 @@ void bhv_1up_running_away_loop(void) {
         case MUSHROOM_ACT_MOVING:
             spawn_object(o, MODEL_NONE, bhvSparkleSpawn);
             one_up_move_away_from_mario(collisionFlags);
+            if (o->behavior == segmented_to_virtual(bhvClock)) {
+                if (o->oTimer == 200) {
+                    o->oAction = MUSHROOM_ACT_DISAPPEARING;
+                }
+            }
             break;
 
         case MUSHROOM_ACT_DISAPPEARING:
@@ -156,6 +167,9 @@ void bhv_1up_running_away_loop(void) {
     }
 
     set_object_visibility(o, 3000);
+    if (o->behavior == segmented_to_virtual(bhvClock)) {
+        o->oFaceAngleYaw += 200;
+    }
 }
 
 void sliding_1up_move(void) {

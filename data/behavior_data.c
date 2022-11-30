@@ -6153,3 +6153,20 @@ const BehaviorScript bhvPeach[] = {
         SET_INT(oIntangibleTimer, 0),
     END_LOOP(),
 };
+
+const BehaviorScript bhvClock[] = {
+    BEGIN(OBJ_LIST_LEVEL),
+    OR_INT(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE | OBJ_FLAG_COMPUTE_ANGLE_TO_MARIO)),
+    CALL_NATIVE(bhv_1up_common_init),
+    BEGIN_LOOP(),
+        SET_INT(oIntangibleTimer, 0),
+        CALL_NATIVE(bhv_1up_running_away_loop),
+    END_LOOP(),
+};
+
+const BehaviorScript bhvClockSpawner[] = {
+    BEGIN(OBJ_LIST_LEVEL),
+    BEGIN_LOOP(),
+        CALL_NATIVE(bhv_clock_spawner_loop),
+    END_LOOP(),
+};

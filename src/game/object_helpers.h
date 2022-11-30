@@ -278,5 +278,8 @@ void bhv_follow_spline(void);
 Gfx *geo_set_global_fog(s32 callContext, struct GraphNode *node, UNUSED Mat4 mtx);
 Gfx *geo_set_spring_color(s32 callContext, struct GraphNode *node, UNUSED void *context);
 void bhv_despawn_on_console(void);
+void bhv_clock_init(void);
+void bhv_clock_loop(void);
+void bhv_clock_spawner_loop(void);
 
 #endif // OBJECT_HELPERS_H
