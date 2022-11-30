@@ -586,43 +586,88 @@ Gfx koopa_without_shell_custom_000_offset_010_mesh_layer_1_tri_0[] = {
 };
 
 
-Gfx mat_koopa_without_shell_custom_shirt_v4_001[] = {
+Gfx mat_koopa_without_shell_custom_shirt_v4_001_layer1[] = {
 	gsDPPipeSync(),
-	gsDPSetCombineLERP(PRIMITIVE, 0, SHADE, 0, 0, 0, 0, ENVIRONMENT, PRIMITIVE, 0, SHADE, 0, 0, 0, 0, ENVIRONMENT),
+	gsDPSetCombineLERP(PRIMITIVE, 0, SHADE, 0, 0, 0, 0, 1, 0, 0, 0, COMBINED, 0, 0, 0, 1),
+	gsSPGeometryMode(0, G_FOG),
+	gsDPSetCycleType(G_CYC_2CYCLE),
+	gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_OPA_SURF2),
 	gsSPTexture(65535, 65535, 0, 0, 1),
 	gsDPSetPrimColor(0, 0, 255, 255, 255, 255),
 	gsSPEndDisplayList(),
 };
 
-Gfx mat_koopa_without_shell_custom_underwear_v4_001[] = {
+Gfx mat_revert_koopa_without_shell_custom_shirt_v4_001_layer1[] = {
 	gsDPPipeSync(),
-	gsDPSetCombineLERP(PRIMITIVE, 0, SHADE, 0, 0, 0, 0, ENVIRONMENT, PRIMITIVE, 0, SHADE, 0, 0, 0, 0, ENVIRONMENT),
+	gsSPGeometryMode(G_FOG, 0),
+	gsDPSetCycleType(G_CYC_1CYCLE),
+	gsDPSetRenderMode(G_RM_AA_ZB_OPA_SURF, G_RM_AA_ZB_OPA_SURF2),
+	gsSPEndDisplayList(),
+};
+
+Gfx mat_koopa_without_shell_custom_underwear_v4_001_layer1[] = {
+	gsDPPipeSync(),
+	gsDPSetCombineLERP(PRIMITIVE, 0, SHADE, 0, 0, 0, 0, 1, 0, 0, 0, COMBINED, 0, 0, 0, 1),
+	gsSPGeometryMode(0, G_FOG),
+	gsDPSetCycleType(G_CYC_2CYCLE),
+	gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_OPA_SURF2),
 	gsSPTexture(65535, 65535, 0, 0, 1),
 	gsDPSetPrimColor(0, 0, 255, 155, 255, 255),
 	gsSPEndDisplayList(),
 };
 
-Gfx mat_koopa_without_shell_custom_body_001_v4[] = {
+Gfx mat_revert_koopa_without_shell_custom_underwear_v4_001_layer1[] = {
 	gsDPPipeSync(),
-	gsDPSetCombineLERP(PRIMITIVE, 0, SHADE, 0, 0, 0, 0, ENVIRONMENT, PRIMITIVE, 0, SHADE, 0, 0, 0, 0, ENVIRONMENT),
+	gsSPGeometryMode(G_FOG, 0),
+	gsDPSetCycleType(G_CYC_1CYCLE),
+	gsDPSetRenderMode(G_RM_AA_ZB_OPA_SURF, G_RM_AA_ZB_OPA_SURF2),
+	gsSPEndDisplayList(),
+};
+
+Gfx mat_koopa_without_shell_custom_body_001_v4_layer1[] = {
+	gsDPPipeSync(),
+	gsDPSetCombineLERP(PRIMITIVE, 0, SHADE, 0, 0, 0, 0, 1, 0, 0, 0, COMBINED, 0, 0, 0, 1),
+	gsSPGeometryMode(0, G_FOG),
+	gsDPSetCycleType(G_CYC_2CYCLE),
+	gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_OPA_SURF2),
 	gsSPTexture(65535, 65535, 0, 0, 1),
 	gsDPSetPrimColor(0, 0, 231, 173, 0, 255),
 	gsSPEndDisplayList(),
 };
 
-Gfx mat_koopa_without_shell_custom_mouth_v4_001[] = {
+Gfx mat_revert_koopa_without_shell_custom_body_001_v4_layer1[] = {
 	gsDPPipeSync(),
-	gsDPSetCombineLERP(PRIMITIVE, 0, SHADE, 0, 0, 0, 0, ENVIRONMENT, PRIMITIVE, 0, SHADE, 0, 0, 0, 0, ENVIRONMENT),
+	gsSPGeometryMode(G_FOG, 0),
+	gsDPSetCycleType(G_CYC_1CYCLE),
+	gsDPSetRenderMode(G_RM_AA_ZB_OPA_SURF, G_RM_AA_ZB_OPA_SURF2),
+	gsSPEndDisplayList(),
+};
+
+Gfx mat_koopa_without_shell_custom_mouth_v4_001_layer1[] = {
+	gsDPPipeSync(),
+	gsDPSetCombineLERP(PRIMITIVE, 0, SHADE, 0, 0, 0, 0, ENVIRONMENT, 0, 0, 0, COMBINED, 0, 0, 0, 1),
+	gsSPGeometryMode(0, G_FOG),
+	gsDPSetCycleType(G_CYC_2CYCLE),
+	gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_OPA_SURF2),
 	gsSPTexture(65535, 65535, 0, 0, 1),
 	gsDPSetPrimColor(0, 0, 188, 0, 0, 255),
+	gsSPEndDisplayList(),
+};
+
+Gfx mat_revert_koopa_without_shell_custom_mouth_v4_001_layer1[] = {
+	gsDPPipeSync(),
+	gsSPGeometryMode(G_FOG, 0),
+	gsDPSetCycleType(G_CYC_1CYCLE),
+	gsDPSetRenderMode(G_RM_AA_ZB_OPA_SURF, G_RM_AA_ZB_OPA_SURF2),
 	gsSPEndDisplayList(),
 };
 
 Gfx mat_koopa_without_shell_custom_nostril_v4_001_layer1[] = {
 	gsDPPipeSync(),
 	gsDPSetCombineLERP(TEXEL0, PRIMITIVE, TEXEL0_ALPHA, PRIMITIVE, 0, 0, 0, ENVIRONMENT, COMBINED, 0, SHADE, 0, 0, 0, 0, ENVIRONMENT),
+	gsSPGeometryMode(0, G_FOG),
 	gsDPSetCycleType(G_CYC_2CYCLE),
-	gsDPSetRenderMode(G_RM_PASS, G_RM_AA_ZB_OPA_SURF2),
+	gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_OPA_SURF2),
 	gsSPTexture(65535, 65535, 0, 0, 1),
 	gsDPTileSync(),
 	gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, koopa_without_shell_custom_nostril2_ia4),
@@ -638,14 +683,18 @@ Gfx mat_koopa_without_shell_custom_nostril_v4_001_layer1[] = {
 
 Gfx mat_revert_koopa_without_shell_custom_nostril_v4_001_layer1[] = {
 	gsDPPipeSync(),
+	gsSPGeometryMode(G_FOG, 0),
 	gsDPSetCycleType(G_CYC_1CYCLE),
 	gsDPSetRenderMode(G_RM_AA_ZB_OPA_SURF, G_RM_AA_ZB_OPA_SURF2),
 	gsSPEndDisplayList(),
 };
 
-Gfx mat_koopa_without_shell_custom_eye_open_v4[] = {
+Gfx mat_koopa_without_shell_custom_eye_open_v4_layer1[] = {
 	gsDPPipeSync(),
-	gsDPSetCombineLERP(TEXEL0, SHADE, TEXEL0_ALPHA, SHADE, 0, 0, 0, ENVIRONMENT, TEXEL0, SHADE, TEXEL0_ALPHA, SHADE, 0, 0, 0, ENVIRONMENT),
+	gsDPSetCombineLERP(TEXEL0, SHADE, TEXEL0_ALPHA, SHADE, 0, 0, 0, 1, 0, 0, 0, COMBINED, 0, 0, 0, 1),
+	gsSPGeometryMode(0, G_FOG),
+	gsDPSetCycleType(G_CYC_2CYCLE),
+	gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_OPA_SURF2),
 	gsSPTexture(65535, 65535, 0, 0, 1),
 	gsDPTileSync(),
 	gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_8b_LOAD_BLOCK, 1, koopa_without_shell_custom_SUPER_MARIO_64_506D1A26_0_2_all_ia8),
@@ -658,9 +707,20 @@ Gfx mat_koopa_without_shell_custom_eye_open_v4[] = {
 	gsSPEndDisplayList(),
 };
 
-Gfx mat_koopa_without_shell_custom_eye_closed_v4[] = {
+Gfx mat_revert_koopa_without_shell_custom_eye_open_v4_layer1[] = {
 	gsDPPipeSync(),
-	gsDPSetCombineLERP(TEXEL0, SHADE, TEXEL0_ALPHA, SHADE, 0, 0, 0, ENVIRONMENT, TEXEL0, SHADE, TEXEL0_ALPHA, SHADE, 0, 0, 0, ENVIRONMENT),
+	gsSPGeometryMode(G_FOG, 0),
+	gsDPSetCycleType(G_CYC_1CYCLE),
+	gsDPSetRenderMode(G_RM_AA_ZB_OPA_SURF, G_RM_AA_ZB_OPA_SURF2),
+	gsSPEndDisplayList(),
+};
+
+Gfx mat_koopa_without_shell_custom_eye_closed_v4_layer1[] = {
+	gsDPPipeSync(),
+	gsDPSetCombineLERP(TEXEL0, SHADE, TEXEL0_ALPHA, SHADE, 0, 0, 0, 1, 0, 0, 0, COMBINED, 0, 0, 0, 1),
+	gsSPGeometryMode(0, G_FOG),
+	gsDPSetCycleType(G_CYC_2CYCLE),
+	gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_OPA_SURF2),
 	gsSPTexture(65535, 65535, 0, 0, 1),
 	gsDPTileSync(),
 	gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_8b_LOAD_BLOCK, 1, koopa_without_shell_custom_SUPER_MARIO_64_0AB43F69_0_2_all_ia8),
@@ -673,105 +733,153 @@ Gfx mat_koopa_without_shell_custom_eye_closed_v4[] = {
 	gsSPEndDisplayList(),
 };
 
-Gfx mat_koopa_without_shell_custom_shoes_v4_001[] = {
+Gfx mat_revert_koopa_without_shell_custom_eye_closed_v4_layer1[] = {
 	gsDPPipeSync(),
-	gsDPSetCombineLERP(PRIMITIVE, 0, SHADE, 0, 0, 0, 0, ENVIRONMENT, PRIMITIVE, 0, SHADE, 0, 0, 0, 0, ENVIRONMENT),
+	gsSPGeometryMode(G_FOG, 0),
+	gsDPSetCycleType(G_CYC_1CYCLE),
+	gsDPSetRenderMode(G_RM_AA_ZB_OPA_SURF, G_RM_AA_ZB_OPA_SURF2),
+	gsSPEndDisplayList(),
+};
+
+Gfx mat_koopa_without_shell_custom_shoes_v4_001_layer1[] = {
+	gsDPPipeSync(),
+	gsDPSetCombineLERP(PRIMITIVE, 0, SHADE, 0, 0, 0, 0, 1, 0, 0, 0, COMBINED, 0, 0, 0, 1),
+	gsSPGeometryMode(0, G_FOG),
+	gsDPSetCycleType(G_CYC_2CYCLE),
+	gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_OPA_SURF2),
 	gsSPTexture(65535, 65535, 0, 0, 1),
 	gsDPSetPrimColor(0, 0, 0, 206, 0, 255),
 	gsSPEndDisplayList(),
 };
 
-Gfx mat_koopa_without_shell_custom_soles_v4_001[] = {
+Gfx mat_revert_koopa_without_shell_custom_shoes_v4_001_layer1[] = {
 	gsDPPipeSync(),
-	gsDPSetCombineLERP(PRIMITIVE, 0, SHADE, 0, 0, 0, 0, ENVIRONMENT, PRIMITIVE, 0, SHADE, 0, 0, 0, 0, ENVIRONMENT),
+	gsSPGeometryMode(G_FOG, 0),
+	gsDPSetCycleType(G_CYC_1CYCLE),
+	gsDPSetRenderMode(G_RM_AA_ZB_OPA_SURF, G_RM_AA_ZB_OPA_SURF2),
+	gsSPEndDisplayList(),
+};
+
+Gfx mat_koopa_without_shell_custom_soles_v4_001_layer1[] = {
+	gsDPPipeSync(),
+	gsDPSetCombineLERP(PRIMITIVE, 0, SHADE, 0, 0, 0, 0, 1, 0, 0, 0, COMBINED, 0, 0, 0, 1),
+	gsSPGeometryMode(0, G_FOG),
+	gsDPSetCycleType(G_CYC_2CYCLE),
+	gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_OPA_SURF2),
 	gsSPTexture(65535, 65535, 0, 0, 1),
 	gsDPSetPrimColor(0, 0, 255, 247, 132, 255),
 	gsSPEndDisplayList(),
 };
 
+Gfx mat_revert_koopa_without_shell_custom_soles_v4_001_layer1[] = {
+	gsDPPipeSync(),
+	gsSPGeometryMode(G_FOG, 0),
+	gsDPSetCycleType(G_CYC_1CYCLE),
+	gsDPSetRenderMode(G_RM_AA_ZB_OPA_SURF, G_RM_AA_ZB_OPA_SURF2),
+	gsSPEndDisplayList(),
+};
+
 Gfx koopa_without_shell_custom_000_offset_001_mesh_layer_1[] = {
-	gsSPDisplayList(mat_koopa_without_shell_custom_shirt_v4_001),
+	gsSPDisplayList(mat_koopa_without_shell_custom_shirt_v4_001_layer1),
 	gsSPDisplayList(koopa_without_shell_custom_000_offset_001_mesh_layer_1_tri_0),
-	gsSPDisplayList(mat_koopa_without_shell_custom_underwear_v4_001),
+	gsSPDisplayList(mat_revert_koopa_without_shell_custom_shirt_v4_001_layer1),
+	gsSPDisplayList(mat_koopa_without_shell_custom_underwear_v4_001_layer1),
 	gsSPDisplayList(koopa_without_shell_custom_000_offset_001_mesh_layer_1_tri_1),
+	gsSPDisplayList(mat_revert_koopa_without_shell_custom_underwear_v4_001_layer1),
 	gsSPEndDisplayList(),
 };
 
 Gfx koopa_without_shell_custom_000_offset_002_mesh_layer_1[] = {
-	gsSPDisplayList(mat_koopa_without_shell_custom_body_001_v4),
+	gsSPDisplayList(mat_koopa_without_shell_custom_body_001_v4_layer1),
 	gsSPDisplayList(koopa_without_shell_custom_000_offset_002_mesh_layer_1_tri_0),
-	gsSPDisplayList(mat_koopa_without_shell_custom_mouth_v4_001),
+	gsSPDisplayList(mat_revert_koopa_without_shell_custom_body_001_v4_layer1),
+	gsSPDisplayList(mat_koopa_without_shell_custom_mouth_v4_001_layer1),
 	gsSPDisplayList(koopa_without_shell_custom_000_offset_002_mesh_layer_1_tri_1),
+	gsSPDisplayList(mat_revert_koopa_without_shell_custom_mouth_v4_001_layer1),
 	gsSPDisplayList(mat_koopa_without_shell_custom_nostril_v4_001_layer1),
 	gsSPDisplayList(koopa_without_shell_custom_000_offset_002_mesh_layer_1_tri_2),
 	gsSPDisplayList(mat_revert_koopa_without_shell_custom_nostril_v4_001_layer1),
-	gsSPDisplayList(mat_koopa_without_shell_custom_eye_open_v4),
+	gsSPDisplayList(mat_koopa_without_shell_custom_eye_open_v4_layer1),
 	gsSPDisplayList(koopa_without_shell_custom_000_offset_002_mesh_layer_1_tri_3),
+	gsSPDisplayList(mat_revert_koopa_without_shell_custom_eye_open_v4_layer1),
 	gsSPEndDisplayList(),
 };
 
 Gfx koopa_without_shell_custom_000_offset_002_mesh_layer_1_mat_override_eye_closed_v4_0[] = {
-	gsSPDisplayList(mat_koopa_without_shell_custom_body_001_v4),
+	gsSPDisplayList(mat_koopa_without_shell_custom_body_001_v4_layer1),
 	gsSPDisplayList(koopa_without_shell_custom_000_offset_002_mesh_layer_1_tri_0),
-	gsSPDisplayList(mat_koopa_without_shell_custom_mouth_v4_001),
+	gsSPDisplayList(mat_revert_koopa_without_shell_custom_body_001_v4_layer1),
+	gsSPDisplayList(mat_koopa_without_shell_custom_mouth_v4_001_layer1),
 	gsSPDisplayList(koopa_without_shell_custom_000_offset_002_mesh_layer_1_tri_1),
+	gsSPDisplayList(mat_revert_koopa_without_shell_custom_mouth_v4_001_layer1),
 	gsSPDisplayList(mat_koopa_without_shell_custom_nostril_v4_001_layer1),
 	gsSPDisplayList(koopa_without_shell_custom_000_offset_002_mesh_layer_1_tri_2),
 	gsSPDisplayList(mat_revert_koopa_without_shell_custom_nostril_v4_001_layer1),
-	gsSPDisplayList(mat_koopa_without_shell_custom_eye_closed_v4),
+	gsSPDisplayList(mat_koopa_without_shell_custom_eye_closed_v4_layer1),
 	gsSPDisplayList(koopa_without_shell_custom_000_offset_002_mesh_layer_1_tri_3),
+	gsSPDisplayList(mat_revert_koopa_without_shell_custom_eye_closed_v4_layer1),
 	gsSPEndDisplayList(),
 };
 
 Gfx koopa_without_shell_custom_000_offset_003_mesh_layer_1[] = {
-	gsSPDisplayList(mat_koopa_without_shell_custom_body_001_v4),
+	gsSPDisplayList(mat_koopa_without_shell_custom_body_001_v4_layer1),
 	gsSPDisplayList(koopa_without_shell_custom_000_offset_003_mesh_layer_1_tri_0),
+	gsSPDisplayList(mat_revert_koopa_without_shell_custom_body_001_v4_layer1),
 	gsSPEndDisplayList(),
 };
 
 Gfx koopa_without_shell_custom_000_offset_004_mesh_layer_1[] = {
-	gsSPDisplayList(mat_koopa_without_shell_custom_shoes_v4_001),
+	gsSPDisplayList(mat_koopa_without_shell_custom_shoes_v4_001_layer1),
 	gsSPDisplayList(koopa_without_shell_custom_000_offset_004_mesh_layer_1_tri_0),
-	gsSPDisplayList(mat_koopa_without_shell_custom_soles_v4_001),
+	gsSPDisplayList(mat_revert_koopa_without_shell_custom_shoes_v4_001_layer1),
+	gsSPDisplayList(mat_koopa_without_shell_custom_soles_v4_001_layer1),
 	gsSPDisplayList(koopa_without_shell_custom_000_offset_004_mesh_layer_1_tri_1),
+	gsSPDisplayList(mat_revert_koopa_without_shell_custom_soles_v4_001_layer1),
 	gsSPEndDisplayList(),
 };
 
 Gfx koopa_without_shell_custom_000_offset_005_mesh_layer_1[] = {
-	gsSPDisplayList(mat_koopa_without_shell_custom_body_001_v4),
+	gsSPDisplayList(mat_koopa_without_shell_custom_body_001_v4_layer1),
 	gsSPDisplayList(koopa_without_shell_custom_000_offset_005_mesh_layer_1_tri_0),
+	gsSPDisplayList(mat_revert_koopa_without_shell_custom_body_001_v4_layer1),
 	gsSPEndDisplayList(),
 };
 
 Gfx koopa_without_shell_custom_000_offset_006_mesh_layer_1[] = {
-	gsSPDisplayList(mat_koopa_without_shell_custom_shoes_v4_001),
+	gsSPDisplayList(mat_koopa_without_shell_custom_shoes_v4_001_layer1),
 	gsSPDisplayList(koopa_without_shell_custom_000_offset_006_mesh_layer_1_tri_0),
-	gsSPDisplayList(mat_koopa_without_shell_custom_soles_v4_001),
+	gsSPDisplayList(mat_revert_koopa_without_shell_custom_shoes_v4_001_layer1),
+	gsSPDisplayList(mat_koopa_without_shell_custom_soles_v4_001_layer1),
 	gsSPDisplayList(koopa_without_shell_custom_000_offset_006_mesh_layer_1_tri_1),
+	gsSPDisplayList(mat_revert_koopa_without_shell_custom_soles_v4_001_layer1),
 	gsSPEndDisplayList(),
 };
 
 Gfx koopa_without_shell_custom_000_offset_007_mesh_layer_1[] = {
-	gsSPDisplayList(mat_koopa_without_shell_custom_body_001_v4),
+	gsSPDisplayList(mat_koopa_without_shell_custom_body_001_v4_layer1),
 	gsSPDisplayList(koopa_without_shell_custom_000_offset_007_mesh_layer_1_tri_0),
+	gsSPDisplayList(mat_revert_koopa_without_shell_custom_body_001_v4_layer1),
 	gsSPEndDisplayList(),
 };
 
 Gfx koopa_without_shell_custom_000_offset_008_mesh_layer_1[] = {
-	gsSPDisplayList(mat_koopa_without_shell_custom_body_001_v4),
+	gsSPDisplayList(mat_koopa_without_shell_custom_body_001_v4_layer1),
 	gsSPDisplayList(koopa_without_shell_custom_000_offset_008_mesh_layer_1_tri_0),
+	gsSPDisplayList(mat_revert_koopa_without_shell_custom_body_001_v4_layer1),
 	gsSPEndDisplayList(),
 };
 
 Gfx koopa_without_shell_custom_000_offset_009_mesh_layer_1[] = {
-	gsSPDisplayList(mat_koopa_without_shell_custom_body_001_v4),
+	gsSPDisplayList(mat_koopa_without_shell_custom_body_001_v4_layer1),
 	gsSPDisplayList(koopa_without_shell_custom_000_offset_009_mesh_layer_1_tri_0),
+	gsSPDisplayList(mat_revert_koopa_without_shell_custom_body_001_v4_layer1),
 	gsSPEndDisplayList(),
 };
 
 Gfx koopa_without_shell_custom_000_offset_010_mesh_layer_1[] = {
-	gsSPDisplayList(mat_koopa_without_shell_custom_body_001_v4),
+	gsSPDisplayList(mat_koopa_without_shell_custom_body_001_v4_layer1),
 	gsSPDisplayList(koopa_without_shell_custom_000_offset_010_mesh_layer_1_tri_0),
+	gsSPDisplayList(mat_revert_koopa_without_shell_custom_body_001_v4_layer1),
 	gsSPEndDisplayList(),
 };
 
