@@ -52,3 +52,4 @@
 #include "koopa_without_shell_custom/model.inc.c"
 #include "shell_custom/model.inc.c"
 #include "koopa_with_shell_custom/model.inc.c"
+#include "clock/model.inc.c"

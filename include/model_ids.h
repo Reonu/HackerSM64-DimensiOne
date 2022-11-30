@@ -12,6 +12,7 @@
 #define MODEL_PEACH                            0x102       // peach_geo
 #define MODEL_MONEYBAG                         0x103
 #define MODEL_PENGUIN                          0x104        // penguin_geo
+#define MODEL_CLOCK                            0x105
 
 /* Various static level geometry, the geo layout differs but terrain object presets treat them the same.*/
 

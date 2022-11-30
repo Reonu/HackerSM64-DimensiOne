@@ -444,4 +444,6 @@ extern const Collision penguin_seg5_collision_05008B88[];
 
 #include "koopa_with_shell_custom/geo_header.h"
 
+#include "clock/geo_header.h"
+
 #endif
