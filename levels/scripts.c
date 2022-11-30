@@ -123,6 +123,7 @@ const LevelScript level_main_scripts_entry[] = {
     LOAD_MODEL_FROM_GEO(MODEL_PEACH,                   peach_geo),
     LOAD_MODEL_FROM_GEO(MODEL_MONEYBAG,                moneybag_geo),
     LOAD_MODEL_FROM_GEO(MODEL_PENGUIN,                 penguin_geo),
+    LOAD_MODEL_FROM_GEO(MODEL_CLOCK,                   clock_geo),
     FREE_LEVEL_POOL(),
     POP_POOL(),
     CALL(/*arg*/ 0, /*func*/ lvl_init_from_save_file),
