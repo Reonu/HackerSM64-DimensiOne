@@ -2570,6 +2570,7 @@ void bhv_clock_init(void) {
 
 }
 
+void bhv_1up_interact(void); // Compiler warnings are just the best. :D
 void bhv_clock_loop(void) {
     o->oForwardVel = 8.0f;
     o->oMoveAngleYaw = o->oAngleToMario + 0x8000;
