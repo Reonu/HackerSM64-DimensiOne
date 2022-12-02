@@ -2562,27 +2562,67 @@ void bhv_follow_spline(void) {
 
 void bhv_clock_init(void) {
     o->oMoveAnglePitch = -0x4000;
-    o->oGravity = 3.0f;
-    o->oFriction = 1.0f;
-    o->oBuoyancy = 1.0f;
-    o->oPosX = remap(random_float(), 0, 1, -1000, 1000);
-    o->oPosZ = remap(random_float(), 0, 1, -1000, 1000);
-
+    o->oVelY = 70.0f;
 }
 
 void bhv_1up_interact(void); // Compiler warnings are just the best. :D
 void bhv_clock_loop(void) {
-    o->oForwardVel = 8.0f;
-    o->oMoveAngleYaw = o->oAngleToMario + 0x8000;
+    o->oFaceAngleYaw += 0x400;
 
-    bhv_1up_interact();
+    cur_obj_update_floor_and_walls();
+    cur_obj_move_standard(78);
+
+    if (o->oMoveFlags & OBJ_MOVE_ON_GROUND) {
+        o->oAction = 1;
+    } else if (o->oMoveFlags & OBJ_MOVE_LANDED) {
+        cur_obj_play_sound_2(SOUND_GENERAL_BOWSER_KEY_LAND);
+    }
+
+    if (o->oDistanceToMario < 100) {
+        o->parentObj->oAction = 0;
+        o->parentObj->oTimer = 0;
+        obj_mark_for_deletion(o);
+        cur_obj_play_sound_2(SOUND_GENERAL_COIN);
+        o->parentObj->oChallengeTimerTimeLeft += (10 * 30);
+    }
 }
 
 void bhv_clock_spawner_loop(void) {
-    if ((get_challenge_enforced_flags() & CHALLENGE_FLAG_TIMER) || (get_challenge_required_flags() & CHALLENGE_FLAG_TIMER)) {
-        if (o->oTimer == 250) {
-            spawn_object_abs_with_rot(o, 0, MODEL_CLOCK, bhvClock, remap(random_float(), 0, 1, -1000, 1000), 100, remap(random_float(), 0, 1, -1000, 1000), 0, 0, 0);
+    if (o->parentObj->oChallengeTimerTimeLeft > 0) {
+        o->oChallengeTimerRate = approach_f32_asymptotic(o->oChallengeTimerRate, 12, 0.08f);
+        gChallengeTimer -= roundf(o->oChallengeTimerRate);
+        o->parentObj->oChallengeTimerTimeLeft -= roundf(o->oChallengeTimerRate);
+
+        if (o->parentObj->oChallengeTimerTimeLeft <= 0) {
+            o->oChallengeTimerRate = 0;
+        }
+        if (gChallengeTimer < 0) {
+            o->parentObj->oChallengeTimerTimeLeft = 0;
+            gChallengeTimer = 1;
+        }
+    }
+
+    if (
+        o->oAction == 0
+        && gChallengeTimer > 5
+        && gChallengeTimer < (30*60)
+        && (
+            (get_challenge_enforced_flags() & CHALLENGE_FLAG_TIMER)
+            || (get_challenge_required_flags() & CHALLENGE_FLAG_TIMER)
+        )
+    ) {
+        if (o->oTimer == (30*8)) {
+            spawn_object_abs_with_rot(
+                o,
+                0,
+                MODEL_CLOCK,
+                bhvClock,
+                remap(random_float(), 0, 1, -800, 800),
+                100,
+                remap(random_float(), 0, 1, -800, 800),
+                0, 0, 0);
             o->oTimer = 0;
+            o->oAction = 1;
         }
     } else {
         o->oTimer = 0;
