@@ -446,4 +446,6 @@ extern const Collision penguin_seg5_collision_05008B88[];
 
 #include "clock/geo_header.h"
 
+#include "penguin/geo_header.h"
+
 #endif
