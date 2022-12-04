@@ -13,6 +13,8 @@
 #define MODEL_MONEYBAG                         0x103
 #define MODEL_PENGUIN                          0x104        // penguin_geo
 #define MODEL_CLOCK                            0x105
+#define MODEL_MR_BLIZZARD_HIDDEN               0x106        // mr_blizzard_hidden_geo
+#define MODEL_MR_BLIZZARD                      0x107        // mr_blizzard_geo
 
 /* Various static level geometry, the geo layout differs but terrain object presets treat them the same.*/
 
@@ -358,8 +360,7 @@
 
 // group 7
 #define MODEL_SPINDRIFT                   0x54        // spindrift_geo
-#define MODEL_MR_BLIZZARD_HIDDEN          0x55        // mr_blizzard_hidden_geo
-#define MODEL_MR_BLIZZARD                 0x56        // mr_blizzard_geo
+
 
 
 // group 8

@@ -31,3 +31,5 @@
 #include "shell_custom/geo.inc.c"
 #include "koopa_with_shell_custom/geo.inc.c"
 #include "clock/geo.inc.c"
+
+#include "snowman/geo.inc.c"
