@@ -15,6 +15,8 @@
 #define MODEL_CLOCK                            0x105
 #define MODEL_MR_BLIZZARD_HIDDEN               0x106        // mr_blizzard_hidden_geo
 #define MODEL_MR_BLIZZARD                      0x107        // mr_blizzard_geo
+#define MODEL_SNOWMAN_CUSTOM                   0x108
+#define MODEL_SNOWBALL_CUSTOM                  0x109
 
 /* Various static level geometry, the geo layout differs but terrain object presets treat them the same.*/
 

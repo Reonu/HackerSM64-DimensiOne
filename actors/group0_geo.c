@@ -33,3 +33,5 @@
 #include "clock/geo.inc.c"
 
 #include "snowman/geo.inc.c"
+#include "snowman_custom/geo.inc.c"
+#include "snowball_custom/geo.inc.c"

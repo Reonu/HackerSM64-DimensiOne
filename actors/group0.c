@@ -57,3 +57,5 @@
 #include "snowman/model.inc.c"
 #include "snowman/anims/data.inc.c"
 #include "snowman/anims/table.inc.c"
+#include "snowman_custom/model.inc.c"
+#include "snowball_custom/model.inc.c"

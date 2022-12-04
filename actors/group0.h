@@ -468,4 +468,8 @@ extern const struct Animation *const snowman_seg5_anims_0500D118[];
 
 #include "penguin/geo_header.h"
 
+#include "snowman_custom/geo_header.h"
+
+#include "snowball_custom/geo_header.h"
+
 #endif
