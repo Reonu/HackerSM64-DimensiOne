@@ -2567,6 +2567,11 @@ void bhv_clock_init(void) {
 
 void bhv_1up_interact(void); // Compiler warnings are just the best. :D
 void bhv_clock_loop(void) {
+    if (!is_challenge_active()) {
+        obj_mark_for_deletion(o);
+        return;
+    }
+
     o->oFaceAngleYaw += 0x400;
 
     cur_obj_update_floor_and_walls();
@@ -2578,16 +2583,25 @@ void bhv_clock_loop(void) {
         cur_obj_play_sound_2(SOUND_GENERAL_BOWSER_KEY_LAND);
     }
 
-    if (o->oDistanceToMario < 100) {
+    if (o->oDistanceToMario < 150) {
         o->parentObj->oAction = 0;
         o->parentObj->oTimer = 0;
         obj_mark_for_deletion(o);
-        cur_obj_play_sound_2(SOUND_GENERAL_COIN);
+        cur_obj_play_sound_2(SOUND_GENERAL_BIG_CLOCK);
+        struct Object *spark = spawn_object(o, MODEL_SPARKLES, bhvCoinSparklesSpawner);
+        spark->oPosY += 80;
         o->parentObj->oChallengeTimerTimeLeft += (10 * 30);
     }
 }
 
+#define TIMER_RESPAWN_TIME ((s32)(30*7.5f))
+#define TIMER_INITIAL_RESPAWN_TIME ((s32)(30*2.5f))
+
 void bhv_clock_spawner_loop(void) {
+    if (!is_challenge_active()) {
+        return;
+    }
+
     if (o->parentObj->oChallengeTimerTimeLeft > 0) {
         o->oChallengeTimerRate = approach_f32_asymptotic(o->oChallengeTimerRate, 12, 0.08f);
         gChallengeTimer -= roundf(o->oChallengeTimerRate);
@@ -2605,13 +2619,17 @@ void bhv_clock_spawner_loop(void) {
     if (
         o->oAction == 0
         && gChallengeTimer > 5
-        && gChallengeTimer < (30*60)
+        && gChallengeTimer <= (30*60)
         && (
             (get_challenge_enforced_flags() & CHALLENGE_FLAG_TIMER)
             || (get_challenge_required_flags() & CHALLENGE_FLAG_TIMER)
         )
     ) {
-        if (o->oTimer == (30*8)) {
+        if (gChallengeTimer == (30*60)-1) {
+            o->oTimer = TIMER_RESPAWN_TIME - TIMER_INITIAL_RESPAWN_TIME;
+        }
+
+        if (o->oTimer == TIMER_RESPAWN_TIME) {
             spawn_object_abs_with_rot(
                 o,
                 0,

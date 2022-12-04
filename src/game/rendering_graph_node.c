@@ -113,6 +113,8 @@ struct RenderModeContainer renderModeTable_1Cycle[2] = { { {
         G_RM_AA_OPA_SURF,                   // LAYER_OCCLUDE_SILHOUETTE_OPAQUE
         G_RM_AA_TEX_EDGE,                   // LAYER_OCCLUDE_SILHOUETTE_ALPHA
 #endif
+        [LAYER_CIRCLE_SHADOW] = G_RM_FOG_SHADE_A,                   // LAYER_SHADOW
+        [LAYER_CIRCLE_SHADOW_TRANSPARENT] = G_RM_FOG_SHADE_A,                   // LAYER_SHADOW
         G_RM_AA_XLU_SURF,                   // LAYER_TRANSPARENT_DECAL
         G_RM_AA_XLU_SURF,                   // LAYER_TRANSPARENT
         G_RM_AA_XLU_SURF,                   // LAYER_TRANSPARENT_INTER
@@ -131,6 +133,8 @@ struct RenderModeContainer renderModeTable_1Cycle[2] = { { {
         G_RM_AA_ZB_OPA_SURF,                // LAYER_OCCLUDE_SILHOUETTE_OPAQUE
         G_RM_AA_ZB_TEX_EDGE,                // LAYER_OCCLUDE_SILHOUETTE_ALPHA
 #endif
+        [LAYER_CIRCLE_SHADOW] = G_RM_FOG_SHADE_A, // LAYER_SHADOW
+        [LAYER_CIRCLE_SHADOW_TRANSPARENT] = G_RM_FOG_SHADE_A, // LAYER_SHADOW
         G_RM_ZB_OVL_SURF,                   // LAYER_TRANSPARENT_DECAL
         G_RM_AA_ZB_XLU_SURF,                // LAYER_TRANSPARENT
         G_RM_AA_ZB_XLU_INTER,               // LAYER_TRANSPARENT_INTER
@@ -150,6 +154,8 @@ struct RenderModeContainer renderModeTable_2Cycle[2] = { { {
         G_RM_AA_OPA_SURF2,                  // LAYER_OCCLUDE_SILHOUETTE_OPAQUE
         G_RM_AA_TEX_EDGE2,                  // LAYER_OCCLUDE_SILHOUETTE_ALPHA
 #endif
+        [LAYER_CIRCLE_SHADOW] = G_RM_AA_XLU_SURF2,                  // LAYER_SHADOW
+        [LAYER_CIRCLE_SHADOW_TRANSPARENT] = G_RM_CLD_SURF2,                  // LAYER_SHADOW
         G_RM_AA_XLU_SURF2,                  // LAYER_TRANSPARENT_DECAL
         G_RM_AA_XLU_SURF2,                  // LAYER_TRANSPARENT
         G_RM_AA_XLU_SURF2,                  // LAYER_TRANSPARENT_INTER
@@ -168,6 +174,8 @@ struct RenderModeContainer renderModeTable_2Cycle[2] = { { {
         G_RM_AA_ZB_OPA_SURF2,               // LAYER_OCCLUDE_SILHOUETTE_OPAQUE
         G_RM_AA_ZB_TEX_EDGE2,               // LAYER_OCCLUDE_SILHOUETTE_ALPHA
 #endif
+        [LAYER_CIRCLE_SHADOW] = G_RM_ZB_OVL_SURF2,                  // LAYER_SHADOW
+        [LAYER_CIRCLE_SHADOW_TRANSPARENT] = G_RM_ZB_CLD_SURF2,                  // LAYER_SHADOW
         G_RM_ZB_OVL_SURF2,                  // LAYER_TRANSPARENT_DECAL
         G_RM_AA_ZB_XLU_SURF2,               // LAYER_TRANSPARENT
         G_RM_AA_ZB_XLU_INTER2,              // LAYER_TRANSPARENT_INTER
@@ -450,37 +458,25 @@ void geo_process_master_list_sub(struct GraphNodeMasterList *node) {
         renderPhase = &sRenderPhases[phaseIndex];
         startLayer  = renderPhase->startLayer;
         endLayer    = renderPhase->endLayer;
-#ifdef OBJECTS_REJ
-        ucode       = renderPhase->ucode;
-        // Set the ucode for the current render phase
-        switch_ucode(ucode);
-        gSPLookAt(gDisplayListHead++, gCurLookAt);
-#endif
+
         if (enableZBuffer) {
             // Enable z buffer.
             gDPPipeSync(gDisplayListHead++);
             gSPSetGeometryMode(gDisplayListHead++, G_ZBUFFER);
         }
+
         // Iterate through the layers on the current render phase.
         for (currLayer = startLayer; currLayer <= endLayer; currLayer++) {
             // Set 'currList' to the first DisplayListNode on the current layer.
             currList = node->listHeads[ucode][currLayer];
-#if defined(DISABLE_AA) || !SILHOUETTE
+
             // Set the render mode for the current layer.
             gDPSetRenderMode(gDisplayListHead++, mode1List->modes[currLayer],
                                                  mode2List->modes[currLayer]);
-#else
-            if (phaseIndex == RENDER_PHASE_NON_SILHOUETTE) {
-                // To properly cover the silhouette, disable AA.
-                // The silhouette model does not have AA due to the hack used to prevent triangle overlap.
-                gDPSetRenderMode(gDisplayListHead++, (mode1List->modes[currLayer] & ~IM_RD),
-                                                     (mode2List->modes[currLayer] & ~IM_RD));
-            } else {
-                // Set the render mode for the current dl.
-                gDPSetRenderMode(gDisplayListHead++, mode1List->modes[currLayer],
-                                                     mode2List->modes[currLayer]);
+
+            if (currLayer == LAYER_CIRCLE_SHADOW) {
+                gSPDisplayList(gDisplayListHead++, dl_shadow_circle);
             }
-#endif
 
             gDPSetFogColor(gDisplayListHead++, gGlobalFog.r, gGlobalFog.g, gGlobalFog.b, gGlobalFog.a);
             gSPFogPosition(gDisplayListHead++, gGlobalFog.low, gGlobalFog.high);
@@ -490,22 +486,20 @@ void geo_process_master_list_sub(struct GraphNodeMasterList *node) {
                 // Add the display list's transformation to the master list.
                 gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(currList->transform),
                           (G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH));
-#if SILHOUETTE
-                if (phaseIndex == RENDER_PHASE_SILHOUETTE) {
-                    // Add the current display list to the master list, with silhouette F3D.
-                    gSPDisplayList(gDisplayListHead++, dl_silhouette_begin);
-                    gSPDisplayList(gDisplayListHead++, currList->displayList);
-                    gSPDisplayList(gDisplayListHead++, dl_silhouette_end);
-                } else {
-                    // Add the current display list to the master list.
-                    gSPDisplayList(gDisplayListHead++, currList->displayList);
-                }
-#else
+
                 // Add the current display list to the master list.
                 gSPDisplayList(gDisplayListHead++, currList->displayList);
-#endif
+
                 // Move to the next DisplayListNode.
                 currList = currList->next;
+            }
+
+            if (currLayer == LAYER_CIRCLE_SHADOW_TRANSPARENT) {
+                gSPTexture(gDisplayListHead++, 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF);
+                gSPSetGeometryMode(gDisplayListHead++, G_LIGHTING | G_CULL_BACK);
+                gSPClearGeometryMode(gDisplayListHead++, G_FOG);
+                gDPSetCycleType(gDisplayListHead++, G_CYC_1CYCLE);
+                gDPSetCombineMode(gDisplayListHead++, G_CC_SHADE, G_CC_SHADE);
             }
         }
     }
@@ -520,12 +514,6 @@ void geo_process_master_list_sub(struct GraphNodeMasterList *node) {
         gSPClearGeometryMode(gDisplayListHead++, G_ZBUFFER);
     }
 
-#ifdef OBJECTS_REJ
- #if defined(F3DEX_GBI_2) && defined(VISUAL_DEBUG)
-    if (hitboxView) render_debug_boxes(DEBUG_UCODE_REJ);
- #endif
-    switch_ucode(GRAPH_NODE_UCODE_DEFAULT);
-#endif
 #ifdef VISUAL_DEBUG
     if ( hitboxView) render_debug_boxes(DEBUG_UCODE_DEFAULT | DEBUG_BOX_CLEAR);
     // Load the world scale identity matrix
@@ -1396,9 +1384,17 @@ void geo_process_shadow(struct GraphNodeShadow *node) {
                 gCurrShadow.floorNormal, shadowPos, gCurrShadow.scale, gCurGraphNodeObject->angle[1]);
 
             inc_mat_stack();
+
+            s32 layer;
+            if (node->shadowType == SHADOW_CIRCLE) {
+                layer = gCurrShadow.isDecal ? LAYER_CIRCLE_SHADOW : LAYER_CIRCLE_SHADOW_TRANSPARENT;
+            } else {
+                layer = gCurrShadow.isDecal ? LAYER_TRANSPARENT_DECAL : LAYER_TRANSPARENT;
+            }
+
             geo_append_display_list(
                 (void *) VIRTUAL_TO_PHYSICAL(shadowList),
-                gCurrShadow.isDecal ? LAYER_TRANSPARENT_DECAL : LAYER_TRANSPARENT
+                layer
             );
 
             gMatStackIndex--;
