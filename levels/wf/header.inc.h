@@ -16,7 +16,7 @@ extern Vtx wf_dl_Plane_003_mesh_layer_1_vtx_cull[8];
 extern Vtx wf_dl_Plane_003_mesh_layer_1_vtx_0[24];
 extern Gfx wf_dl_Plane_003_mesh_layer_1_tri_0[];
 extern Vtx wf_dl_Area_2_WF_mesh_layer_1_vtx_cull[8];
-extern Vtx wf_dl_Area_2_WF_mesh_layer_1_vtx_0[474];
+extern Vtx wf_dl_Area_2_WF_mesh_layer_1_vtx_0[702];
 extern Gfx wf_dl_Area_2_WF_mesh_layer_1_tri_0[];
 extern Vtx wf_dl_Area_2_WF_mesh_layer_1_vtx_1[8];
 extern Gfx wf_dl_Area_2_WF_mesh_layer_1_tri_1[];

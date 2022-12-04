@@ -69,7 +69,7 @@ static void mr_blizzard_act_spawn_snowball(void) {
     if (o->oMrBlizzardHeldObj == NULL && cur_obj_init_anim_check_frame(0, 5)) {
         o->oMrBlizzardHeldObj =
             spawn_object_relative(0, -70, (s32)(o->oMrBlizzardGraphYOffset + 153.0f), 0, o,
-                                  MODEL_WHITE_PARTICLE, bhvMrBlizzardSnowball);
+                                  MODEL_SNOWBALL_CUSTOM, bhvMrBlizzardSnowball);
     } else if (cur_obj_check_anim_frame(10)) {
         o->prevObj = o->oMrBlizzardHeldObj;
     } else if (cur_obj_check_if_near_animation_end()) {
@@ -87,7 +87,7 @@ static void mr_blizzard_act_spawn_snowball(void) {
  * Handler for Mario entering or exiting Mr. Blizzard's range.
  */
 static void mr_blizzard_act_hide_unhide(void) {
-    if (o->oDistanceToMario < 1000.0f) {
+    if (o->oDistanceToMario < 2000.0f) {
         // If Mario is in range, move to rising action, make Mr. Blizzard visible,
         // make Mr. Blizzard tangible, and initialize GraphYVel.
         cur_obj_play_sound_2(SOUND_OBJ_SNOW_SAND2);
@@ -95,7 +95,10 @@ static void mr_blizzard_act_hide_unhide(void) {
         o->oMoveAngleYaw = o->oAngleToMario;
         o->oMrBlizzardGraphYVel = 42.0f;
 
-        mr_blizzard_spawn_white_particles(8, -10, 15, 20, 10);
+        if (!gIsConsole) {
+            mr_blizzard_spawn_white_particles(8, -10, 15, 20, 10);
+        }
+        
         cur_obj_unhide();
         cur_obj_become_tangible();
     } else {
@@ -120,7 +123,10 @@ static void mr_blizzard_act_rise_from_ground(void) {
         o->oPosY += o->oMrBlizzardGraphYOffset - 24.0f;
         o->oMrBlizzardGraphYOffset = 24.0f;
 
-        mr_blizzard_spawn_white_particles(8, -20, 20, 15, 10);
+        if (!gIsConsole) {
+            mr_blizzard_spawn_white_particles(8, -20, 20, 15, 10);
+        }
+        
 
         o->oAction = MR_BLIZZARD_ACT_ROTATE;
         o->oVelY = o->oMrBlizzardGraphYVel;
@@ -180,7 +186,7 @@ static void mr_blizzard_act_rotate(void) {
             }
         }
         // If Mario gets too far away, move to burrow action and delete the snowball.
-        else if (o->oDistanceToMario > 1500.0f) {
+        else if (o->oDistanceToMario > 2500.0f) {
             o->oAction = MR_BLIZZARD_ACT_BURROW;
             o->oMrBlizzardChangeInDizziness = 300.0f;
             o->prevObj = o->oMrBlizzardHeldObj = NULL;
@@ -435,7 +441,9 @@ static void mr_blizzard_snowball_act_2(void) {
 
     // If snowball collides with the ground, delete snowball.
     if (o->oAction == -1 || o->oMoveFlags & (OBJ_MOVE_MASK_ON_GROUND | OBJ_MOVE_ENTERED_WATER)) {
-        mr_blizzard_spawn_white_particles(6, 0, 5, 10, 3);
+        if (!gIsConsole) {
+            mr_blizzard_spawn_white_particles(6, 0, 5, 10, 3);
+        }
         create_sound_spawner(SOUND_GENERAL_MOVING_IN_SAND);
         obj_mark_for_deletion(o);
     }
