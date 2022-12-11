@@ -28,10 +28,21 @@
 // The default value can be increased or decreased in conjunction with the values in delaysL/R
 #define BETTER_REVERB_SIZE ALIGN16(0x1E200 + BETTER_REVERB_PTR_SIZE) // This can be significantly decreased if a downsample rate of 1 is not being used.
 
+/**
+ * Allow for more configurable reverb preset options, at cost of a bit of runtime (~600us from my testing)
+*/
+// #define CONFIGURABLE_BETTER_REVERB_PRESETS
+
 extern u8 gBetterReverbPreset;
 extern s8 betterReverbDownsampleRate;
 extern u8 monoReverb;
+
+#ifdef CONFIGURABLE_BETTER_REVERB_PRESETS
 extern s32 reverbFilterCount;
+#else
+#define reverbFilterCount 3
+#endif
+
 extern s32 betterReverbWindowsSize;
 extern s32 betterReverbRevIndex;
 extern s32 betterReverbGainIndex;

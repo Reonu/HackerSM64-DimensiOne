@@ -54,12 +54,20 @@ static u8 reverbMultsL[NUM_ALLPASS / 3] = {0};
 static u8 reverbMultsR[NUM_ALLPASS / 3] = {0};
 static s32 **delayBufsL;
 static s32 **delayBufsR;
+
+#ifdef CONFIGURABLE_BETTER_REVERB_PRESETS
 s32 reverbFilterCount;
+#endif
+
 s32 betterReverbWindowsSize;
 s32 betterReverbRevIndex; // This one is okay to adjust whenever
 s32 betterReverbGainIndex; // This one is okay to adjust whenever
 s32 *gReverbMultsL;
 s32 *gReverbMultsR;
+
+s32 *lastHistSampleL;
+s32 *lastHistSampleR;
+
 #endif
 
 
@@ -97,6 +105,7 @@ u8 sAudioSynthesisPad[0x20];
 #endif
 
 #ifdef BETTER_REVERB
+#ifdef CONFIGURABLE_BETTER_REVERB_PRESETS // Suboptimal versions
 static void reverb_samples(s16 *outSampleL, s16 *outSampleR, s32 inSampleL, s32 inSampleR) {
     s32 *curDelaySampleL;
     s32 *curDelaySampleR;
@@ -170,6 +179,49 @@ static void reverb_mono_sample(s16 *outSample, s32 inSample) {
 
     *outSample = CLAMP_S16(outTmp);
 }
+#else
+static void reverb_samples(s16 *outSampleL, s16 *outSampleR, s32 inSampleL, s32 inSampleR) {
+    s32 *curDelaySampleL;
+    s32 *curDelaySampleR;
+    s32 historySampleL;
+    s32 historySampleR;
+    s32 i = 0;
+    s32 outTmpL;
+    s32 outTmpR;
+    s32 tmpCarryoverL = (((delayBufsL[reverbFilterCount-1][allpassIdxL[reverbFilterCount-1]] * /*betterReverbRevIndex*/ 0x30) >> 8) + inSampleL);
+    s32 tmpCarryoverR = (((delayBufsR[reverbFilterCount-1][allpassIdxR[reverbFilterCount-1]] * /*betterReverbRevIndex*/ 0x30) >> 8) + inSampleR);
+
+    for (; i < reverbFilterCount-1; ++i) {
+        curDelaySampleL = &delayBufsL[i][allpassIdxL[i]];
+        curDelaySampleR = &delayBufsR[i][allpassIdxR[i]];
+        historySampleL = *curDelaySampleL;
+        historySampleR = *curDelaySampleR;
+
+        *curDelaySampleL = (((historySampleL * (-/*betterReverbGainIndex*/ 0xA0)) >> 8) + tmpCarryoverL);
+        *curDelaySampleR = (((historySampleR * (-/*betterReverbGainIndex*/ 0xA0)) >> 8) + tmpCarryoverR);
+        tmpCarryoverL = (((*curDelaySampleL * /*betterReverbGainIndex*/ 0xA0) >> 8) + historySampleL);
+        tmpCarryoverR = (((*curDelaySampleR * /*betterReverbGainIndex*/ 0xA0) >> 8) + historySampleR);
+
+        if (++allpassIdxL[i] == delaysL[i]) allpassIdxL[i] = 0;
+        if (++allpassIdxR[i] == delaysR[i]) allpassIdxR[i] = 0;
+    }
+
+    curDelaySampleL = &delayBufsL[reverbFilterCount-1][allpassIdxL[reverbFilterCount-1]];
+    curDelaySampleR = &delayBufsR[reverbFilterCount-1][allpassIdxR[reverbFilterCount-1]];
+    outTmpL = ((*curDelaySampleL * reverbMultsL[0]) >> 8);
+    outTmpR = ((*curDelaySampleR * reverbMultsR[0]) >> 8);
+    *curDelaySampleL = tmpCarryoverL;
+    *curDelaySampleR = tmpCarryoverR;
+
+    if (++allpassIdxL[reverbFilterCount-1] == delaysL[reverbFilterCount-1]) allpassIdxL[reverbFilterCount-1] = 0;
+    if (++allpassIdxR[reverbFilterCount-1] == delaysR[reverbFilterCount-1]) allpassIdxR[reverbFilterCount-1] = 0;
+
+    *outSampleL = CLAMP_S16(outTmpL);
+    *outSampleR = CLAMP_S16(outTmpR);
+}
+
+#define reverb_mono_sample(outSample, inSample) // Unused
+#endif
 
 void initialize_better_reverb_buffers(void) {
     delayBufsL = (s32**) soundAlloc(&gBetterReverbPool, BETTER_REVERB_PTR_SIZE);
@@ -314,7 +366,9 @@ void prepare_reverb_ring_buffer(s32 chunkLen, u32 updateIndex) {
         }
 #ifdef BETTER_REVERB
         else if (toggleBetterReverb) {
+#ifdef CONFIGURABLE_BETTER_REVERB_PRESETS
             reverbFilterCount--; // Temporarily lower filter count for optimized bulk processing
+#endif
             item = &gSynthesisReverb.items[gSynthesisReverb.curFrame][updateIndex];
             itemStartPos = item->startPos;
             finalLengthA = (item->lengthA / 2) + itemStartPos;
@@ -358,7 +412,9 @@ void prepare_reverb_ring_buffer(s32 chunkLen, u32 updateIndex) {
                         reverb_samples(&leftBuf[dstPos], &rightBuf[dstPos], leftBuf[dstPos], rightBuf[dstPos]);
                 }
             }
+#ifdef CONFIGURABLE_BETTER_REVERB_PRESETS
             reverbFilterCount++; // Reset filter count to accurate numbers
+#endif
         }
 #endif
     }
@@ -518,6 +574,8 @@ u64 *synthesis_execute(u64 *cmdBuf, s32 *writtenCmds, s16 *aiBuf, s32 bufLen) {
     aSegment(cmdBuf, 0, 0);
 
 #ifdef BETTER_REVERB
+
+#ifdef CONFIGURABLE_BETTER_REVERB_PRESETS
     if (reverbFilterCount > NUM_ALLPASS) {
         reverbFilterCount = NUM_ALLPASS;
     } else if (reverbFilterCount < 3) {
@@ -526,6 +584,9 @@ u64 *synthesis_execute(u64 *cmdBuf, s32 *writtenCmds, s16 *aiBuf, s32 bufLen) {
 
     s32 filterCountDiv3 = reverbFilterCount / 3;
     reverbFilterCount = filterCountDiv3 * 3; // reverbFilterCount should always be a multiple of 3.
+#else
+    s32 filterCountDiv3 = reverbFilterCount / 3;
+#endif
 
     // Update reverbMultsL every audio frame just in case gReverbMults is ever to change.
     if (gReverbMultsL != NULL && gReverbMultsR != NULL) {

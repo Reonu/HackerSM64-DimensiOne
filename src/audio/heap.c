@@ -1071,7 +1071,9 @@ void init_reverb_us(s32 presetId) {
 
     betterReverbDownsampleRate = betterReverbPreset->downsampleRate;
     monoReverb = betterReverbPreset->isMono;
+#ifdef CONFIGURABLE_BETTER_REVERB_PRESETS
     reverbFilterCount = betterReverbPreset->filterCount;
+#endif
     betterReverbWindowsSize = betterReverbPreset->windowSize;
     betterReverbRevIndex = betterReverbPreset->reverbIndex;
     betterReverbGainIndex = betterReverbPreset->gainIndex;
