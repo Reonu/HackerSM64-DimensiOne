@@ -334,8 +334,6 @@ void check_cache_emulation() {
 }
 
 extern void crash_screen_init(void);
-
-extern void crash_screen_init(void);
 extern OSViMode VI;
 void thread3_main(UNUSED void *arg) {
     setup_mesg_queues();
