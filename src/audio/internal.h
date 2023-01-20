@@ -5,8 +5,6 @@
 
 #include "types.h"
 
-#define VIBRATO_DISABLED_VALUE (0xFF * 8)
-
 #if defined(VERSION_EU) || defined(VERSION_SH)
 #define SEQUENCE_PLAYERS 4
 #else
@@ -28,6 +26,8 @@
 #define SEQUENCE_LAYERS 52
 #endif
 #endif // EXPAND_AUDIO_HEAP
+
+#define VIBRATO_DISABLED_VALUE (0xFF * 8)
 
 #define NO_LAYER ((struct SequenceChannelLayer *)(-1))
 
