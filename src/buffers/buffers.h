@@ -6,15 +6,9 @@
 
 #include "game/save_file.h"
 #include "game/game_init.h"
+#include "game/main.h"
 #include "config.h"
 #include "audio/data.h"
-
-#define THREAD1_STACK 0x100
-#define THREAD2_STACK 0x800
-#define THREAD3_STACK 0x200
-#define THREAD4_STACK 0x2000
-#define THREAD5_STACK 0x2000
-#define THREAD6_STACK 0x400
 
 extern u8 gDecompressionHeap[];
 
