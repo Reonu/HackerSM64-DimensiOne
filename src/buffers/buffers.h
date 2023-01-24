@@ -9,16 +9,23 @@
 #include "config.h"
 #include "audio/data.h"
 
+#define THREAD1_STACK 0x100
+#define THREAD2_STACK 0x800
+#define THREAD3_STACK 0x200
+#define THREAD4_STACK 0x2000
+#define THREAD5_STACK 0x2000
+#define THREAD6_STACK 0x400
+
 extern u8 gDecompressionHeap[];
 
 extern u8 gAudioHeap[DOUBLE_SIZE_ON_64_BIT(AUDIO_HEAP_SIZE)];
 
-extern u8 gIdleThreadStack[];
-extern u8 gThread3Stack[];
-extern u8 gThread4Stack[];
-extern u8 gThread5Stack[];
+extern u8 gIdleThreadStack[THREAD1_STACK];
+extern u8 gThread3Stack[THREAD3_STACK];
+extern u8 gThread4Stack[THREAD4_STACK];
+extern u8 gThread5Stack[THREAD5_STACK];
 #if ENABLE_RUMBLE
-extern u8 gThread6Stack[];
+extern u8 gThread6Stack[THREAD6_STACK];
 #endif
 
 extern u8 gGfxSPTaskYieldBuffer[];
