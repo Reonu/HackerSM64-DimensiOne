@@ -363,7 +363,9 @@ void adsr_init(struct AdsrState *adsr, struct AdsrEnvelope *envelope, UNUSED s16
 #if defined(VERSION_EU) || defined(VERSION_SH)
 f32 adsr_update(struct AdsrState *adsr) {
 #else
-s32 adsr_update(struct AdsrState *adsr) {
+s32 adsr_update(struct Note *note) {
+    struct AdsrState *adsr = &note->adsr;
+    u8 isInit = FALSE;
 #endif
     u8 action = adsr->action;
     u8 state = adsr->state;
@@ -372,6 +374,10 @@ s32 adsr_update(struct AdsrState *adsr) {
             return 0;
 
         case ADSR_STATE_INITIAL:
+            isInit = TRUE;
+            // fallthrough
+
+        case ADSR_STATE_RESTART:
 #if defined(VERSION_JP) || defined(VERSION_US)
             adsr->current = adsr->initial;
             adsr->target = adsr->initial;
@@ -411,7 +417,7 @@ s32 adsr_update(struct AdsrState *adsr) {
                     break;
 #endif
                 case ADSR_RESTART:
-                    adsr->state = ADSR_STATE_INITIAL;
+                    adsr->state = ADSR_STATE_RESTART;
                     break;
 
                 default:
@@ -432,6 +438,10 @@ s32 adsr_update(struct AdsrState *adsr) {
                     adsr->target = adsr->target * adsr->target;
                     adsr->velocity = (adsr->target - adsr->current) / adsr->delay;
 #else // !(VERSION_EU || VERSION_SH)
+                    if (isInit && adsr->delay <= 1) {
+                        note->initFullVelocity = TRUE;
+                    }
+
                     adsr->target = BSWAP16(adsr->envelope[adsr->envIndex].arg);
                     adsr->velocity = ((adsr->target - adsr->current) << 0x10) / adsr->delay;
 #endif // !(VERSION_EU || VERSION_SH)

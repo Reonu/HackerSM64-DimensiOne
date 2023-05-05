@@ -579,7 +579,7 @@ void process_notes(void) {
                 }
             }
 
-            adsr_update(&note->adsr);
+            adsr_update(note);
             note_vibrato_update(note);
             attributes = &note->attributes;
             if (note->priority == NOTE_PRIORITY_STOPPING) {
@@ -1451,6 +1451,7 @@ void note_init_all(void) {
 #else
         note->reverbVol = 0;
         note->usesHeadsetPanEffects = FALSE;
+        note->initFullVelocity = FALSE;
         note->sampleCount = 0;
         note->instOrWave = 0;
         note->targetVolLeft = 0;
