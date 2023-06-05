@@ -443,11 +443,9 @@ void init_mario_after_warp(void) {
         }
 #endif
 #ifndef DISABLE_EXIT_COURSE
-    //    if (sWarpDest.levelNum == EXIT_COURSE_LEVEL && sWarpDest.areaIdx == EXIT_COURSE_AREA
-    //         && sWarpDest.nodeId == EXIT_COURSE_NODE
-    //     ) {
-    //         play_sound(SOUND_MENU_MARIO_CASTLE_WARP, gGlobalSoundSource);
-    //     }
+        // if (sWarpDest.arg == WARP_FLAG_EXIT_COURSE) {
+        //     play_sound(SOUND_MENU_MARIO_CASTLE_WARP, gGlobalSoundSource);
+        // }
 #endif
     }
 #ifdef PUPPYPRINT_DEBUG
@@ -631,6 +629,8 @@ s16 music_unchanged_through_warp(s16 arg) {
  */
 void initiate_warp(s16 destLevel, s16 destArea, s16 destWarpNode, s32 warpFlags) {
     if (destWarpNode >= WARP_NODE_CREDITS_MIN) {
+        sWarpDest.type = WARP_TYPE_CHANGE_LEVEL;
+    } else if (warpFlags == WARP_FLAG_EXIT_COURSE) {
         sWarpDest.type = WARP_TYPE_CHANGE_LEVEL;
     } else if (destLevel != gCurrLevelNum) {
         sWarpDest.type = WARP_TYPE_CHANGE_LEVEL;
@@ -1185,7 +1185,7 @@ s32 play_mode_paused(void) {
             gMarioState->health = MARIO_MAX_HEALTH;
 
             tmpChallengeWarpID = -2; // Dumb hardcoded case for exit course level warps
-            initiate_warp(EXIT_COURSE_LEVEL, EXIT_COURSE_AREA, EXIT_COURSE_NODE, WARP_FLAGS_NONE);
+            initiate_warp(EXIT_COURSE_LEVEL, EXIT_COURSE_AREA, EXIT_COURSE_NODE, WARP_FLAG_EXIT_COURSE);
             tmpChallengeWarpID = -1;
 
             fade_into_special_warp(WARP_SPECIAL_NONE, 0);
