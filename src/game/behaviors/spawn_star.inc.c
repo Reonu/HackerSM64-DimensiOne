@@ -229,7 +229,8 @@ void bhv_hidden_red_coin_star_init(void) {
         o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
     }
 
-    o->oHiddenStarTriggerCounter = 8 - numRedCoinsRemaining;
+    o->oHiddenStarTriggerTotal = numRedCoinsRemaining + gRedCoinsCollected;
+    o->oHiddenStarTriggerCounter = o->oHiddenStarTriggerTotal - numRedCoinsRemaining;
 }
 
 void bhv_hidden_red_coin_star_loop(void) {
@@ -237,7 +238,7 @@ void bhv_hidden_red_coin_star_loop(void) {
 
     switch (o->oAction) {
         case HIDDEN_STAR_ACT_INACTIVE:
-            if (o->oHiddenStarTriggerCounter == 8) {
+            if (o->oHiddenStarTriggerCounter == o->oHiddenStarTriggerTotal) {
                 o->oAction = HIDDEN_STAR_ACT_ACTIVE;
             }
             break;
