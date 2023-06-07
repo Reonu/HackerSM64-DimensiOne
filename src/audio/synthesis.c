@@ -90,11 +90,15 @@ u64 *note_apply_headset_pan_effects(u64 *cmd, struct NoteSubEu *noteSubEu, struc
 u64 *synthesis_process_notes(s16 *aiBuf, s32 bufLen, u64 *cmd);
 u64 *load_wave_samples(u64 *cmd, struct Note *note, s32 nSamplesToLoad);
 u64 *final_resample(u64 *cmd, struct Note *note, s32 count, u16 pitch, u16 dmemIn, u32 flags);
-u64 *process_envelope(u64 *cmd, struct Note *note, s32 nSamples, u16 inBuf, s32 headsetPanSettings,
-                      u32 flags);
+#ifdef ENABLE_STEREO_HEADSET_EFFECTS
+u64 *process_envelope(u64 *cmd, struct Note *note, s32 nSamples, u16 inBuf, s32 headsetPanSettings);
 u64 *process_envelope_inner(u64 *cmd, struct Note *note, s32 nSamples, u16 inBuf,
                             s32 headsetPanSettings, struct VolumeChange *vol);
 u64 *note_apply_headset_pan_effects(u64 *cmd, struct Note *note, s32 bufLen, s32 flags, s32 leftRight);
+#else
+u64 *process_envelope(u64 *cmd, struct Note *note, s32 nSamples, u16 inBuf);
+u64 *process_envelope_inner(u64 *cmd, struct Note *note, s32 nSamples, u16 inBuf, struct VolumeChange *vol);
+#endif
 #endif
 
 #ifdef VERSION_EU
@@ -868,7 +872,9 @@ u64 *synthesis_process_notes(s16 *aiBuf, s32 bufLen, u64 *cmd) {
     s32 nSamplesToProcess;  // sp10c/a0, spE0
 #endif
 
+#ifdef ENABLE_STEREO_HEADSET_EFFECTS
     s32 leftRight;
+#endif
     s32 s3;
     s32 s5; //s4
 
@@ -1272,6 +1278,7 @@ u64 *synthesis_process_notes(s16 *aiBuf, s32 bufLen, u64 *cmd) {
                                  noteSamplesDmemAddrBeforeResampling, flags);
 #endif
 
+#ifdef ENABLE_STEREO_HEADSET_EFFECTS
 #ifdef VERSION_EU
             if (noteSubEu->headsetPanRight != 0 || synthesisState->prevHeadsetPanRight != 0) {
                 leftRight = 1;
@@ -1290,7 +1297,7 @@ u64 *synthesis_process_notes(s16 *aiBuf, s32 bufLen, u64 *cmd) {
 #ifdef VERSION_EU
             cmd = process_envelope(cmd, noteSubEu, synthesisState, bufLen, 0, leftRight, flags);
 #else
-            cmd = process_envelope(cmd, note, bufLen, 0, leftRight, flags);
+            cmd = process_envelope(cmd, note, bufLen, 0, leftRight);
 #endif
 
 #ifdef VERSION_EU
@@ -1301,6 +1308,9 @@ u64 *synthesis_process_notes(s16 *aiBuf, s32 bufLen, u64 *cmd) {
             if (note->usesHeadsetPanEffects) {
                 cmd = note_apply_headset_pan_effects(cmd, note, bufLen * 2, flags, leftRight);
             }
+#endif
+#else
+            cmd = process_envelope(cmd, note, bufLen, 0);
 #endif
         }
 #ifndef VERSION_EU
@@ -1371,8 +1381,11 @@ u64 *final_resample(u64 *cmd, struct Note *note, s32 count, u16 pitch, u16 dmemI
 #endif
 
 #ifndef VERSION_EU
-u64 *process_envelope(u64 *cmd, struct Note *note, s32 nSamples, u16 inBuf, s32 headsetPanSettings,
-                      UNUSED u32 flags) {
+#ifdef ENABLE_STEREO_HEADSET_EFFECTS
+u64 *process_envelope(u64 *cmd, struct Note *note, s32 nSamples, u16 inBuf, s32 headsetPanSettings) {
+#else
+u64 *process_envelope(u64 *cmd, struct Note *note, s32 nSamples, u16 inBuf) {
+#endif
     struct VolumeChange vol;
     if (note->initFullVelocity) {
         note->initFullVelocity = FALSE;
@@ -1386,11 +1399,20 @@ u64 *process_envelope(u64 *cmd, struct Note *note, s32 nSamples, u16 inBuf, s32 
     vol.targetRight = note->targetVolRight;
     note->curVolLeft = vol.targetLeft;
     note->curVolRight = vol.targetRight;
+#ifdef ENABLE_STEREO_HEADSET_EFFECTS
     return process_envelope_inner(cmd, note, nSamples, inBuf, headsetPanSettings, &vol);
+#else
+    return process_envelope_inner(cmd, note, nSamples, inBuf, &vol);
+#endif
 }
 
+#ifdef ENABLE_STEREO_HEADSET_EFFECTS
 u64 *process_envelope_inner(u64 *cmd, struct Note *note, s32 nSamples, u16 inBuf,
                             s32 headsetPanSettings, struct VolumeChange *vol) {
+#else
+u64 *process_envelope_inner(u64 *cmd, struct Note *note, s32 nSamples, u16 inBuf,
+                            struct VolumeChange *vol) {
+#endif
     u8 mixerFlags;
     s32 rampLeft, rampRight;
 #elif defined(VERSION_EU)
@@ -1421,6 +1443,7 @@ u64 *process_envelope(u64 *cmd, struct NoteSubEu *note, struct NoteSynthesisStat
     // in, dry left, count without A_AUX flag.
     // dry right, wet left, wet right with A_AUX flag.
 
+#ifdef ENABLE_STEREO_HEADSET_EFFECTS
     if (note->usesHeadsetPanEffects) {
         aClearBuffer(cmd++, DMEM_ADDR_NOTE_PAN_TEMP, DEFAULT_LEN_1CH);
 
@@ -1460,6 +1483,10 @@ u64 *process_envelope(u64 *cmd, struct NoteSubEu *note, struct NoteSynthesisStat
             aSetBuffer(cmd++, A_AUX, DMEM_ADDR_RIGHT_CH, DMEM_ADDR_WET_LEFT_CH, DMEM_ADDR_WET_RIGHT_CH);
         }
     }
+#else
+    aSetBuffer(cmd++, 0, inBuf, DMEM_ADDR_LEFT_CH, nSamples * 2);
+    aSetBuffer(cmd++, A_AUX, DMEM_ADDR_RIGHT_CH, DMEM_ADDR_WET_LEFT_CH, DMEM_ADDR_WET_RIGHT_CH);
+#endif
 
 #ifdef VERSION_EU
     if (targetLeft == sourceLeft && targetRight == sourceRight && !note->envMixerNeedsInit) {
@@ -1511,6 +1538,7 @@ u64 *process_envelope(u64 *cmd, struct NoteSubEu *note, struct NoteSynthesisStat
 #endif
     }
 
+#ifdef ENABLE_STEREO_HEADSET_EFFECTS
 #ifdef VERSION_EU
     if (gUseReverb && note->reverbVol != 0) {
         aEnvMixer(cmd++, mixerFlags | A_AUX,
@@ -1546,9 +1574,16 @@ u64 *process_envelope(u64 *cmd, struct NoteSubEu *note, struct NoteSynthesisStat
                  /*out*/ DMEM_ADDR_RIGHT_CH);
         }
     }
+#else
+    if (gSynthesisReverb.useReverb && note->reverbVol != 0) {
+        mixerFlags |= A_AUX;
+    }
+    aEnvMixer(cmd++, mixerFlags, VIRTUAL_TO_PHYSICAL2(note->synthesisBuffers->mixEnvelopeState));
+#endif
     return cmd;
 }
 
+#ifdef ENABLE_STEREO_HEADSET_EFFECTS
 #ifdef VERSION_EU
 u64 *note_apply_headset_pan_effects(u64 *cmd, struct NoteSubEu *noteSubEu, struct NoteSynthesisState *note, s32 bufLen, s32 flags, s32 leftRight) {
 #else
@@ -1644,6 +1679,7 @@ u64 *note_apply_headset_pan_effects(u64 *cmd, struct Note *note, s32 bufLen, s32
 
     return cmd;
 }
+#endif
 
 #ifndef VERSION_EU
 // Moved to playback.c in EU
@@ -1653,7 +1689,6 @@ void note_init_volume(struct Note *note) {
     note->targetVolRight = 0;
     note->reverbVol = 0;
     note->reverbVolShifted = 0;
-    note->unused2 = 0;
     note->curVolLeft = 1;
     note->curVolRight = 1;
     note->frequency = 0.0f;
@@ -1662,7 +1697,12 @@ void note_init_volume(struct Note *note) {
 void note_set_vel_pan_reverb(struct Note *note, f32 velocity, f32 pan, u8 reverbVol) {
     f32 volLeft, volRight;
     s32 panIndex = (s32)(pan * 127.5f) & 127;
-    if (note->stereoHeadsetEffects && gSoundMode == SOUND_MODE_HEADSET) {
+
+    if (gSoundMode == SOUND_MODE_MONO) {
+        volLeft = 0.707f;
+        volRight = 0.707f;
+#ifdef ENABLE_STEREO_HEADSET_EFFECTS
+    } else if (note->stereoHeadsetEffects && gSoundMode == SOUND_MODE_HEADSET) {
         s8 smallPanIndex;
         s8 temp = (s8)(pan * 10.0f);
         if (temp < 9) {
@@ -1692,9 +1732,7 @@ void note_set_vel_pan_reverb(struct Note *note, f32 velocity, f32 pan, u8 reverb
         }
         note->stereoStrongRight = strongRight;
         note->stereoStrongLeft = strongLeft;
-    } else if (gSoundMode == SOUND_MODE_MONO) {
-        volLeft = 0.707f;
-        volRight = 0.707f;
+#endif
     } else {
         volLeft = gDefaultPanVolume[panIndex];
         volRight = gDefaultPanVolume[127 - panIndex];
@@ -1730,6 +1768,7 @@ void note_enable(struct Note *note) {
     note->needsInit = TRUE;
     note->restart = FALSE;
     note->finished = FALSE;
+#ifdef ENABLE_STEREO_HEADSET_EFFECTS
     note->stereoStrongRight = FALSE;
     note->stereoStrongLeft = FALSE;
     note->usesHeadsetPanEffects = FALSE;
@@ -1738,6 +1777,7 @@ void note_enable(struct Note *note) {
     note->headsetPanRight = 0;
     note->prevHeadsetPanRight = 0;
     note->prevHeadsetPanLeft = 0;
+#endif
 }
 
 void note_disable(struct Note *note) {
