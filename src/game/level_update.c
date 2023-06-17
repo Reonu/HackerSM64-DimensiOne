@@ -1180,6 +1180,12 @@ s32 play_mode_paused(void) {
         if (gDebugLevelSelect) {
             fade_into_special_warp(WARP_SPECIAL_LEVEL_SELECT, 1);
         } else {
+#ifdef DEATH_ON_EXIT_COURSE
+            raise_background_noise(1);
+            gCameraMovementFlags &= ~CAM_MOVE_PAUSE_SCREEN;
+            set_play_mode(PLAY_MODE_NORMAL);
+            level_trigger_warp(gMarioState, WARP_OP_DEATH);
+#else
             gChallengeLevel = 0xFF;
             gChallengeStatus = CHALLENGE_STATUS_NOT_PLAYING;
             gMarioState->health = MARIO_MAX_HEALTH;
@@ -1190,6 +1196,7 @@ s32 play_mode_paused(void) {
 
             fade_into_special_warp(WARP_SPECIAL_NONE, 0);
             gSavedCourseNum = COURSE_NONE;
+#endif
         }
 
         gCameraMovementFlags &= ~CAM_MOVE_PAUSE_SCREEN;
