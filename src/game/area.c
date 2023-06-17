@@ -28,6 +28,9 @@
 #include "profiling.h"
 #include "one_challenges.h"
 #include "geo_misc.h"
+#ifdef S2DEX_TEXT_ENGINE
+#include "s2d_engine/init.h"
+#endif
 
 struct SpawnInfo gPlayerSpawnInfos[1];
 struct GraphNode *gGraphNodePointers[MODEL_ID_COUNT];
@@ -553,6 +556,14 @@ void render_game(void) {
                 gWarpTransDelay--;
             }
         }
+#ifdef S2DEX_TEXT_ENGINE
+        s2d_init();
+
+        // place any custom text engine code here if not using deferred prints
+
+        s2d_handle_deferred();
+        s2d_stop();
+#endif
     } else {
         render_text_labels();
 #ifdef PUPPYPRINT
