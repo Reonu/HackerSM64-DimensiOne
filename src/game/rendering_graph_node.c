@@ -335,7 +335,7 @@ extern const Gfx init_rdp[];
 
 const Gfx sSplineLineGfx[] = {
     gsDPPipeSync(),
-    gsSPClipRatio(FRUSTRATIO_1),
+    gsSPClipRatio(FRUSTRATIO_2),
     gsDPSetPrimColor(0, 0, 255, 255, 255, 255),
     gsSPClearGeometryMode(G_CULL_BACK | G_CULL_FRONT | G_LIGHTING | G_TEXTURE_GEN | G_TEXTURE_GEN_LINEAR | G_LOD),
     gsSPSetGeometryMode(G_ZBUFFER | G_FOG | G_SHADE),
