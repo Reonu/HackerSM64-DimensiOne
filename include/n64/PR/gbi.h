@@ -932,6 +932,10 @@
 	CVG_DST_CLAMP | FORCE_BL | ZMODE_OPA |			\
 	GBL_c##clk(G_BL_CLR_IN, G_BL_0, G_BL_CLR_IN, G_BL_1)
 
+#define	RM_OPA_SURF_S(clk)					\
+	CVG_DST_SAVE | FORCE_BL | ZMODE_OPA |			\
+	GBL_c##clk(G_BL_CLR_IN, G_BL_0, G_BL_CLR_IN, G_BL_1)
+
 #define	RM_XLU_SURF(clk)					\
 	IM_RD | CVG_DST_FULL | FORCE_BL | ZMODE_OPA |		\
 	GBL_c##clk(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA)
@@ -953,6 +957,14 @@
 #define	RM_ADD(clk)					\
 	IM_RD | CVG_DST_SAVE | FORCE_BL | ZMODE_OPA |	\
 	GBL_c##clk(G_BL_CLR_IN, G_BL_A_FOG, G_BL_CLR_MEM, G_BL_1)
+
+#define	RM_ADD_ALPHA(clk)					\
+	IM_RD | CVG_DST_SAVE | FORCE_BL | ZMODE_OPA |	\
+	GBL_c##clk(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1)
+
+#define	RM_ZB_ADD_ALPHA(clk)					\
+	IM_RD | CVG_DST_SAVE | FORCE_BL | ZMODE_OPA | Z_CMP | \
+	GBL_c##clk(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1)
 
 #define	RM_NOOP(clk)	\
 	GBL_c##clk(0, 0, 0, 0)
@@ -1115,6 +1127,8 @@
 
 #define	G_RM_OPA_SURF		RM_OPA_SURF(1)
 #define	G_RM_OPA_SURF2		RM_OPA_SURF(2)
+#define	G_RM_OPA_SURF_S		RM_OPA_SURF_S(1)
+#define	G_RM_OPA_SURF_S2    RM_OPA_SURF_S(2)
 #define	G_RM_XLU_SURF		RM_XLU_SURF(1)
 #define	G_RM_XLU_SURF2		RM_XLU_SURF(2)
 #define	G_RM_CLD_SURF		RM_CLD_SURF(1)
@@ -1125,6 +1139,10 @@
 #define	G_RM_PCL_SURF2		RM_PCL_SURF(2)
 #define G_RM_ADD       		RM_ADD(1)
 #define G_RM_ADD2      		RM_ADD(2)
+#define G_RM_ADD_ALPHA      RM_ADD_ALPHA(1)
+#define G_RM_ADD_ALPHA2     RM_ADD_ALPHA(2)
+#define G_RM_ZB_ADD_ALPHA   RM_ZB_ADD_ALPHA(1)
+#define G_RM_ZB_ADD_ALPHA2  RM_ZB_ADD_ALPHA(2)
 #define G_RM_NOOP       	RM_NOOP(1)
 #define G_RM_NOOP2      	RM_NOOP(2)
 #define G_RM_VISCVG    		RM_VISCVG(1)
