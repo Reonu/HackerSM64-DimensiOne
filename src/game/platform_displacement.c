@@ -6,6 +6,7 @@
 #include "object_fields.h"
 #include "object_helpers.h"
 #include "object_list_processor.h"
+#include "mario_step.h"
 #include "platform_displacement.h"
 #include "types.h"
 #include "sm64.h"
@@ -37,7 +38,16 @@ void update_mario_platform(void) {
     marioX = gMarioObject->oPosX;
     marioY = gMarioObject->oPosY;
     marioZ = gMarioObject->oPosZ;
+#ifdef COYOTE_TIME_FRAMES
+    if (gMarioState->onGround && gMarioState->lastGroundedFloor != NULL && mario_using_coyote_floor(gMarioState)) {
+        floor = gMarioState->lastGroundedFloor;
+        floorHeight = gMarioState->floorHeight;
+    } else {
+        floorHeight = find_floor(marioX, marioY, marioZ, &floor);
+    }
+#else
     floorHeight = find_floor(marioX, marioY, marioZ, &floor);
+#endif
 
     awayFromFloor =  absf(marioY - floorHeight) >= 4.0f;
 

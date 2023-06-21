@@ -378,7 +378,7 @@ void mario_set_forward_vel(struct MarioState *m, f32 forwardVel) {
 /**
  * Returns the slipperiness class of Mario's floor.
  */
-s32 mario_get_floor_class(struct MarioState *m) {
+s32 get_floor_class(struct Surface *floor, struct MarioState *m) {
     s32 floorClass;
 
     // The slide terrain type defaults to slide slipperiness.
@@ -390,8 +390,8 @@ s32 mario_get_floor_class(struct MarioState *m) {
         floorClass = SURFACE_CLASS_DEFAULT;
     }
 
-    if (m->floor != NULL) {
-        switch (m->floor->type) {
+    if (floor != NULL) {
+        switch (floor->type) {
             case SURFACE_NOT_SLIPPERY:
             case SURFACE_HARD_NOT_SLIPPERY:
             case SURFACE_SWITCH:
@@ -419,11 +419,18 @@ s32 mario_get_floor_class(struct MarioState *m) {
     }
 
     // Crawling allows Mario to not slide on certain steeper surfaces.
-    if (m->action == ACT_CRAWLING && m->floor->normal.y > 0.5f && floorClass == SURFACE_CLASS_DEFAULT) {
+    if (m->action == ACT_CRAWLING && floor->normal.y > 0.5f && floorClass == SURFACE_CLASS_DEFAULT) {
         floorClass = SURFACE_CLASS_NOT_SLIPPERY;
     }
 
     return floorClass;
+}
+
+/**
+ * Returns the slipperiness class of Mario's floor.
+ */
+s32 mario_get_floor_class(struct MarioState *m) {
+    return get_floor_class(m->floor, m);
 }
 
 // clang-format off
@@ -535,21 +542,28 @@ s32 mario_facing_downhill(struct MarioState *m, s32 turnYaw) {
 /**
  * Determines if a surface is slippery based on the surface class.
  */
-u32 mario_floor_is_slippery(struct MarioState *m) {
+u32 floor_is_slippery(struct Surface *floor, struct MarioState *m) {
     f32 normY;
 
-    if (((m->area->terrainType & TERRAIN_MASK) == TERRAIN_SLIDE  && m->floor->normal.y < COS1) || (m->floor->type == SURFACE_SUPER_SLIPPERY)) {
+    if (((m->area->terrainType & TERRAIN_MASK) == TERRAIN_SLIDE  && floor->normal.y < COS1) || (floor->type == SURFACE_SUPER_SLIPPERY)) {
         return TRUE;
     }
 
-    switch (mario_get_floor_class(m)) {
+    switch (get_floor_class(floor, m)) {
         case SURFACE_CLASS_VERY_SLIPPERY: normY = COS10; break;
         case SURFACE_CLASS_SLIPPERY:      normY = COS20; break;
         default:                          normY = COS38; break;
         case SURFACE_CLASS_NOT_SLIPPERY:  normY = 0.0f;  break;
     }
 
-    return m->floor->normal.y <= normY;
+    return floor->normal.y <= normY;
+}
+
+/**
+ * Determines if a surface is slippery based on the surface class.
+ */
+u32 mario_floor_is_slippery(struct MarioState *m) {
+    return floor_is_slippery(m->floor, m);
 }
 
 /**
@@ -1401,9 +1415,14 @@ void update_mario_inputs(struct MarioState *m) {
     update_mario_button_inputs(m);
     update_mario_joystick_inputs(m);
     update_mario_geometry_inputs(m);
+#ifdef COYOTE_TIME_FRAMES
+    m->onGround = check_mario_on_ground(m);
+#endif
+
 #ifdef VANILLA_DEBUG
     debug_print_speed_action_normal(m);
 #endif
+
     if (gCameraMovementFlags & CAM_MOVE_C_UP_MODE) {
         if (m->action & ACT_FLAG_ALLOW_FIRST_PERSON) {
             m->input |= INPUT_FIRST_PERSON;
@@ -1868,6 +1887,12 @@ void init_mario(void) {
     gMarioState->actionTimer = 0;
     gMarioState->framesSinceA = 0xFF;
     gMarioState->framesSinceB = 0xFF;
+    gMarioState->bufferedframesSinceA = -1;
+
+#ifdef COYOTE_TIME_FRAMES
+    gMarioState->lastGroundedFloor = NULL;
+    gMarioState->onGround = FALSE;
+#endif
 
     gMarioState->invincTimer = 0;
 

@@ -30,6 +30,23 @@ struct Surface gWaterSurfacePseudoFloor = {
     NULL,                       // object
 };
 
+#ifdef COYOTE_TIME_FRAMES
+struct Surface sCoyoteFloor = {
+    .type = SURFACE_DEFAULT,
+    .force = 0x0,
+    .flags = 0x0,
+    .room = 0,
+    .lowerY = -SURFACE_VERTICAL_BUFFER,
+    .upperY = SURFACE_VERTICAL_BUFFER,
+    .vertex1 = { 0, 0, 0 }, 
+    .vertex2 = { 0, 0, 0 }, 
+    .vertex3 = { 0, 0, 0 }, 
+    .normal = { 0.0f, 1.0f, 0.0f }, 
+    .originOffset = 0.0f,
+    .object = NULL,
+};
+#endif
+
 /**
  * Always returns zero. This may have been intended
  * to be used for the beta trampoline. Its return value
@@ -256,6 +273,12 @@ s32 stationary_ground_step(struct MarioState *m) {
 
     mario_set_forward_vel(m, 0.0f);
 
+    mario_update_moving_sand(m);
+    mario_update_windy_ground(m);
+    stepResult = perform_ground_step(m);
+    // its less glitchy to just take the step ^
+
+    /*
     u32 takeStep = (mario_update_moving_sand(m) | mario_update_windy_ground(m));
     if (takeStep) {
         stepResult = perform_ground_step(m);
@@ -268,9 +291,16 @@ s32 stationary_ground_step(struct MarioState *m) {
         vec3f_copy(marioObj->header.gfx.pos, m->pos);
         vec3s_set(marioObj->header.gfx.angle, 0, m->faceAngle[1], 0);
     }
+    */
 
     return stepResult;
 }
+
+#ifdef COYOTE_TIME_FRAMES
+s32 mario_using_coyote_floor(struct MarioState *m) {
+    return m->floor == &sCoyoteFloor;
+}
+#endif
 
 static s32 perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos) {
     struct WallCollisionData lowerWall, upperWall;
@@ -303,9 +333,28 @@ static s32 perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos) {
             return GROUND_STEP_HIT_WALL_STOP_QSTEPS;
         }
 
+#ifdef COYOTE_TIME_FRAMES
+        if (m->coyoteTime <= COYOTE_TIME_FRAMES && m->lastGroundedFloor != NULL) {
+            floor = &sCoyoteFloor;
+            sCoyoteFloor.normal.x = m->lastGroundedFloor->normal.x;
+            sCoyoteFloor.normal.y = m->lastGroundedFloor->normal.y;
+            sCoyoteFloor.normal.z = m->lastGroundedFloor->normal.z;
+            sCoyoteFloor.object = m->lastGroundedFloor->object;
+            sCoyoteFloor.originOffset = m->lastGroundedFloor->originOffset;
+
+            floorHeight = m->pos[1] - (4.0f / 4.0f); // real fake gravity
+        } else {
+            m->coyoteTime = 0;
+            vec3f_copy(m->pos, nextPos);
+            set_mario_floor(m, floor, floorHeight);
+            m->onGround = FALSE;
+            return GROUND_STEP_LEFT_GROUND;
+        }
+#else
         vec3f_copy(m->pos, nextPos);
         set_mario_floor(m, floor, floorHeight);
         return GROUND_STEP_LEFT_GROUND;
+#endif
     }
 
     if (floorHeight + 160.0f >= ceilHeight) {
@@ -361,6 +410,18 @@ s32 perform_ground_step(struct MarioState *m) {
             break;
         }
     }
+
+#ifdef COYOTE_TIME_FRAMES
+    if (mario_using_coyote_floor(m)) m->coyoteTime++;
+    else {
+        m->coyoteTime = 0;
+        if (stepResult != GROUND_STEP_LEFT_GROUND && !floor_is_slippery(m->floor, m)) {
+            m->lastGroundedFloor = m->floor;
+        } else {
+            m->lastGroundedFloor = NULL;
+        }
+    }
+#endif
 
     m->terrainSoundAddend = mario_get_terrain_sound_addend(m);
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);

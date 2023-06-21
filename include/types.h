@@ -490,6 +490,11 @@ struct MarioState {
              s16 wallYaw;
     // -- HackerSM64 MarioState fields end --
     s8 bufferedframesSinceA;
+#ifdef COYOTE_TIME_FRAMES
+    s8 coyoteTime;
+    struct Surface *lastGroundedFloor;
+    s8 onGround;
+#endif
 };
 
 typedef uint8_t   qu08_t;
