@@ -1778,11 +1778,6 @@ s32 execute_mario_action(UNUSED struct Object *obj) {
             set_camera_mode(gMarioState->area->camera, CAMERA_MODE_8_DIRECTIONS, 1);
             set_mario_action(gMarioState, ACT_DEBUG_FREE_MOVE, 0);
         }
-
-        if (gPlayer1Controller->buttonDown & (R_JPAD | R_TRIG) && (gPlayer1Controller->buttonPressed & (R_JPAD | R_TRIG))) {
-            level_trigger_warp(gMarioState, WARP_OP_STAR_EXIT);
-            gChallengeStatus = CHALLENGE_STATUS_WIN;
-        }
 #endif
 #ifdef ENABLE_CREDITS_BENCHMARK
         static s32 startedBenchmark = FALSE;

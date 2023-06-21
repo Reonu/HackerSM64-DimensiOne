@@ -13,107 +13,9 @@
 #include "fb_effects.h"
 #include "rendering_graph_node.h"
 
+
 // Actual data for all challenges
-static struct OneChallengeLevel sChallengeLevels[sizeof(oneflags_t)*8] = {
-    {    /*00*/
-        (CHALLENGE_FLAG_COIN), // Requirements (i.e. "At least one of")
-        (CHALLENGE_FLAG_COIN), // Enforcements (i.e. "No more than one of")
-    }, { /*01*/
-        (CHALLENGE_FLAG_NONE), // Requirements
-        (CHALLENGE_FLAG_COIN), // Enforcements
-    }, { /*02*/
-        (CHALLENGE_FLAG_JUMP | CHALLENGE_FLAG_KILL_GOOMBA | CHALLENGE_FLAG_GROUND), // Requirements
-        (CHALLENGE_FLAG_JUMP | CHALLENGE_FLAG_KILL_GOOMBA | CHALLENGE_FLAG_GROUND), // Enforcements
-    }, { /*03*/
-        (CHALLENGE_FLAG_NONE), // Requirements
-        (CHALLENGE_FLAG_GROUND | CHALLENGE_FLAG_KILL_GOOMBA), // Enforcements
-    }, { /*04*/
-        (CHALLENGE_FLAG_KILL_BOMB), // Requirements
-        (CHALLENGE_FLAG_KILL_BOMB), // Enforcements
-    }, { /*05*/
-        (CHALLENGE_FLAG_KILL_ALL_BOMBS), // Requirements
-        (CHALLENGE_FLAG_KILL_ALL_BOMBS), // Enforcements
-    }, { /*06*/
-        (CHALLENGE_FLAG_WALLKICK), // Requirements
-        (CHALLENGE_FLAG_WALLKICK | CHALLENGE_FLAG_GROUND), // Enforcements
-    }, { /*07*/
-        (CHALLENGE_FLAG_KILL_GOOMBA_WITH_BOMB), // Requirements
-        (CHALLENGE_FLAG_KILL_GOOMBA_WITH_BOMB | CHALLENGE_FLAG_KILL_GOOMBA), // Enforcements
-    }, { /*08*/
-        (CHALLENGE_FLAG_INTERACTED_KOOPA), // Requirements
-        (CHALLENGE_FLAG_INTERACTED_KOOPA | CHALLENGE_FLAG_GROUND), // Enforcements
-    }, { /*09*/
-        (CHALLENGE_FLAG_TRIPLE_JUMP | CHALLENGE_FLAG_COIN), // Requirements
-        (CHALLENGE_FLAG_TRIPLE_JUMP), // Enforcements
-    }, { /*10*/
-        (CHALLENGE_FLAG_A_PRESS), // Requirements
-        (CHALLENGE_FLAG_A_PRESS), // Enforcements
-    }, { /*11*/
-        (CHALLENGE_FLAG_NONE), // Requirements
-        (CHALLENGE_FLAG_COLLECT_LIFE), // Enforcements
-    }, { /*12*/
-        (CHALLENGE_FLAG_A_PRESS), // Requirements
-        (CHALLENGE_FLAG_A_PRESS | CHALLENGE_FLAG_SLEEPING_PIRANHA), // Enforcements
-    }, { /*13*/
-        (CHALLENGE_FLAG_A_PRESS), // Requirements
-        (CHALLENGE_FLAG_A_PRESS), // Enforcements
-    }, { /*14*/
-        (CHALLENGE_FLAG_TIMER), // Requirements
-        (CHALLENGE_FLAG_INTERACTED_KOOPA), // Enforcements
-    }, { /*15*/
-        (CHALLENGE_FLAG_COIN), // Requirements
-        (CHALLENGE_FLAG_COIN | CHALLENGE_FLAG_KILL_MONEYBAG), // Enforcements
-    }, { /*16*/
-        (CHALLENGE_FLAG_A_PRESS), // Requirements
-        (CHALLENGE_FLAG_A_PRESS), // Enforcements
-    }, { /*17*/
-        (CHALLENGE_FLAG_KILL_PENGUIN), // Requirements
-        (CHALLENGE_FLAG_KILL_PENGUIN), // Enforcements
-    }, { /*18*/
-        (CHALLENGE_FLAG_NONE), // Requirements
-        (CHALLENGE_FLAG_COLLECT_LIFE), // Enforcements
-    }, { /*19*/
-        (CHALLENGE_FLAG_KILL_WHOMP_KING | CHALLENGE_FLAG_SMOOCH), // Requirements
-        (CHALLENGE_FLAG_KILL_WHOMP_KING | CHALLENGE_FLAG_SMOOCH), // Enforcements
-    }, { /*20*/
-        (CHALLENGE_FLAG_NONE), // Requirements
-        (CHALLENGE_FLAG_NONE), // Enforcements
-    }, { /*21*/
-        (CHALLENGE_FLAG_NONE), // Requirements
-        (CHALLENGE_FLAG_NONE), // Enforcements
-    }, { /*22*/
-        (CHALLENGE_FLAG_NONE), // Requirements
-        (CHALLENGE_FLAG_NONE), // Enforcements
-    }, { /*23*/
-        (CHALLENGE_FLAG_NONE), // Requirements
-        (CHALLENGE_FLAG_NONE), // Enforcements
-    }, { /*24*/
-        (CHALLENGE_FLAG_NONE), // Requirements
-        (CHALLENGE_FLAG_NONE), // Enforcements
-    }, { /*25*/
-        (CHALLENGE_FLAG_NONE), // Requirements
-        (CHALLENGE_FLAG_NONE), // Enforcements
-    }, { /*26*/
-        (CHALLENGE_FLAG_NONE), // Requirements
-        (CHALLENGE_FLAG_NONE), // Enforcements
-    }, { /*27*/
-        (CHALLENGE_FLAG_NONE), // Requirements
-        (CHALLENGE_FLAG_NONE), // Enforcements
-    }, { /*28*/
-        (CHALLENGE_FLAG_NONE), // Requirements
-        (CHALLENGE_FLAG_NONE), // Enforcements
-    }, { /*29*/
-        (CHALLENGE_FLAG_NONE), // Requirements
-        (CHALLENGE_FLAG_NONE), // Enforcements
-    }, { /*30*/
-        (CHALLENGE_FLAG_NONE), // Requirements
-        (CHALLENGE_FLAG_NONE), // Enforcements
-    }, { /*31*/
-        (CHALLENGE_FLAG_NONE), // Requirements
-        (CHALLENGE_FLAG_NONE), // Enforcements
-    }
-    // ... (up to 64 entries if using u64 typedef)
-};
+#include "one_challenge_structs.c.in"
 
 
 // What is the current level of the challenge?
@@ -362,8 +264,8 @@ void reset_challenge(void) {
     sObtainedChallengeFlags = CHALLENGE_FLAG_NONE;
     sFailureFlags = CHALLENGE_FLAG_NONE;
 
-    sRequiredChallengeFlags = sChallengeLevels[gChallengeLevel].requiredFlags;
-    sEnforcedChallengeFlags = sChallengeLevels[gChallengeLevel].enforcedFlags;
+    sRequiredChallengeFlags = gChallengeLevelData[gChallengeLevel].requiredFlags;
+    sEnforcedChallengeFlags = gChallengeLevelData[gChallengeLevel].enforcedFlags;
 
     internalFlagsForFrame = CHALLENGE_FLAG_NONE;
 

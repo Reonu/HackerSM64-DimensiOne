@@ -29,6 +29,7 @@
 #include "game/puppycam2.h"
 #include "game/puppyprint.h"
 #include "game/puppylights.h"
+#include "game/debug.h"
 #include "game/one_challenges.h"
 
 #include "config.h"
@@ -1013,7 +1014,7 @@ static void level_cmd_challenge_jump_no_stack(void) {
 }
 
 static void level_cmd_area_spline(void) {
-    DEBUG_ASSERT(gAreas[sCurrAreaIndex].numSplines < 8);
+    assert(gAreas[sCurrAreaIndex].numSplines < 8, "Areas must use less than 8 total splines!");
     gAreas[sCurrAreaIndex].splines[gAreas[sCurrAreaIndex].numSplines] = segmented_to_virtual(CMD_GET(void *, 4));
     gAreas[sCurrAreaIndex].numSplines++;
 

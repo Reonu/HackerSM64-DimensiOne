@@ -896,7 +896,9 @@ s16 level_trigger_warp(struct MarioState *m, s32 warpOp) {
  */
 void initiate_delayed_warp(void) {
     struct ObjectWarpNode *warpNode;
+    struct OneChallengeLevel *challenge;
     s32 destWarpNode;
+    u8 standardLevelWarp = TRUE;
 
 #ifdef PUPPYPRINT_DEBUG
     if (gPuppyWarp) {
@@ -983,18 +985,28 @@ void initiate_delayed_warp(void) {
 
                     if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING) {
                         if (sSourceWarpNodeId == WARP_NODE_DEFAULT) {
-                            // 1-Indexed
-                            warpNode = area_get_warp_node(gChallengeLevel + 2);
+                            standardLevelWarp = FALSE;
+                            if (gChallengeLevel + 1 >= ARRAY_COUNT(gChallengeLevelData)) {
+                                challenge = &gChallengeLevelData[ARRAY_COUNT(gChallengeLevelData) - 1];
+                            } else {
+                                challenge = &gChallengeLevelData[gChallengeLevel + 1];
+                            }
+                            initiate_warp(challenge->warpLevelNum & 0x7F, challenge->warpAreaIdx,
+                                        challenge->warpNodeId, sDelayedWarpArg);
                         } else if (sSourceWarpNodeId == WARP_NODE_DEATH || sSourceWarpNodeId == WARP_NODE_WARP_FLOOR) {
-                            // 1-Indexed
-                            warpNode = area_get_warp_node(gChallengeLevel + 1);
+                            standardLevelWarp = FALSE;
+                            challenge = &gChallengeLevelData[gChallengeLevel];
+                            initiate_warp(challenge->warpLevelNum & 0x7F, challenge->warpAreaIdx,
+                                        challenge->warpNodeId, sDelayedWarpArg);
                         }
                     }
 
-                    initiate_warp(warpNode->node.destLevel & 0x7F, warpNode->node.destArea,
-                                  warpNode->node.destNode, sDelayedWarpArg);
+                    if (standardLevelWarp) {
+                        initiate_warp(warpNode->node.destLevel & 0x7F, warpNode->node.destArea,
+                                    warpNode->node.destNode, sDelayedWarpArg);
+                        check_if_should_set_warp_checkpoint(&warpNode->node);
+                    }
 
-                    check_if_should_set_warp_checkpoint(&warpNode->node);
                     if (sWarpDest.type != WARP_TYPE_CHANGE_LEVEL) {
                         level_set_transition(2, NULL);
                     }

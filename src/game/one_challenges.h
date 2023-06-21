@@ -43,7 +43,7 @@ STATIC_ASSERT(CHALLENGE_NAME_TOTAL <= sizeof(oneflags_t) * 8, "Too many challeng
 enum OneChallengeFlags {
     CHALLENGE_FLAG_NONE                  = 0,
 
-    CHALLENGE_FLAG_SMOOCH                = (1ULL << CHALLENGE_NAME_SMOOCH), // TODO: Everything lol
+    CHALLENGE_FLAG_SMOOCH                = (1ULL << CHALLENGE_NAME_SMOOCH),
     CHALLENGE_FLAG_JUMP                  = (1ULL << CHALLENGE_NAME_JUMP),
     CHALLENGE_FLAG_COIN                  = (1ULL << CHALLENGE_NAME_COIN),
     CHALLENGE_FLAG_GROUND                = (1ULL << CHALLENGE_NAME_GROUND),
@@ -67,10 +67,16 @@ enum OneChallengeFlags {
 };
 
 struct OneChallengeLevel {
-    oneflags_t requiredFlags;
-    oneflags_t enforcedFlags;
+    u8 challengeId;
+    u8 warpLevelNum;
+    u8 warpAreaIdx;
+    u8 warpNodeId;
+    char *challengeName;
+    oneflags_t requiredFlags; // "At least one of"
+    oneflags_t enforcedFlags; // "No more than one of"
 };
 
+extern struct OneChallengeLevel gChallengeLevelData[sizeof(oneflags_t)*8];
 extern u8 gChallengeLevel;
 extern u16 gBombsSpawned;
 extern u32 gChallengeStatus;
