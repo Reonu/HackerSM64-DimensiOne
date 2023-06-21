@@ -16,10 +16,11 @@ void bhv_1up_interact(void) {
 #if ENABLE_RUMBLE
         queue_rumble_data(5, 80);
 #endif
-    if (o->behavior == segmented_to_virtual(bhvClock))
-        gChallengeTimer -= (5 * 30); // 5 seconds
-    } else {
-        add_challenge_kill_flags(CHALLENGE_FLAG_COLLECT_LIFE);
+        if (o->behavior == segmented_to_virtual(bhvClock)) {
+            gChallengeTimer -= (5 * 30); // 5 seconds
+        } else {
+            add_challenge_kill_flags(CHALLENGE_FLAG_COLLECT_LIFE);
+        }
     }
 }
 

@@ -49,7 +49,7 @@ static struct OneChallengeLevel sChallengeLevels[sizeof(oneflags_t)*8] = {
         (CHALLENGE_FLAG_A_PRESS), // Requirements
         (CHALLENGE_FLAG_A_PRESS), // Enforcements
     }, { /*11*/
-        (CHALLENGE_FLAG_COLLECT_LIFE), // Requirements
+        (CHALLENGE_FLAG_NONE), // Requirements
         (CHALLENGE_FLAG_COLLECT_LIFE), // Enforcements
     }, { /*12*/
         (CHALLENGE_FLAG_A_PRESS), // Requirements
@@ -70,7 +70,7 @@ static struct OneChallengeLevel sChallengeLevels[sizeof(oneflags_t)*8] = {
         (CHALLENGE_FLAG_KILL_PENGUIN), // Requirements
         (CHALLENGE_FLAG_KILL_PENGUIN), // Enforcements
     }, { /*18*/
-        (CHALLENGE_FLAG_COLLECT_LIFE), // Requirements
+        (CHALLENGE_FLAG_NONE), // Requirements
         (CHALLENGE_FLAG_COLLECT_LIFE), // Enforcements
     }, { /*19*/
         (CHALLENGE_FLAG_KILL_WHOMP_KING | CHALLENGE_FLAG_SMOOCH), // Requirements
