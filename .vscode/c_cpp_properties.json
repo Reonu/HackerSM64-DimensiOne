@@ -3,11 +3,16 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/include/n64/**",
-                "${workspaceFolder}/include/**",
+                "${workspaceFolder}",
+                "${workspaceFolder}/include/n64",
+                "${workspaceFolder}/include",
+                "${workspaceFolder}/include/libc",
                 "${workspaceFolder}/textures/**",
-                "${workspaceFolder}/build/us_n64/**",
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/build/us_n64/include",
+                "${workspaceFolder}/build/us_n64",
+                "${workspaceFolder}/src",
+                "${workspaceFolder}/src/engine",
+                "${workspaceFolder}/src/game"
             ],
             "forcedInclude": [
                 "${workspaceFolder}/include/types.h",
@@ -19,7 +24,8 @@
                 "${workspaceFolder}/include/level_commands.h",
                 "${workspaceFolder}/include/segment_symbols.h",
                 "${workspaceFolder}/include/command_macros_base.h",
-                "${workspaceFolder}/include/object_constants.h"
+                "${workspaceFolder}/include/object_constants.h",
+                "${workspaceFolder}/src/game/obj_behaviors_2.c"
             ],
             "defines": [
                 "TARGET_N64=1",
@@ -27,12 +33,21 @@
                 "F3DEX_GBI_2=1",
                 "F3DZEX_NON_GBI_2=1",
                 "F3DEX_GBI_SHARED=1",
-                "L3DZEX_GBI=1"
+                "L3DZEX_GBI=1",
+                "_LANGUAGE_C"
             ],
             "compilerPath": "/usr/bin/mips-linux-gnu-gcc",
             "cStandard": "gnu17",
             "cppStandard": "gnu++14",
-            "intelliSenseMode": "linux-gcc-x86"
+            "intelliSenseMode": "linux-gcc-x86",
+            "browse": {
+                "path": [
+                    "${workspaceFolder}/src/game",
+                    "${workspaceFolder}/src/game/behaviors",
+                    "${workspaceFolder}"
+                ],
+                "limitSymbolsToIncludedHeaders": false
+            }
         }
     ],
     "version": 4
