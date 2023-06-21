@@ -65,5 +65,20 @@ s32 execute_mario_action(UNUSED struct Object *obj);
 void init_mario(void);
 void init_mario_from_save_file(void);
 s32 consume_buffered_jump(struct MarioState *m);
+u32 floor_is_slippery(struct Surface *floor, struct MarioState *m);
+
+ALWAYS_INLINE s32 check_mario_near_ground(struct MarioState *m) {
+    return m->pos[1] - m->floorHeight < 4.0f;
+}
+
+ALWAYS_INLINE s32 check_mario_on_ground(struct MarioState *m) {
+    return (
+        (m->action & ACT_GROUP_MASK) == ACT_GROUP_STATIONARY
+        || (m->action & ACT_GROUP_MASK) == ACT_GROUP_MOVING
+        || (m->action & ACT_GROUP_MASK) == ACT_GROUP_SUBMERGED
+        || check_mario_near_ground(m)
+    )
+    && m->vel[1] <= 0.0f;
+}
 
 #endif // MARIO_H
