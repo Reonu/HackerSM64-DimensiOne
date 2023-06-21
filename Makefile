@@ -587,7 +587,7 @@ load: $(ROM) $(LOADER)
 	$(LOADER) -r $<
 
 unf: $(ROM) $(LOADER)
-	$(LOADER) -d -r $<
+	$(LOADER) -d unfoutput.txt -r $<
 
 libultra: $(BUILD_DIR)/libultra.a
 
