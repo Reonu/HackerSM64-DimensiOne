@@ -268,7 +268,7 @@ void stop_and_set_height_to_floor(struct MarioState *m) {
 }
 
 s32 stationary_ground_step(struct MarioState *m) {
-    struct Object *marioObj = m->marioObj;
+    // struct Object *marioObj = m->marioObj;
     u32 stepResult = GROUND_STEP_NONE;
 
     mario_set_forward_vel(m, 0.0f);
@@ -467,7 +467,7 @@ struct Surface *check_ledge_grab(struct MarioState *m, struct Surface *prevWall,
         || (*ledgeFloor) == NULL
         || ledgePos[1] < nextPos[1] + 100.0f
 #ifdef DONT_LEDGE_GRAB_STEEP_SLOPES
-        || floor_is_slippery(ledgeFloor, m)
+        || floor_is_slippery(*ledgeFloor, m)
         || (SURFACE_IS_QUICKSAND((*ledgeFloor)->type) && gChallengeLevel == 14)
 #endif
     ) {
