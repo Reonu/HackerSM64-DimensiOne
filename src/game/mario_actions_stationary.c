@@ -28,7 +28,7 @@ s32 check_common_idle_cancels(struct MarioState *m) {
         return set_mario_action(m, ACT_SHOCKWAVE_BOUNCE, 0);
     }
 
-    if (m->input & INPUT_A_PRESSED) {
+    if (consume_buffered_jump(m)) {
         return set_jumping_action(m, ACT_JUMP, 0);
     }
 
@@ -75,7 +75,7 @@ s32 check_common_hold_idle_cancels(struct MarioState *m) {
         return drop_and_set_mario_action(m, ACT_SHOCKWAVE_BOUNCE, 0);
     }
 
-    if (m->input & INPUT_A_PRESSED) {
+    if (consume_buffered_jump(m)) {
         return set_jumping_action(m, ACT_HOLD_JUMP, 0);
     }
 
@@ -507,7 +507,7 @@ s32 act_crouching(struct MarioState *m) {
         return set_mario_action(m, ACT_SHOCKWAVE_BOUNCE, 0);
     }
 
-    if (m->input & INPUT_A_PRESSED) {
+    if (consume_buffered_jump(m)) {
         return set_jumping_action(m, ACT_BACKFLIP, 0);
     }
 
@@ -819,7 +819,7 @@ s32 check_common_landing_cancels(struct MarioState *m, u32 action) {
         return set_mario_action(m, ACT_IDLE, 0);
     }
 
-    if (m->input & INPUT_A_PRESSED) {
+    if (consume_buffered_jump(m)) {
         if (!action) {
             return set_jump_from_landing(m);
         } else {
@@ -887,6 +887,7 @@ s32 act_triple_jump_land_stop(struct MarioState *m) {
 s32 act_backflip_land_stop(struct MarioState *m) {
     if (!(m->input & INPUT_Z_DOWN) || m->marioObj->header.gfx.animInfo.animFrame >= 6) {
         m->input &= ~INPUT_A_PRESSED;
+        consume_buffered_jump(m);
     }
 
     if (check_common_landing_cancels(m, ACT_BACKFLIP)) {

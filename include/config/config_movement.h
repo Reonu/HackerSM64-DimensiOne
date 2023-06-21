@@ -111,7 +111,7 @@
 /**
  * The last frame after hitting a wall that will be considered a firsty when wallkicking.
  */
-#define FIRSTY_LAST_FRAME 1
+#define NUM_FIRSTY_FRAMES 1
 
 /**
  * The maximum angle the player can wall kick, in degrees. 0..90. To allow 45 degree wall kicks, you must supply `46` to allow 45 and under.
@@ -141,3 +141,4 @@
  */
 // #define BUGFIX_DIALOG_TIME_STOP
 
+#define JUMP_BUFFER_FRAMES 1

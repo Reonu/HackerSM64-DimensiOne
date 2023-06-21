@@ -737,6 +737,9 @@ void set_mario_y_vel_based_on_fspeed(struct MarioState *m, f32 initialVelY, f32 
     if (m->squishTimer != 0 || m->quicksandDepth > 1.0f) {
         m->vel[1] *= 0.5f;
     }
+
+    // reset frames since A if this is a jump
+    if (m->input & INPUT_A_PRESSED) m->bufferedframesSinceA = -1;
 }
 
 /**
@@ -1095,7 +1098,7 @@ s32 hurt_and_set_mario_action(struct MarioState *m, u32 action, u32 actionArg, s
  * actions. A common variant of the below function.
  */
 s32 check_common_action_exits(struct MarioState *m) {
-    if (m->input & INPUT_A_PRESSED) {
+    if (consume_buffered_jump(m)) {
         return set_mario_action(m, ACT_JUMP, 0);
     }
     if (m->input & INPUT_OFF_FLOOR) {
@@ -1116,7 +1119,7 @@ s32 check_common_action_exits(struct MarioState *m) {
  * object holding actions. A holding variant of the above function.
  */
 s32 check_common_hold_action_exits(struct MarioState *m) {
-    if (m->input & INPUT_A_PRESSED     ) return set_mario_action(m, ACT_HOLD_JUMP,          0);
+    if (consume_buffered_jump(m)) return set_mario_action(m, ACT_HOLD_JUMP,          0);
     if (m->input & INPUT_OFF_FLOOR     ) return set_mario_action(m, ACT_HOLD_FREEFALL,      0);
     if (m->input & INPUT_NONZERO_ANALOG) return set_mario_action(m, ACT_HOLD_WALKING,       0);
     if (m->input & INPUT_ABOVE_SLIDE   ) return set_mario_action(m, ACT_HOLD_BEGIN_SLIDING, 0);
@@ -1239,6 +1242,14 @@ void debug_print_speed_action_normal(struct MarioState *m) {
 }
 #endif
 
+s32 consume_buffered_jump(struct MarioState *m) {
+    if (m->bufferedframesSinceA >= 0) {
+        m->bufferedframesSinceA = -1;
+        return TRUE;
+    }
+    return FALSE;
+}
+
 /**
  * Update the button inputs for Mario.
  */
@@ -1256,9 +1267,19 @@ void update_mario_button_inputs(struct MarioState *m) {
 
     if (m->input & INPUT_A_PRESSED) {
         m->framesSinceA = 0;
-    } else if (m->framesSinceA < 0xFF) {
-        m->framesSinceA++;
+        m->bufferedframesSinceA = 0;
+    } else {
+        if (m->framesSinceA < 0xFF) {
+            m->framesSinceA++;
+        }
+
+        if (m->bufferedframesSinceA >= 0 && m->bufferedframesSinceA <= JUMP_BUFFER_FRAMES) {
+            m->bufferedframesSinceA++;
+        } else {
+            m->bufferedframesSinceA = -1;
+        }
     }
+
 
     if (m->input & INPUT_B_PRESSED) {
         m->framesSinceB = 0;
@@ -1756,6 +1777,11 @@ s32 execute_mario_action(UNUSED struct Object *obj) {
         if (gPlayer1Controller->buttonDown & U_JPAD && !(gPlayer1Controller->buttonDown & L_TRIG)) {
             set_camera_mode(gMarioState->area->camera, CAMERA_MODE_8_DIRECTIONS, 1);
             set_mario_action(gMarioState, ACT_DEBUG_FREE_MOVE, 0);
+        }
+
+        if (gPlayer1Controller->buttonDown & (R_JPAD | R_TRIG) && (gPlayer1Controller->buttonPressed & (R_JPAD | R_TRIG))) {
+            level_trigger_warp(gMarioState, WARP_OP_STAR_EXIT);
+            gChallengeStatus = CHALLENGE_STATUS_WIN;
         }
 #endif
 #ifdef ENABLE_CREDITS_BENCHMARK

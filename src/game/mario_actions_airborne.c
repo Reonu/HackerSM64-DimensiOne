@@ -1285,12 +1285,14 @@ s32 act_air_hit_wall(struct MarioState *m) {
         mario_drop_held_object(m);
     }
 
-    if (++(m->actionTimer) <= FIRSTY_LAST_FRAME) {
-        if (m->input & INPUT_A_PRESSED) {
+    m->actionTimer++;
+    if (m->actionTimer <= NUM_FIRSTY_FRAMES) {
+        if (consume_buffered_jump(m)) {
             m->vel[1] = 52.0f;
             m->faceAngle[1] += 0x8000;
             return set_mario_action(m, ACT_WALL_KICK_AIR, 0);
         }
+        if (m->actionTimer == NUM_FIRSTY_FRAMES) return TRUE;
     } else if (m->forwardVel >= 38.0f) {
         m->wallKickTimer = 5;
         if (m->vel[1] > 0.0f) {
@@ -1311,10 +1313,9 @@ s32 act_air_hit_wall(struct MarioState *m) {
         return set_mario_action(m, ACT_SOFT_BONK, 0);
     }
 
-#if FIRSTY_LAST_FRAME > 1
-    set_mario_animation(m, MARIO_ANIM_START_WALLKICK);
-    m->marioObj->header.gfx.angle[1] = m->wallYaw;
-#endif
+    /* This can look nice when allowing a higher number of firsty frames */
+    // set_mario_animation(m, MARIO_ANIM_START_WALLKICK);
+    // m->marioObj->header.gfx.angle[1] = m->wallYaw;
 
     return FALSE;
 }
