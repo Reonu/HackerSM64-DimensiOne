@@ -1053,19 +1053,18 @@ void init_reverb_us(s32 presetId) {
     struct BetterReverbSettings *betterReverbPreset = &gBetterReverbSettings[gBetterReverbPreset];
 
     if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING) {
-        betterReverbPreset = &gBetterReverbSettings[1]; // Always use preset 1 for now
+        betterReverbPreset = &gBetterReverbSettings[3]; // Always use preset 3 for now
     }
 
+    betterReverbLightweight = betterReverbPreset->useLightweightSettings;
     betterReverbDownsampleRate = betterReverbPreset->downsampleRate;
     monoReverb = betterReverbPreset->isMono;
-#ifdef CONFIGURABLE_BETTER_REVERB_PRESETS
     reverbFilterCount = betterReverbPreset->filterCount;
-#endif
     betterReverbWindowsSize = betterReverbPreset->windowSize;
     betterReverbRevIndex = betterReverbPreset->reverbIndex;
     betterReverbGainIndex = betterReverbPreset->gainIndex;
-    gReverbMultsL = betterReverbPreset->reverbMultsL;
-    gReverbMultsR = betterReverbPreset->reverbMultsR;
+    gReverbMults[SYNTH_CHANNEL_LEFT] = betterReverbPreset->reverbMultsL;
+    gReverbMults[SYNTH_CHANNEL_RIGHT] = betterReverbPreset->reverbMultsR;
 
     if (betterReverbDownsampleRate <= 0) {
         toggleBetterReverb = FALSE;
@@ -1081,6 +1080,14 @@ void init_reverb_us(s32 presetId) {
             if (reverbWindowSize < DEFAULT_LEN_2CH && betterReverbWindowsSize != 0) // Minimum window size to not overflow
                 reverbWindowSize = DEFAULT_LEN_2CH;
         }
+    }
+
+    reverbFilterCount -= reverbFilterCount % 3;
+    
+    if (reverbFilterCount > NUM_ALLPASS) {
+        reverbFilterCount = NUM_ALLPASS;
+    } else if (reverbFilterCount < 3) {
+        reverbFilterCount = 3;
     }
 #endif
     if (reverbWindowSize > 0)
@@ -1133,6 +1140,9 @@ void init_reverb_us(s32 presetId) {
     }
 
 #ifdef BETTER_REVERB
+    if (!gSynthesisReverb.useReverb)
+        toggleBetterReverb = FALSE;
+
     if (betterReverbPreset->gain > 0)
         gSynthesisReverb.reverbGain = (u16) betterReverbPreset->gain;
 
@@ -1141,8 +1151,7 @@ void init_reverb_us(s32 presetId) {
 
     // This does not have to be reset after being initialized for the first time, which would help speed up load times.
     // However, resetting this allows for proper clearing of the reverb buffers, as well as dynamic customization of the delays array.
-    if (toggleBetterReverb)
-        set_better_reverb_buffers(betterReverbPreset->delaysL, betterReverbPreset->delaysR);
+    set_better_reverb_buffers(betterReverbPreset->delaysL, betterReverbPreset->delaysR);
 #endif
 }
 #endif
