@@ -2586,16 +2586,16 @@ void bhv_clock_spawner_loop(void) {
         return;
     }
 
-    if (o->parentObj->oChallengeTimerTimeLeft > 0) {
+    if (o->oChallengeTimerTimeLeft > 0) {
         o->oChallengeTimerRate = approach_f32_asymptotic(o->oChallengeTimerRate, 12, 0.08f);
         gChallengeTimer -= roundf(o->oChallengeTimerRate);
-        o->parentObj->oChallengeTimerTimeLeft -= roundf(o->oChallengeTimerRate);
+        o->oChallengeTimerTimeLeft -= roundf(o->oChallengeTimerRate);
 
-        if (o->parentObj->oChallengeTimerTimeLeft <= 0) {
+        if (o->oChallengeTimerTimeLeft <= 0) {
             o->oChallengeTimerRate = 0;
         }
         if (gChallengeTimer < 0) {
-            o->parentObj->oChallengeTimerTimeLeft = 0;
+            o->oChallengeTimerTimeLeft = 0;
             gChallengeTimer = 1;
         }
     }

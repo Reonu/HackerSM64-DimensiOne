@@ -294,6 +294,7 @@ const LevelScript level_bob_entry[] = {
 		TERRAIN_TYPE(TERRAIN_GRASS),
 		/* Fast64 begin persistent block [area commands] */
 		SET_ECHO(0x22, 0x22),
+		OBJECT(MODEL_NONE, 0, 0, 0, 0, 0, 0, 0, bhvClockSpawner),
 		/* Fast64 end persistent block [area commands] */
 	END_AREA(),
 
