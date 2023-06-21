@@ -411,8 +411,8 @@ ifneq ($(call find-command,mips64-elf-ld),)
   CROSS := mips64-elf-
 else ifneq ($(call find-command,mips64-ld),)
   CROSS := mips64-
-# else ifneq ($(call find-command,mips-n64-ld),)
-#   CROSS := mips-n64-
+else ifneq ($(call find-command,mips-n64-ld),)
+  CROSS := mips-n64-
 else ifneq ($(call find-command,mips-linux-gnu-ld),)
   CROSS := mips-linux-gnu-
 else ifneq ($(call find-command,mips64-linux-gnu-ld),)
