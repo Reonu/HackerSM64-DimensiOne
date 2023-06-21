@@ -407,7 +407,7 @@ void init_mario_after_warp(void) {
 
     if (gCurrDemoInput == NULL) {
 #ifdef BETTER_REVERB
-        gBetterReverbPreset = gCurrentArea->betterReverbPreset;
+        gBetterReverbPresetValue = gCurrentArea->betterReverbPreset;
 #endif
         if (gSetChallengeMusic) {
             gSetChallengeMusic = FALSE;
@@ -528,7 +528,7 @@ void warp_credits(void) {
 
     if (gCurrCreditsEntry == NULL || gCurrCreditsEntry == sCreditsSequence) {
 #ifdef BETTER_REVERB
-        gBetterReverbPreset = gCurrentArea->betterReverbPreset;
+        gBetterReverbPresetValue = gCurrentArea->betterReverbPreset;
 #endif
         if (gSetChallengeMusic) {
             gSetChallengeMusic = FALSE;
@@ -1396,7 +1396,7 @@ s32 init_level(void) {
 
         if (gCurrDemoInput == NULL) {
 #ifdef BETTER_REVERB
-            gBetterReverbPreset = gCurrentArea->betterReverbPreset;
+            gBetterReverbPresetValue = gCurrentArea->betterReverbPreset;
 #endif
             if (gSetChallengeMusic) {
                 gSetChallengeMusic = FALSE;

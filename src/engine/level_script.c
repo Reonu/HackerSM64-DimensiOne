@@ -792,9 +792,9 @@ static void level_cmd_set_menu_music(void) {
 #ifdef BETTER_REVERB
     // Must come before set_background_music()
     if (gIsConsole)
-        gBetterReverbPreset = CMD_GET(u8, 4);
+        gBetterReverbPresetValue = CMD_GET(u8, 4);
     else
-        gBetterReverbPreset = CMD_GET(u8, 5);
+        gBetterReverbPresetValue = CMD_GET(u8, 5);
 #endif
     set_background_music(0, CMD_GET(s16, 2), 0);
     sCurrentCmd = CMD_NEXT;
@@ -1022,6 +1022,7 @@ static void level_cmd_area_spline(void) {
 
 static void level_cmd_set_echo(void) {
     if (sCurrAreaIndex >= 0 && sCurrAreaIndex < AREA_COUNT) {
+        gAreaData[sCurrAreaIndex].useEchoOverride = TRUE;
         if (gIsConsole)
             gAreaData[sCurrAreaIndex].echoOverride = CMD_GET(s8, 2);
         else
