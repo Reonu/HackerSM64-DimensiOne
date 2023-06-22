@@ -9,6 +9,12 @@ extern char **gChallengeTypesArr[];
 
 extern u32 gChallengesPrintTimer;
 
+#ifdef ENABLE_CHALLENGE_SELECTIONS
+extern s32 gChallengeWarpPauseIndex;
+extern s32 gChallengeScroll;
+s32 print_debug_challenge_select(void);
+#endif
+
 void print_challenge_types(void);
 void clear_challenge_print_timers(void);
 void update_last_print_vars(oneflags_t obtained, oneflags_t failure);

@@ -90,3 +90,9 @@
  * BoB music really is the best, isn't it?
  */
 // #define MUTE_MUSIC_PLAYERS
+
+/**
+ * Pausing provides a list of warpable DimensiOne challenges.
+ * This also enables for quick skipping of challenges by pressing R+Z.
+ */
+#define ENABLE_CHALLENGE_SELECTIONS

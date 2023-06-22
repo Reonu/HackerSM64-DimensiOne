@@ -475,19 +475,19 @@ void credits_text(void) {
     switch (sCreditsState)
     {
     case 1: {
-        print_small_text(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, CRED_STR1, PRINT_TEXT_ALIGN_CENTER, PRINT_ALL, FONT_DEFAULT);
+        print_small_text(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, CRED_STR1, PRINT_TEXT_ALIGN_CENTER, PRINT_ALL, FONT_DEFAULT, TRUE);
         break;
     }
     case 2: {
-        print_small_text(SCREEN_WIDTH/2, SCREEN_HEIGHT/3, CRED_STR2, PRINT_TEXT_ALIGN_CENTER, PRINT_ALL, FONT_DEFAULT);
+        print_small_text(SCREEN_WIDTH/2, SCREEN_HEIGHT/3, CRED_STR2, PRINT_TEXT_ALIGN_CENTER, PRINT_ALL, FONT_DEFAULT, TRUE);
         break;
     }
     case 3: {
-        print_small_text(SCREEN_WIDTH/2, SCREEN_HEIGHT/3, CRED_STR3, PRINT_TEXT_ALIGN_CENTER, PRINT_ALL, FONT_DEFAULT);
+        print_small_text(SCREEN_WIDTH/2, SCREEN_HEIGHT/3, CRED_STR3, PRINT_TEXT_ALIGN_CENTER, PRINT_ALL, FONT_DEFAULT, TRUE);
         break;
     }
     case LAST_CREDITS_MESSAGE: {
-        print_small_text(SCREEN_WIDTH/2, SCREEN_HEIGHT/3, CRED_STR4, PRINT_TEXT_ALIGN_CENTER, PRINT_ALL, FONT_DEFAULT);
+        print_small_text(SCREEN_WIDTH/2, SCREEN_HEIGHT/3, CRED_STR4, PRINT_TEXT_ALIGN_CENTER, PRINT_ALL, FONT_DEFAULT, TRUE);
         break;
     }
     case 5:

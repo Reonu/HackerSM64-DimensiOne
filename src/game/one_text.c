@@ -1,6 +1,7 @@
 #include "sm64.h"
 #include "debug.h"
 #include "game_init.h"
+#include "ingame_menu.h"
 #include "level_update.h"
 #include "object_list_processor.h"
 #include "one_challenges.h"
@@ -20,12 +21,133 @@ static oneflags_t sObtainedChallengeFlagsLast = CHALLENGE_FLAG_NONE;
 static oneflags_t sFailureFlagsLast = CHALLENGE_FLAG_NONE;
 u32 gChallengesPrintTimer = -1U;
 
+#ifdef ENABLE_CHALLENGE_SELECTIONS
+s32 gChallengeWarpPauseIndex = 1;
+s32 gChallengeScroll = 2;
+
+static s8 dpadUpHeldFrames = 0;
+static s8 dpadDownHeldFrames = 0;
+static s8 dpadLeftHeldFrames = 0;
+static s8 dpadRightHeldFrames = 0;
+
+#define DISPLAY_MAX MIN(ARRAY_COUNT(gChallengeLevelData), 12)
+#define SCROLL_FRAMES 10
+s32 print_debug_challenge_select(void) {
+    print_set_envcolour(0xFF, 0xFF, 0xFF, gDialogTextAlpha);
+    print_small_text(SCREEN_WIDTH / 2, 48, "Debug Challenge Select", PRINT_TEXT_ALIGN_CENTER, PRINT_ALL, FONT_DEFAULT, TRUE);
+    s32 lastIndex = gChallengeWarpPauseIndex;
+
+    if ((gPlayer3Controller->rawStickY > 60) || gPlayer1Controller->buttonDown & (U_CBUTTONS | U_JPAD)) {
+        if (dpadUpHeldFrames >= SCROLL_FRAMES || dpadUpHeldFrames == 0) {
+            gChallengeWarpPauseIndex--;
+            gChallengeScroll--;
+        }
+        dpadUpHeldFrames++;
+        if (dpadUpHeldFrames > SCROLL_FRAMES) {
+            dpadUpHeldFrames -= 2;
+        }
+    } else {
+        dpadUpHeldFrames = 0;
+    }
+    if ((gPlayer3Controller->rawStickY < -60) || gPlayer1Controller->buttonDown & (D_CBUTTONS | D_JPAD)) {
+        if (dpadDownHeldFrames >= SCROLL_FRAMES || dpadDownHeldFrames == 0) {
+            gChallengeWarpPauseIndex++;
+            gChallengeScroll++;
+        }
+        dpadDownHeldFrames++;
+        if (dpadDownHeldFrames > SCROLL_FRAMES) {
+            dpadDownHeldFrames -= 2;
+        }
+    } else {
+        dpadDownHeldFrames = 0;
+    }
+    if ((gPlayer3Controller->rawStickX < -60) || gPlayer1Controller->buttonDown & (L_CBUTTONS | L_JPAD)) {
+        if (dpadLeftHeldFrames >= SCROLL_FRAMES || dpadLeftHeldFrames == 0) {
+            gChallengeWarpPauseIndex -= 10;
+            gChallengeScroll -= 10;
+        }
+        dpadLeftHeldFrames++;
+        if (dpadLeftHeldFrames > SCROLL_FRAMES) {
+            dpadLeftHeldFrames -= 2;
+        }
+    } else {
+        dpadLeftHeldFrames = 0;
+    }
+    if ((gPlayer3Controller->rawStickX > 60) || gPlayer1Controller->buttonDown & (R_CBUTTONS | R_JPAD)) {
+        if (dpadRightHeldFrames >= SCROLL_FRAMES || dpadRightHeldFrames == 0) {
+            gChallengeWarpPauseIndex += 10;
+            gChallengeScroll += 10;
+        }
+        dpadRightHeldFrames++;
+        if (dpadRightHeldFrames > SCROLL_FRAMES) {
+            dpadRightHeldFrames -= 2;
+        }
+    } else {
+        dpadRightHeldFrames = 0;
+    }
+
+    if (gChallengeWarpPauseIndex < 1) {
+        gChallengeWarpPauseIndex = 1;
+    } else if (gChallengeWarpPauseIndex >= ARRAY_COUNT(gChallengeLevelData)) {
+        gChallengeWarpPauseIndex = ARRAY_COUNT(gChallengeLevelData) - 1;
+    }
+
+    if (gChallengeScroll < 2) {
+        gChallengeScroll = 2;
+    } else if (gChallengeScroll > (DISPLAY_MAX - 1) - 2) {
+        gChallengeScroll = (DISPLAY_MAX - 1) - 2;
+    }
+    if ((ARRAY_COUNT(gChallengeLevelData) - 1) - gChallengeWarpPauseIndex < 2) {
+        gChallengeScroll = DISPLAY_MAX - ((ARRAY_COUNT(gChallengeLevelData) - 1) - gChallengeWarpPauseIndex) - 1;
+    }
+    if (gChallengeWarpPauseIndex - 1 < 2) {
+        gChallengeScroll = gChallengeWarpPauseIndex - 1;
+    }
+
+    s32 scrollStart = gChallengeWarpPauseIndex - gChallengeScroll;
+    for (s32 i = 0; i < DISPLAY_MAX; i++, scrollStart++) {
+        char buffer[128];
+
+        sprintf(buffer, "%d: %s", scrollStart, gChallengeLevelData[scrollStart].challengeName);
+
+        if (i == gChallengeScroll) {
+            print_set_envcolour(0xFF, 0x7F, 0x00, gDialogTextAlpha);
+            print_small_text((SCREEN_WIDTH / 4) - 6, (12 * i) + 72, "-", PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_DEFAULT, FALSE);
+            print_set_envcolour(0xFF, 0x7F, 0x00, gDialogTextAlpha);
+        } else {
+            print_set_envcolour(0xFF, 0xFF, 0xFF, gDialogTextAlpha);
+        }
+        print_small_text(SCREEN_WIDTH / 4, (12 * i) + 72, buffer, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_DEFAULT, FALSE);
+    }
+
+    if (lastIndex != gChallengeWarpPauseIndex) {
+        play_sound(SOUND_MENU_CHANGE_SELECT, gGlobalSoundSource);
+    }
+
+    if (gPlayer3Controller->buttonPressed & (A_BUTTON | B_BUTTON | START_BUTTON)) {
+        dpadUpHeldFrames = 0;
+        dpadDownHeldFrames = 0;
+        dpadLeftHeldFrames = 0;
+        dpadRightHeldFrames = 0;
+
+        if (gPlayer3Controller->buttonPressed & A_BUTTON) { // B and Start should both just unpause
+            return gChallengeWarpPauseIndex;
+        }
+    }
+
+    return 0;
+}
+#undef DISPLAY_MAX
+#undef SCROLL_FRAMES
+
+#endif
+
 static void loser_text(void) {
     if (gChallengeStatus != CHALLENGE_STATUS_LOSE) {
         return;
     }
 
-    print_small_text(SCREEN_WIDTH / 2, 12, LOSER_STRING, PRINT_TEXT_ALIGN_CENTER, PRINT_ALL, FONT_DEFAULT);
+    print_small_text(SCREEN_WIDTH / 2, 12, LOSER_STRING, PRINT_TEXT_ALIGN_CENTER, PRINT_ALL, FONT_DEFAULT, TRUE);
 }
 
 static void update_timer(void) {
@@ -48,7 +170,7 @@ static void update_timer(void) {
     char str[16];
     sprintf(str, "%d.%d", seconds, decaseconds);
 
-    print_small_text(16, 12, str, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_DEFAULT);
+    print_small_text(16, 12, str, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_DEFAULT, TRUE);
 }
 
 static char* get_challenge_type_text_entry(u8 typeIndex) {
@@ -256,7 +378,7 @@ void print_challenge_types(void) {
 
         if (alpha != 0) {
             print_set_envcolour(0xFF, 0xFF, 0xFF, alpha);
-            print_small_text(x, y, str, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_DEFAULT);
+            print_small_text(x, y, str, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_DEFAULT, TRUE);
         }
 
         y -= lineSpacing;
@@ -269,9 +391,9 @@ void print_challenge_types(void) {
         char strBuf[16];
         sprintf(strBuf, "Challenge %d", gChallengeLevel);
         print_set_envcolour(0xFF, 0xFF, 0xFF, 0xFF);
-        print_small_text(SCREEN_WIDTH / 2, 12, strBuf, PRINT_TEXT_ALIGN_CENTER, PRINT_ALL, FONT_DEFAULT);
+        print_small_text(SCREEN_WIDTH / 2, 12, strBuf, PRINT_TEXT_ALIGN_CENTER, PRINT_ALL, FONT_DEFAULT, TRUE);
         print_set_envcolour(0xFF, 0xFF, 0xFF, alpha);
-        print_small_text(SCREEN_WIDTH / 2, 29, gChallengeLevelData[gChallengeLevel].challengeName, PRINT_TEXT_ALIGN_CENTER, PRINT_ALL, FONT_DEFAULT);
+        print_small_text(SCREEN_WIDTH / 2, 29, gChallengeLevelData[gChallengeLevel].challengeName, PRINT_TEXT_ALIGN_CENTER, PRINT_ALL, FONT_DEFAULT, TRUE);
     }
 
     update_timer();

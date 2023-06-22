@@ -26,6 +26,7 @@
 #include "config.h"
 #include "puppycam2.h"
 #include "main.h"
+#include "one_text.h"
 
 #ifdef VERSION_EU
 #undef LANGUAGE_FUNCTION
@@ -2219,6 +2220,14 @@ s32 render_menus_and_dialogs(void) {
 */
 
         shade_screen();
+
+#ifdef ENABLE_CHALLENGE_SELECTIONS
+        s32 response = 0;
+        if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING && gDialogBoxState != DIALOG_STATE_OPENING) {
+            response = print_debug_challenge_select();
+        }
+#endif
+
         if (gDialogBoxState == DIALOG_STATE_OPENING) {
             gDialogLineNum = MENU_OPT_DEFAULT;
             gDialogTextAlpha = 0;
@@ -2233,16 +2242,32 @@ s32 render_menus_and_dialogs(void) {
                 highlight_last_course_complete_stars();
                 gDialogBoxState = DIALOG_STATE_HORIZONTAL;
             }
+#ifdef ENABLE_CHALLENGE_SELECTIONS
+        } else if (gPlayer3Controller->buttonPressed & (A_BUTTON | B_BUTTON | START_BUTTON)) {
+#else
         } else if (gPlayer3Controller->buttonPressed & (A_BUTTON | START_BUTTON)) {
+#endif
             level_set_transition(0, NULL);
             play_sound(SOUND_MENU_PAUSE_CLOSE, gGlobalSoundSource);
             gDialogBoxState = DIALOG_STATE_OPENING;
             gMenuMode = MENU_MODE_NONE;
             mode = MENU_OPT_DEFAULT;
+
+#ifdef ENABLE_CHALLENGE_SELECTIONS
+            if (response > 0 && sDelayedWarpOp == WARP_OP_NONE && !gWarpTransition.isActive) {
+                gChallengeLevel = response - 1;
+                gChallengeStatus = CHALLENGE_STATUS_WIN;
+                level_trigger_warp(gMarioState, WARP_OP_DEBUG_CHALLENGE_SKIP); // warp to next challenge
+            }
+#endif
         }
         if (gPlayer1Controller->buttonPressed & L_TRIG) {
             gConfig.widescreen ^= 1;
             save_file_set_widescreen_mode(gConfig.widescreen);
+        }
+
+        if (gDialogTextAlpha < 250) {
+            gDialogTextAlpha += 25;
         }
 
         gDialogColorFadeTimer = (s16) gDialogColorFadeTimer + 0x1000;

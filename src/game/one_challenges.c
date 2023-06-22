@@ -366,11 +366,11 @@ void challenge_update(void) {
     // ONE_TODO: Delete this
     // if (gChallengeLevel == 0xFF) {
     //     print_set_envcolour(0xFF, 0xFF, 0xFF, 0xFF);
-    //     print_small_text(16, SCREEN_HEIGHT - 24, PRESS_L_TO_RESTART, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_DEFAULT);
-    //     // print_small_text(16, SCREEN_HEIGHT - 64, ALL_LETTERS, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_DEFAULT);
+    //     print_small_text(16, SCREEN_HEIGHT - 24, PRESS_L_TO_RESTART, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_DEFAULT, TRUE);
+    //     // print_small_text(16, SCREEN_HEIGHT - 64, ALL_LETTERS, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_DEFAULT, TRUE);
     // }
 
-#ifdef ENABLE_DEBUG_FREE_MOVE
+#ifdef ENABLE_CHALLENGE_SELECTIONS
     if (
         (gPlayer1Controller->buttonDown & (Z_TRIG | R_TRIG)) == (Z_TRIG | R_TRIG) &&
         (gPlayer1Controller->buttonPressed & (Z_TRIG | R_TRIG))
@@ -400,7 +400,7 @@ void challenge_update(void) {
                 set_fb_effect_col(gGlobalFog.r, gGlobalFog.g, gGlobalFog.b);
                 set_fb_effect_type(FBE_EFFECT_MULT);
                 print_set_envcolour(0xFF, 0xFF, 0xFF, 0xFF);
-                print_small_text(SCREEN_WIDTH / 2, 24+36, "Press ONE button to start", PRINT_TEXT_ALIGN_CENTER, PRINT_ALL, FONT_DEFAULT);
+                print_small_text(SCREEN_WIDTH / 2, 24+36, "Press ONE button to start", PRINT_TEXT_ALIGN_CENTER, PRINT_ALL, FONT_DEFAULT, TRUE);
                 print_challenge_types();
                 update_last_print_vars(sObtainedChallengeFlags, sFailureFlags);
                 return;

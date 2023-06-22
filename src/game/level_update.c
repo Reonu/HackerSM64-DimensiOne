@@ -35,6 +35,7 @@
 #include "puppylights.h"
 #include "level_commands.h"
 #include "one_challenges.h"
+#include "one_text.h"
 
 #include "config.h"
 
@@ -1166,6 +1167,16 @@ s32 play_mode_normal(void) {
 #endif
             gCameraMovementFlags |= CAM_MOVE_PAUSE_SCREEN;
             set_play_mode(PLAY_MODE_PAUSED);
+
+#ifdef ENABLE_CHALLENGE_SELECTIONS
+            if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING) {
+                gChallengeScroll += gChallengeLevel - gChallengeWarpPauseIndex;
+                gChallengeWarpPauseIndex = gChallengeLevel;
+                if (gChallengeWarpPauseIndex < 1) {
+                    gChallengeWarpPauseIndex = 1;
+                }
+            }
+#endif
         }
     }
     return FALSE;

@@ -964,7 +964,7 @@ static s8 sTextShakeTable[] = {
     1, 1, 0, 1, 0, 1, 0, 0
 };
 
-void print_small_text(s32 x, s32 y, const char *str, s32 align, s32 amount, u8 font) {
+void print_small_text(s32 x, s32 y, const char *str, s32 align, s32 amount, u8 font, u8 displayBlackBox) {
     s32 textX = 0;
     s32 textPos[2] = { 0, 0 };
     u16 wideX[16] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -1056,9 +1056,11 @@ void print_small_text(s32 x, s32 y, const char *str, s32 align, s32 amount, u8 f
     gCurrEnvColTmp[2] = gCurrEnvCol[2];
     gCurrEnvColTmp[3] = gCurrEnvCol[3];
 
-    prepare_blank_box();
-    render_blank_box(startX, y - 2, endX, y + largestHeight + 3, 0, 0, 0, ((u32) 96 * gCurrEnvCol[3]) / 255);
-    finish_blank_box();
+    if (displayBlackBox) {
+        prepare_blank_box();
+        render_blank_box(startX, y - 2, endX, y + largestHeight + 3, 0, 0, 0, ((u32) 96 * gCurrEnvCol[3]) / 255);
+        finish_blank_box();
+    }
 
     print_set_envcolour(gCurrEnvColTmp[0], gCurrEnvColTmp[1], gCurrEnvColTmp[2], gCurrEnvColTmp[3]);
     
@@ -1539,7 +1541,7 @@ void puppyprint_print_deferred(void) {
         if (sPuppyprintTextBuffer[i + 12]) {
             print_small_text_light(x, y, text, alignment, amount, font);
         } else {
-            print_small_text(x, y, text, alignment, amount, font);
+            print_small_text(x, y, text, alignment, amount, font, TRUE);
         }
         mem_pool_free(gEffectsMemoryPool, text);
         print_set_envcolour(originalEnvCol[0], originalEnvCol[1], originalEnvCol[2], originalEnvCol[3]);
