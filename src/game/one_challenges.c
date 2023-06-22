@@ -19,7 +19,7 @@
 
 
 // What is the current level of the challenge?
-u8 gChallengeLevel = (u8) -1; // ONE_TODO: Save file support?
+u8 gChallengeLevel = 0xFF; // ONE_TODO: Save file support?
 
 // What is the current status of the challenge?
 u32 gChallengeStatus = CHALLENGE_STATUS_NOT_PLAYING;
@@ -72,7 +72,7 @@ static void can_win_challenge(void) {
         return;
     }
 
-    if (gChallengeLevel == 8 && !(sRequiredChallengeFlags & CHALLENGE_FLAG_TIMER)) {
+    if (gChallengeLevel == 9 && !(sRequiredChallengeFlags & CHALLENGE_FLAG_TIMER)) {
         sRequiredChallengeFlags |= CHALLENGE_FLAG_TIMER;
         gChallengesPrintTimer = 0;
         return;
@@ -239,22 +239,22 @@ u8 is_challenge_active(void) {
     );
 }
 
-// What is the current status of the challenge?
+// Flags of which challenge conditions have been met by the player
 oneflags_t get_challenge_obtained_flags(void) {
     return sObtainedChallengeFlags;
 }
 
-// Flags of which challenge conditions have been met by the player
+// Which challenges are being enforced? (i.e. if one of these conditions is met more than once e.g. pressing A twice, automatically fail the challenge)
 oneflags_t get_challenge_enforced_flags(void) {
     return sEnforcedChallengeFlags;
 }
 
-// Which challenges are being enforced? (i.e. if one of these conditions is met more than once e.g. pressing A twice, automatically fail the challenge)
+// Which of these challenges are required in order to beat the level? (e.g. must collect one coin, or must kill one goomba)
 oneflags_t get_challenge_required_flags(void) {
     return sRequiredChallengeFlags;
 }
 
-// Which of these challenges are required in order to beat the level? (e.g. must collect one coin, or must kill one goomba)
+// Which challenge(s) did the player actively fail (if applicable)?
 oneflags_t get_challenge_failure_flags(void) {
     return sFailureFlags;
 }
@@ -307,8 +307,12 @@ void reset_challenge(void) {
 void start_next_challenge_level(void) {
     gChallengeLevel++;
 
-    if (gChallengeLevel >= sizeof(oneflags_t) * 8) {
-        gChallengeLevel = (sizeof(oneflags_t) * 8) - 1;
+    if (gChallengeLevel == 0) {
+        gChallengeLevel++;
+    }
+
+    if (gChallengeLevel >= ARRAY_COUNT(gChallengeLevelData)) {
+        gChallengeLevel = ARRAY_COUNT(gChallengeLevelData) - 1;
     }
 
     start_challenge();
@@ -321,6 +325,10 @@ void start_challenge(void) {
     if (gChallengeLevel == 0xFF) {
         start_next_challenge_level();
         return;
+    }
+
+    if (gChallengeLevel == 0) {
+        gChallengeLevel++;
     }
 
     reset_challenge();

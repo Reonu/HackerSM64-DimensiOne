@@ -165,7 +165,7 @@ static void mark_goomba_as_dead(void) {
         }
     }
 
-    if (gChallengeLevel == 2) {
+    if (gChallengeLevel == 3) { // The goomba stomp challenge needs to enter a win condition before Mario lands back on the ground
         add_challenge_kill_flags(CHALLENGE_FLAG_KILL_GOOMBA);
 
         if (o->oBlownUp) {
@@ -393,7 +393,7 @@ void bhv_goomba_update(void) {
 #endif
     }
 
-    if (gChallengeLevel != 2) {
+    if (gChallengeLevel != 3) {
         if (o->activeFlags == ACTIVE_FLAG_DEACTIVATED) {
             add_challenge_kill_flags(CHALLENGE_FLAG_KILL_GOOMBA);
 

@@ -67,7 +67,6 @@ enum OneChallengeFlags {
 };
 
 struct OneChallengeLevel {
-    u8 challengeId;
     u8 warpLevelNum;
     u8 warpAreaIdx;
     u8 warpNodeId;

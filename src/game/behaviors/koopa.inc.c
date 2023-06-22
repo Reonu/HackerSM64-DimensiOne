@@ -345,9 +345,9 @@ static void koopa_unshelled_act_run(void) {
 
         // If shell exists, then turn toward shell
         if (
-            gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING && gChallengeLevel != 18 &&
+            gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING && gChallengeLevel != 19 &&
             (
-                gChallengeLevel == 14 ||
+                gChallengeLevel == 15 ||
                 ((get_challenge_obtained_flags() & get_challenge_obtained_flags()) & CHALLENGE_FLAG_INTERACTED_KOOPA)
             )
         ) {

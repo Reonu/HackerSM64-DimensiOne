@@ -974,15 +974,6 @@ void initiate_delayed_warp(void) {
                         start_challenge();
                     }
 
-                    if (sDelayedWarpOp == WARP_OP_START_CHALLENGES && gChallengeStatus == CHALLENGE_STATUS_NOT_PLAYING) {
-                        warpNode = area_get_warp_node(WARP_NODE_DEATH);
-                        if (warpNode != NULL) {
-                            gChallengeLevel = warpNode->node.destNode - 1;
-                        } else {
-                            gChallengeLevel = 0;
-                        }
-                    }
-
                     if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING) {
                         if (sSourceWarpNodeId == WARP_NODE_DEFAULT) {
                             standardLevelWarp = FALSE;
@@ -1094,9 +1085,9 @@ void basic_update(void) {
 void handle_lighting(void)  {
     Vec3f lightPos;
     switch (gChallengeLevel) {
-        case 0x00:
         case 0x01:
         case 0x02:
+        case 0x03:
             lightPos[0] = 0.f;
             lightPos[1] = 0.9f;
             lightPos[2] = 0.f;

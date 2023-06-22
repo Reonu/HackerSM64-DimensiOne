@@ -502,8 +502,8 @@ static void level_cmd_place_object(void) {
         u32 bparams = CMD_GET(u32, 16);
         if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING) {
             u8 level = gChallengeLevel;
-            if (level >= sizeof(oneflags_t) * 8) {
-                level = (sizeof(oneflags_t) * 8) - 1;
+            if (level >= ARRAY_COUNT(gChallengeLevelData)) {
+                level = ARRAY_COUNT(gChallengeLevelData) - 1;
             }
 
             // Mario vs Wario Ware system
@@ -512,8 +512,7 @@ static void level_cmd_place_object(void) {
                 return;
             }
 
-            // bparam4 overrides (1-indexed)
-            if ((bparams & 0xFF) != 0 && (bparams & 0xFF) != (u32) (level + 1)) {
+            if ((bparams & 0xFF) != 0 && (bparams & 0xFF) != (u32) level) {
                 sCurrentCmd = CMD_NEXT;
                 return;
             }
@@ -951,12 +950,11 @@ static void level_cmd_moving_platform(void) {
         u32 bparams = CMD_GET(u32, 16);
         if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING) {
             u8 level = gChallengeLevel;
-            if (level >= sizeof(oneflags_t) * 8) {
-                level = (sizeof(oneflags_t) * 8) - 1;
+            if (level >= ARRAY_COUNT(gChallengeLevelData)) {
+                level = ARRAY_COUNT(gChallengeLevelData) - 1;
             }
 
-            // bparam4 overrides (1-indexed)
-            if ((bparams & 0xFF) != 0 && (bparams & 0xFF) != (u32) (level + 1)) {
+            if ((bparams & 0xFF) != 0 && (bparams & 0xFF) != (u32) level) {
                 sCurrentCmd = CMD_NEXT;
                 return;
             }

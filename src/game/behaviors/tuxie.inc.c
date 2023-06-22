@@ -316,8 +316,13 @@ void bhv_small_penguin_loop(void) {
         if (is_challenge_active()) {
             play_sound(SOUND_OBJ_BULLY_EXPLODE_LAVA, gMarioObject->header.gfx.cameraToObject);
             play_sound(SOUND_OBJ2_BABY_PENGUIN_YELL, gMarioObject->header.gfx.cameraToObject);
-            play_puzzle_jingle();
             add_challenge_flags(CHALLENGE_FLAG_KILL_PENGUIN);
+            if (
+                (get_challenge_required_flags() & CHALLENGE_FLAG_KILL_PENGUIN) &&
+                !(get_challenge_obtained_flags() & CHALLENGE_FLAG_KILL_PENGUIN)
+            ) {
+                play_puzzle_jingle();
+            }
         }
         spawn_mist_particles();
         obj_mark_for_deletion(o);

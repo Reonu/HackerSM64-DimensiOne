@@ -266,8 +266,8 @@ void print_challenge_types(void) {
         print_set_envcolour(0xFF, 0xFF, 0xFF, 0xFF);
         loser_text();
     } else {
-        char strBuf[32];
-        sprintf(strBuf, "Challenge %d", gChallengeLevelData[gChallengeLevel].challengeId);
+        char strBuf[16];
+        sprintf(strBuf, "Challenge %d", gChallengeLevel);
         print_set_envcolour(0xFF, 0xFF, 0xFF, 0xFF);
         print_small_text(SCREEN_WIDTH / 2, 12, strBuf, PRINT_TEXT_ALIGN_CENTER, PRINT_ALL, FONT_DEFAULT);
         print_set_envcolour(0xFF, 0xFF, 0xFF, alpha);
