@@ -2231,7 +2231,7 @@ s32 obj_attack_collided_from_other_object(struct Object *obj) {
     if (obj->numCollidedObjs != 0) {
         struct Object *other = obj->collidedObjs[0];
 
-        if (other != gMarioObject && !(other->behavior == segmented_to_virtual(bhvKoopa) && gChallengeLevel == 15)) {
+        if (other != gMarioObject && !(other->behavior == segmented_to_virtual(bhvKoopa) && gChallengeLevel == CHAL_ID_BOBOMB_BATTLE_ROYALE)) {
             s32 oneIsBobOmb = obj_has_behavior(obj, bhvBobomb) || obj_has_behavior(other, bhvBobomb);
             if (oneIsBobOmb) {
                 if (check_obj_is_LIT(obj) || check_obj_is_LIT(other)) {

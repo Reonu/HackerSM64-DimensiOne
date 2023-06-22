@@ -345,9 +345,9 @@ static void koopa_unshelled_act_run(void) {
 
         // If shell exists, then turn toward shell
         if (
-            gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING && gChallengeLevel != 19 &&
+            gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING && gChallengeLevel != CHAL_ID_THE_GREEN_DEMONS_POSSE &&
             (
-                gChallengeLevel == 15 ||
+                gChallengeLevel == CHAL_ID_BOBOMB_BATTLE_ROYALE ||
                 ((get_challenge_obtained_flags() & get_challenge_obtained_flags()) & CHALLENGE_FLAG_INTERACTED_KOOPA)
             )
         ) {

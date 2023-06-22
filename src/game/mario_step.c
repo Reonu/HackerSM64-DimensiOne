@@ -468,7 +468,7 @@ struct Surface *check_ledge_grab(struct MarioState *m, struct Surface *prevWall,
         || ledgePos[1] < nextPos[1] + 100.0f
 #ifdef DONT_LEDGE_GRAB_STEEP_SLOPES
         || floor_is_slippery(*ledgeFloor, m)
-        || (SURFACE_IS_QUICKSAND((*ledgeFloor)->type) && gChallengeLevel == 15)
+        || (SURFACE_IS_QUICKSAND((*ledgeFloor)->type) && gChallengeLevel == CHAL_ID_BOBOMB_BATTLE_ROYALE)
 #endif
     ) {
         return NULL;

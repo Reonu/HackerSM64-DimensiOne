@@ -1086,9 +1086,9 @@ void basic_update(void) {
 void handle_lighting(void)  {
     Vec3f lightPos;
     switch (gChallengeLevel) {
-        case 0x01:
-        case 0x02:
-        case 0x03:
+        case CHAL_ID_LEARNING_THE_ROPES:
+        case CHAL_ID_COIN_PARANOIA:
+        case CHAL_ID_GOOMBOUNCING:
             lightPos[0] = 0.f;
             lightPos[1] = 0.9f;
             lightPos[2] = 0.f;

@@ -72,7 +72,7 @@ static void can_win_challenge(void) {
         return;
     }
 
-    if (gChallengeLevel == 9 && !(sRequiredChallengeFlags & CHALLENGE_FLAG_TIMER)) {
+    if (gChallengeLevel == CHAL_ID_DIMENSION_OF_THE_LIVING_KOOPA && !(sRequiredChallengeFlags & CHALLENGE_FLAG_TIMER)) {
         sRequiredChallengeFlags |= CHALLENGE_FLAG_TIMER;
         gChallengesPrintTimer = 0;
         return;
