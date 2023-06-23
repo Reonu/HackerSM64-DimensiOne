@@ -1,0 +1,3 @@
+struct_array_variable_name: "gChallengeLevelData"
+struct_array_type: "struct OneChallengeLevel"
+enum_name: "OneChallengeChallenges"

@@ -502,8 +502,8 @@ static void level_cmd_place_object(void) {
         u32 bparams = CMD_GET(u32, 16);
         if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING) {
             u8 level = gChallengeLevel;
-            if (level >= ARRAY_COUNT(gChallengeLevelData)) {
-                level = ARRAY_COUNT(gChallengeLevelData) - 1;
+            if (level >= CHAL_ID_NUM_CHALLENGES) {
+                level = CHAL_ID_NUM_CHALLENGES - 1;
             }
 
             // Mario vs Wario Ware system
@@ -950,8 +950,8 @@ static void level_cmd_moving_platform(void) {
         u32 bparams = CMD_GET(u32, 16);
         if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING) {
             u8 level = gChallengeLevel;
-            if (level >= ARRAY_COUNT(gChallengeLevelData)) {
-                level = ARRAY_COUNT(gChallengeLevelData) - 1;
+            if (level >= CHAL_ID_NUM_CHALLENGES) {
+                level = CHAL_ID_NUM_CHALLENGES - 1;
             }
 
             if ((bparams & 0xFF) != 0 && (bparams & 0xFF) != (u32) level) {

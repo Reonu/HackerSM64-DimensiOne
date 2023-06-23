@@ -15,7 +15,7 @@
 
 
 // Actual data for all challenges
-#include "one_challenge_structs.c.in"
+#include "gen/one_challenges.c.in"
 
 
 // What is the current level of the challenge?
@@ -311,8 +311,8 @@ void start_next_challenge_level(void) {
         gChallengeLevel++;
     }
 
-    if (gChallengeLevel >= ARRAY_COUNT(gChallengeLevelData)) {
-        gChallengeLevel = ARRAY_COUNT(gChallengeLevelData) - 1;
+    if (gChallengeLevel >= CHAL_ID_NUM_CHALLENGES) {
+        gChallengeLevel = CHAL_ID_NUM_CHALLENGES - 1;
     }
 
     start_challenge();

@@ -380,6 +380,10 @@ COLOR_CSV := src/game/colors.csv
 COLOR_CSV_INC_C := $(BUILD_DIR)/gen/colors.inc.c
 COLOR_CSV_INC_H := $(BUILD_DIR)/gen/colors.inc.h
 
+CSV_GEN_FILES := src/game/one_challenges.csv
+CSV_GEN_C_IN_FILES := $(foreach file,$(CSV_GEN_FILES),$(BUILD_DIR)/gen/$(basename $(notdir $(file))).c.in)
+CSV_GEN_H_IN_FILES := $(foreach file,$(CSV_GEN_FILES),include/gen/$(basename $(notdir $(file))).h.in)
+
 # Sound files
 SOUND_BANK_FILES    := $(wildcard sound/sound_banks/*.json)
 SOUND_SAMPLE_DIRS   := $(wildcard sound/samples/*)
@@ -673,6 +677,10 @@ $(COLOR_CSV_INC_C) $(COLOR_CSV_INC_H): $(COLOR_CSV)
 	$(call print,Generating color tables:,$<,$@)
 	python3 tools/color-table.py
 
+$(BUILD_DIR)/src/game/one_challenges.o: $(CSV_GEN_C_IN_FILES) $(CSV_GEN_H_IN_FILES)
+$(CSV_GEN_C_IN_FILES) $(CSV_GEN_H_IN_FILES): $(CSV_GEN_FILES)
+	$(call print,Generating csv tables:,$<,$@)
+	python3 tools/csv-to-c.py $<
 
 #==============================================================================#
 # Texture Generation                                                           #

@@ -30,7 +30,7 @@ static s8 dpadDownHeldFrames = 0;
 static s8 dpadLeftHeldFrames = 0;
 static s8 dpadRightHeldFrames = 0;
 
-#define DISPLAY_MAX MIN(ARRAY_COUNT(gChallengeLevelData), 12)
+#define DISPLAY_MAX MIN(CHAL_ID_NUM_CHALLENGES, 12)
 #define SCROLL_FRAMES 10
 s32 print_debug_challenge_select(void) {
     print_set_envcolour(0xFF, 0xFF, 0xFF, gDialogTextAlpha);
@@ -88,8 +88,8 @@ s32 print_debug_challenge_select(void) {
 
     if (gChallengeWarpPauseIndex < 1) {
         gChallengeWarpPauseIndex = 1;
-    } else if (gChallengeWarpPauseIndex >= ARRAY_COUNT(gChallengeLevelData)) {
-        gChallengeWarpPauseIndex = ARRAY_COUNT(gChallengeLevelData) - 1;
+    } else if (gChallengeWarpPauseIndex >= CHAL_ID_NUM_CHALLENGES) {
+        gChallengeWarpPauseIndex = CHAL_ID_NUM_CHALLENGES - 1;
     }
 
     if (gChallengeScroll < 2) {
@@ -97,8 +97,8 @@ s32 print_debug_challenge_select(void) {
     } else if (gChallengeScroll > (DISPLAY_MAX - 1) - 2) {
         gChallengeScroll = (DISPLAY_MAX - 1) - 2;
     }
-    if ((ARRAY_COUNT(gChallengeLevelData) - 1) - gChallengeWarpPauseIndex < 2) {
-        gChallengeScroll = DISPLAY_MAX - ((ARRAY_COUNT(gChallengeLevelData) - 1) - gChallengeWarpPauseIndex) - 1;
+    if ((CHAL_ID_NUM_CHALLENGES - 1) - gChallengeWarpPauseIndex < 2) {
+        gChallengeScroll = DISPLAY_MAX - ((CHAL_ID_NUM_CHALLENGES - 1) - gChallengeWarpPauseIndex) - 1;
     }
     if (gChallengeWarpPauseIndex - 1 < 2) {
         gChallengeScroll = gChallengeWarpPauseIndex - 1;

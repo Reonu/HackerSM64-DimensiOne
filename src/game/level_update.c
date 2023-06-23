@@ -978,8 +978,8 @@ void initiate_delayed_warp(void) {
                     if (gChallengeStatus != CHALLENGE_STATUS_NOT_PLAYING) {
                         if (sSourceWarpNodeId == WARP_NODE_DEFAULT) {
                             standardLevelWarp = FALSE;
-                            if (gChallengeLevel + 1 >= ARRAY_COUNT(gChallengeLevelData)) {
-                                challenge = &gChallengeLevelData[ARRAY_COUNT(gChallengeLevelData) - 1];
+                            if (gChallengeLevel + 1 >= CHAL_ID_NUM_CHALLENGES) {
+                                challenge = &gChallengeLevelData[CHAL_ID_NUM_CHALLENGES - 1];
                             } else {
                                 challenge = &gChallengeLevelData[gChallengeLevel + 1];
                             }
