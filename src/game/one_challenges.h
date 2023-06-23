@@ -5,6 +5,8 @@
 
 typedef u64 oneflags_t;
 
+#include "gen/one_challenges.h.in"
+
 enum OneChallengeStatus {
     CHALLENGE_STATUS_NOT_PLAYING,
     CHALLENGE_STATUS_PLAYING,
@@ -37,8 +39,6 @@ enum OneChallengeEntries {
     CHALLENGE_NAME_TIMER, // Must be last
     CHALLENGE_NAME_TOTAL,
 };
-
-#include "gen/one_challenges.h.in"
 
 STATIC_ASSERT(CHALLENGE_NAME_TOTAL <= sizeof(oneflags_t) * 8, "Too many challenges!");
 
