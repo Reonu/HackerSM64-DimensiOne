@@ -161,6 +161,7 @@ enum WarpTypes {
 
 enum WarpNodes {
     WARP_NODE_MAIN_ENTRY    = 0x0A,
+    CHALLENGE_WARP_NODE     = 0x69,
     WARP_NODE_DEFAULT       = 0xF0,
     WARP_NODE_DEATH         = 0xF1,
     WARP_NODE_LOOK_UP       = 0xF2,
@@ -168,7 +169,7 @@ enum WarpNodes {
     WARP_NODE_CREDITS_MIN   = 0xF8,
     WARP_NODE_CREDITS_START = 0xF8,
     WARP_NODE_CREDITS_NEXT  = 0xF9,
-    WARP_NODE_CREDITS_END   = 0xFA
+    WARP_NODE_CREDITS_END   = 0xFA,
 };
 
 u16 level_control_timer(s32 timerOp);

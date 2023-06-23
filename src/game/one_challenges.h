@@ -71,7 +71,6 @@ enum OneChallengeFlags {
 struct OneChallengeLevel {
     u8 warpLevelNum;
     u8 warpAreaIdx;
-    u8 warpNodeId;
     char *challengeName;
     oneflags_t requiredFlags; // "At least one of"
     oneflags_t enforcedFlags; // "No more than one of"

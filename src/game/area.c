@@ -28,6 +28,7 @@
 #include "profiling.h"
 #include "one_challenges.h"
 #include "geo_misc.h"
+#include "debug.h"
 #ifdef S2DEX_TEXT_ENGINE
 #include "s2d_engine/init.h"
 #endif
@@ -151,8 +152,49 @@ u32 get_mario_spawn_type(struct Object *obj) {
     return MARIO_SPAWN_NONE;
 }
 
+
+struct ObjectWarpNode sChallengeWarpNode = {
+    .node = {
+        .id = CHALLENGE_WARP_NODE,
+        .destLevel = 0,
+        .destArea = 0,
+        .destNode = CHALLENGE_WARP_NODE,
+    },
+    .next = NULL,
+    .object = NULL
+};
+
+struct Object *find_challenge_warp_object(void) {
+    struct Object *children = (struct Object *) gObjParentGraphNode.children;
+
+    do {
+        struct Object *obj = children;
+
+        if (
+            obj->activeFlags != ACTIVE_FLAG_DEACTIVATED &&
+            get_mario_spawn_type(obj) != 0 && 
+            GET_BPARAM2(obj->oBehParams) == CHALLENGE_WARP_NODE &&
+            GET_BPARAM4(obj->oBehParams) == gChallengeLevel
+        ) {
+            return obj;
+        }
+    } while ((children = (struct Object *) children->header.gfx.node.next)
+             != (struct Object *) gObjParentGraphNode.children);
+
+    return NULL;
+}
+
 struct ObjectWarpNode *area_get_warp_node(u8 id) {
     struct ObjectWarpNode *node = NULL;
+
+    if (id == CHALLENGE_WARP_NODE) {
+        struct OneChallengeLevel *challengeLevel = &gChallengeLevelData[gChallengeLevel];
+        sChallengeWarpNode.object = find_challenge_warp_object();
+        assert(sChallengeWarpNode.object != NULL, "Could not find a challenge warp object");
+        sChallengeWarpNode.node.destArea = challengeLevel->warpAreaIdx;
+        sChallengeWarpNode.node.destLevel = challengeLevel->warpLevelNum;
+        return &sChallengeWarpNode;
+    }
 
     for (node = gCurrentArea->warpNodes; node != NULL; node = node->next) {
         if (node->node.id == id) {

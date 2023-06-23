@@ -984,12 +984,12 @@ void initiate_delayed_warp(void) {
                                 challenge = &gChallengeLevelData[gChallengeLevel + 1];
                             }
                             initiate_warp(challenge->warpLevelNum & 0x7F, challenge->warpAreaIdx,
-                                        challenge->warpNodeId, sDelayedWarpArg);
+                                        CHALLENGE_WARP_NODE, sDelayedWarpArg);
                         } else if (sSourceWarpNodeId == WARP_NODE_DEATH || sSourceWarpNodeId == WARP_NODE_WARP_FLOOR) {
                             standardLevelWarp = FALSE;
                             challenge = &gChallengeLevelData[gChallengeLevel];
                             initiate_warp(challenge->warpLevelNum & 0x7F, challenge->warpAreaIdx,
-                                        challenge->warpNodeId, sDelayedWarpArg);
+                                        CHALLENGE_WARP_NODE, sDelayedWarpArg);
                         }
                     }
 
