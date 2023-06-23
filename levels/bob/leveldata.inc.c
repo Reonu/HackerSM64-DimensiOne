@@ -25,4 +25,13 @@
 #include "levels/bob/area_9/collision.inc.c"
 #include "levels/bob/area_9/macro.inc.c"
 #include "levels/bob/area_9/spline.inc.c"
+
+#include "levels/bob/BulletBillCannon_bob/collision.inc.c"
+
+#include "levels/bob/moving_platform_geo_bob/collision.inc.c"
+
+#include "levels/bob/moving_platform_geo_challenge_10_larger_bob/collision.inc.c"
+
+#include "levels/bob/moving_platform_geo_challenge_10_bob/collision.inc.c"
+
 #include "levels/bob/model.inc.c"

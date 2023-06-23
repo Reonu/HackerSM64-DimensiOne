@@ -13,14 +13,4 @@
 
 #include "levels/bob/header.h"
 
-#include "levels/bob/chain_chomp_gate/geo.inc.c"
-#include "levels/bob/seesaw_platform/geo.inc.c"
-#include "levels/bob/grate_door/geo.inc.c"
-#include "levels/bob/areas/1/geo.inc.c"
-
 #include "levels/bob/geo.inc.c"
-
-#include "levels/bob/moving_platform_geo/geo.inc.c"
-#include "levels/bob/moving_platform_geo_challenge_10/geo.inc.c"
-#include "levels/bob/BulletBillCannon/geo.inc.c"
-#include "levels/bob/moving_platform_geo_challenge_10_larger/geo.inc.c"

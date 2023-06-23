@@ -40,17 +40,34 @@ extern const GeoLayout bob_area_9_geo[];
 extern const GeoLayout bob_area_9[];
 extern const Collision bob_area_9_collision[];
 extern const MacroObject bob_area_9_macro_objs[];
+
+extern const GeoLayout BulletBillCannon_bob_geo[];
+
+extern const Collision BulletBillCannon_bob_collision[];
+
+extern const GeoLayout moving_platform_geo_bob_geo[];
+
+extern const Collision moving_platform_geo_bob_collision[];
+
+extern const GeoLayout moving_platform_geo_challenge_10_larger_bob_geo[];
+
+extern const Collision moving_platform_geo_challenge_10_larger_bob_collision[];
+
+extern const GeoLayout moving_platform_geo_challenge_10_bob_geo[];
+
+extern const Collision moving_platform_geo_challenge_10_bob_collision[];
+
 extern u8 bob_dl_Z2_00KEIKOKUTex_02C050_rgba16_rgba16[];
 extern u8 bob_dl_Grass_rgba16[];
 extern u8 bob_dl_LightWall_64x64_ci4_ci4[];
-extern u8 bob_dl_LightWall_64x64_ci4_ci4_pal_rgba16[];
+extern u8 bob_dl_LightWall_64x64_ci4_pal_rgba16[];
 extern u8 bob_dl_Diddy_Kong_Racing_48432BC3_0_2_all_rgba16[];
 extern u8 bob_dl_DK_grass_64x64_ci4_ci4[];
-extern u8 bob_dl_DK_grass_64x64_ci4_ci4_pal_rgba16[];
+extern u8 bob_dl_DK_grass_64x64_ci4_pal_rgba16[];
 extern u8 bob_dl_grassy_stone_64x64_ci4_ci4[];
-extern u8 bob_dl_grassy_stone_64x64_ci4_ci4_pal_rgba16[];
+extern u8 bob_dl_grassy_stone_64x64_ci4_pal_rgba16[];
 extern u8 bob_dl_OSC_O_J_ROAD01_M7_ci4[];
-extern u8 bob_dl_OSC_O_J_ROAD01_M7_ci4_pal_rgba16[];
+extern u8 bob_dl_OSC_O_J_ROAD01_M7_pal_rgba16[];
 extern Vtx bob_dl_Cube_001_mesh_layer_5_vtx_cull[8];
 extern Vtx bob_dl_Cube_001_mesh_layer_5_vtx_0[8];
 extern Gfx bob_dl_Cube_001_mesh_layer_5_tri_0[];
@@ -84,7 +101,7 @@ extern Vtx bob_dl_Plane_001_mesh_layer_1_vtx_cull[8];
 extern Vtx bob_dl_Plane_001_mesh_layer_1_vtx_0[384];
 extern Gfx bob_dl_Plane_001_mesh_layer_1_tri_0[];
 extern Vtx bob_dl_ColiseumVisual_mesh_layer_1_vtx_cull[8];
-extern Vtx bob_dl_ColiseumVisual_mesh_layer_1_vtx_0[359];
+extern Vtx bob_dl_ColiseumVisual_mesh_layer_1_vtx_0[362];
 extern Gfx bob_dl_ColiseumVisual_mesh_layer_1_tri_0[];
 extern Vtx bob_dl_Area_6_ground_mesh_layer_1_vtx_cull[8];
 extern Vtx bob_dl_Area_6_ground_mesh_layer_1_vtx_0[179];
@@ -100,6 +117,22 @@ extern Gfx bob_dl_area_8_mesh_layer_1_tri_0[];
 extern Vtx bob_dl_Plane_002_mesh_layer_1_vtx_cull[8];
 extern Vtx bob_dl_Plane_002_mesh_layer_1_vtx_0[400];
 extern Gfx bob_dl_Plane_002_mesh_layer_1_tri_0[];
+extern Vtx bob_dl_BulletBillCannon_mesh_layer_1_vtx_cull[8];
+extern Vtx bob_dl_BulletBillCannon_mesh_layer_1_vtx_0[24];
+extern Gfx bob_dl_BulletBillCannon_mesh_layer_1_tri_0[];
+extern Vtx bob_dl_BulletBillCannon_mesh_layer_1_vtx_1[8];
+extern Gfx bob_dl_BulletBillCannon_mesh_layer_1_tri_1[];
+extern Vtx bob_dl_BulletBillCannon_mesh_layer_1_vtx_2[4];
+extern Gfx bob_dl_BulletBillCannon_mesh_layer_1_tri_2[];
+extern Vtx bob_dl_moving_platform_geo_mesh_layer_1_vtx_cull[8];
+extern Vtx bob_dl_moving_platform_geo_mesh_layer_1_vtx_0[24];
+extern Gfx bob_dl_moving_platform_geo_mesh_layer_1_tri_0[];
+extern Vtx bob_dl_moving_platform_geo_challenge_10_larger_mesh_layer_1_vtx_cull[8];
+extern Vtx bob_dl_moving_platform_geo_challenge_10_larger_mesh_layer_1_vtx_0[24];
+extern Gfx bob_dl_moving_platform_geo_challenge_10_larger_mesh_layer_1_tri_0[];
+extern Vtx bob_dl_moving_platform_geo_challenge_10_mesh_layer_1_vtx_cull[8];
+extern Vtx bob_dl_moving_platform_geo_challenge_10_mesh_layer_1_vtx_0[24];
+extern Gfx bob_dl_moving_platform_geo_challenge_10_mesh_layer_1_tri_0[];
 extern Gfx mat_bob_dl_multitex_grass_fade_001_layer5[];
 extern Gfx mat_revert_bob_dl_multitex_grass_fade_001_layer5[];
 extern Gfx mat_bob_dl_multitex_grass_layer1[];
@@ -124,6 +157,14 @@ extern Gfx mat_bob_dl_cozies_noise_thing_no_AA_layer1[];
 extern Gfx mat_revert_bob_dl_cozies_noise_thing_no_AA_layer1[];
 extern Gfx mat_bob_dl_cozies_noise_thing_yellow_layer1[];
 extern Gfx mat_revert_bob_dl_cozies_noise_thing_yellow_layer1[];
+extern Gfx mat_bob_dl_cozies_noise_thing_yellow_no_AA_layer1[];
+extern Gfx mat_revert_bob_dl_cozies_noise_thing_yellow_no_AA_layer1[];
+extern Gfx mat_bob_dl_f3dlite_material_004_layer1[];
+extern Gfx mat_revert_bob_dl_f3dlite_material_004_layer1[];
+extern Gfx mat_bob_dl_quicksand_layer1[];
+extern Gfx mat_revert_bob_dl_quicksand_layer1[];
+extern Gfx mat_bob_dl_cozies_noise_thing_2_layer1[];
+extern Gfx mat_revert_bob_dl_cozies_noise_thing_2_layer1[];
 extern Gfx bob_dl_Cube_001_mesh_layer_5[];
 extern Gfx bob_dl_Cube_001_mesh_layer_1[];
 extern Gfx bob_dl_Cube_mesh_layer_1[];
@@ -135,4 +176,8 @@ extern Gfx bob_dl_Area_6_ground_mesh_layer_1[];
 extern Gfx bob_dl_area_7_map_mesh_layer_1[];
 extern Gfx bob_dl_area_8_mesh_layer_1[];
 extern Gfx bob_dl_Plane_002_mesh_layer_1[];
+extern Gfx bob_dl_BulletBillCannon_mesh_layer_1[];
+extern Gfx bob_dl_moving_platform_geo_mesh_layer_1[];
+extern Gfx bob_dl_moving_platform_geo_challenge_10_larger_mesh_layer_1[];
+extern Gfx bob_dl_moving_platform_geo_challenge_10_mesh_layer_1[];
 extern Gfx bob_dl_material_revert_render_settings[];

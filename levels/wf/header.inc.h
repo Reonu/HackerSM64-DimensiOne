@@ -10,6 +10,11 @@ extern const GeoLayout wf_area_2_geo[];
 extern const GeoLayout wf_area_2[];
 extern const Collision wf_area_2_collision[];
 extern const MacroObject wf_area_2_macro_objs[];
+
+extern const GeoLayout moving_platform_geo_challenge_10_wf_wf_geo[];
+
+extern const Collision moving_platform_geo_challenge_10_wf_wf_collision[];
+
 extern u8 wf_dl_darklava_32x32_rgba16_rgba16[];
 extern u8 wf_dl_lightlava_32x32_rgba16_rgba16[];
 extern Vtx wf_dl_Plane_003_mesh_layer_1_vtx_cull[8];
@@ -20,10 +25,16 @@ extern Vtx wf_dl_Area_2_WF_mesh_layer_1_vtx_0[702];
 extern Gfx wf_dl_Area_2_WF_mesh_layer_1_tri_0[];
 extern Vtx wf_dl_Area_2_WF_mesh_layer_1_vtx_1[8];
 extern Gfx wf_dl_Area_2_WF_mesh_layer_1_tri_1[];
+extern Vtx wf_dl_moving_platform_geo_challenge_10_wf_mesh_layer_1_vtx_cull[8];
+extern Vtx wf_dl_moving_platform_geo_challenge_10_wf_mesh_layer_1_vtx_0[24];
+extern Gfx wf_dl_moving_platform_geo_challenge_10_wf_mesh_layer_1_tri_0[];
 extern Gfx mat_wf_dl_cozies_noise_thing_layer1[];
 extern Gfx mat_revert_wf_dl_cozies_noise_thing_layer1[];
 extern Gfx mat_wf_dl_f3dlite_material_005_layer1[];
 extern Gfx mat_revert_wf_dl_f3dlite_material_005_layer1[];
+extern Gfx mat_wf_dl_cozies_noise_thing_2_layer1[];
+extern Gfx mat_revert_wf_dl_cozies_noise_thing_2_layer1[];
 extern Gfx wf_dl_Plane_003_mesh_layer_1[];
 extern Gfx wf_dl_Area_2_WF_mesh_layer_1[];
+extern Gfx wf_dl_moving_platform_geo_challenge_10_wf_mesh_layer_1[];
 extern Gfx wf_dl_material_revert_render_settings[];

@@ -771,7 +771,7 @@ const BehaviorScript bhvRotatingPlatform[] = {
 const BehaviorScript bhvTower[] = {
     BEGIN(OBJ_LIST_SURFACE),
     OR_INT(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
-    LOAD_COLLISION_DATA(wf_seg7_collision_tower),
+    // LOAD_COLLISION_DATA(wf_seg7_collision_tower),
     SET_FLOAT(oDrawingDistance, 20000),
     CALL_NATIVE(load_object_static_model),
     BREAK(),
@@ -780,20 +780,20 @@ const BehaviorScript bhvTower[] = {
 const BehaviorScript bhvBulletBillCannon[] = {
     BEGIN(OBJ_LIST_SURFACE),
     OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
-    LOAD_COLLISION_DATA(wf_seg7_collision_bullet_bill_cannon),
+    // LOAD_COLLISION_DATA(wf_seg7_collision_bullet_bill_cannon),
     CALL_NATIVE(load_object_static_model),
     BREAK(),
 };
 
 const BehaviorScript bhvWfBreakableWallRight[] = {
     BEGIN(OBJ_LIST_SURFACE),
-    LOAD_COLLISION_DATA(wf_seg7_collision_breakable_wall),
+    // LOAD_COLLISION_DATA(wf_seg7_collision_breakable_wall),
     GOTO(bhvWfBreakableWallLeft + 1 + 2),
 };
 
 const BehaviorScript bhvWfBreakableWallLeft[] = {
     BEGIN(OBJ_LIST_SURFACE),
-    LOAD_COLLISION_DATA(wf_seg7_collision_breakable_wall_2),
+    // LOAD_COLLISION_DATA(wf_seg7_collision_breakable_wall_2),
     // WF breakable walls - common:
     OR_INT(oFlags, (OBJ_FLAG_ACTIVE_FROM_AFAR | OBJ_FLAG_COMPUTE_DIST_TO_MARIO | OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
     SET_HITBOX(/*Radius*/ 300, /*Height*/ 400),
@@ -808,7 +808,7 @@ const BehaviorScript bhvWfBreakableWallLeft[] = {
 const BehaviorScript bhvKickableBoard[] = {
     BEGIN(OBJ_LIST_SURFACE),
     OR_INT(oFlags, (OBJ_FLAG_COMPUTE_ANGLE_TO_MARIO | OBJ_FLAG_ACTIVE_FROM_AFAR | OBJ_FLAG_COMPUTE_DIST_TO_MARIO | OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
-    LOAD_COLLISION_DATA(wf_seg7_collision_kickable_board),
+    // LOAD_COLLISION_DATA(wf_seg7_collision_kickable_board),
     SET_HITBOX(/*Radius*/ 100, /*Height*/ 1200),
     SET_HURTBOX(/*Radius*/ 1, /*Height*/ 1),
     SET_FLOAT(oCollisionDistance, 1500),
@@ -821,7 +821,7 @@ const BehaviorScript bhvKickableBoard[] = {
 const BehaviorScript bhvTowerDoor[] = {
     BEGIN(OBJ_LIST_SURFACE),
     OR_INT(oFlags, (OBJ_FLAG_ACTIVE_FROM_AFAR | OBJ_FLAG_COMPUTE_DIST_TO_MARIO | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
-    LOAD_COLLISION_DATA(wf_seg7_collision_tower_door),
+    // LOAD_COLLISION_DATA(wf_seg7_collision_tower_door),
     SET_HITBOX(/*Radius*/ 100, /*Height*/ 100),
     SET_INT(oIntangibleTimer, 0),
     BEGIN_LOOP(),
@@ -838,7 +838,7 @@ const BehaviorScript bhvRotatingCounterClockwise[] = {
 const BehaviorScript bhvWfRotatingWoodenPlatform[] = {
     BEGIN(OBJ_LIST_SURFACE),
     OR_INT(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
-    LOAD_COLLISION_DATA(wf_seg7_collision_clocklike_rotation),
+    // LOAD_COLLISION_DATA(wf_seg7_collision_clocklike_rotation),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_wf_rotating_wooden_platform_loop),
         CALL_NATIVE(load_object_collision_model),
@@ -1668,7 +1668,7 @@ const BehaviorScript bhvTowerPlatformGroup[] = {
 const BehaviorScript bhvWfSlidingTowerPlatform[] = {
     BEGIN(OBJ_LIST_SURFACE),
     OR_INT(oFlags, (OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
-    LOAD_COLLISION_DATA(wf_seg7_collision_platform),
+    // LOAD_COLLISION_DATA(wf_seg7_collision_platform),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_wf_sliding_tower_platform_loop),
         CALL_NATIVE(load_object_collision_model),
@@ -1678,7 +1678,7 @@ const BehaviorScript bhvWfSlidingTowerPlatform[] = {
 const BehaviorScript bhvWfElevatorTowerPlatform[] = {
     BEGIN(OBJ_LIST_SURFACE),
     OR_INT(oFlags, (OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
-    LOAD_COLLISION_DATA(wf_seg7_collision_platform),
+    // LOAD_COLLISION_DATA(wf_seg7_collision_platform),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_wf_elevator_tower_platform_loop),
         CALL_NATIVE(load_object_collision_model),
@@ -1688,7 +1688,7 @@ const BehaviorScript bhvWfElevatorTowerPlatform[] = {
 const BehaviorScript bhvWfSolidTowerPlatform[] = {
     BEGIN(OBJ_LIST_SURFACE),
     OR_INT(oFlags, (OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
-    LOAD_COLLISION_DATA(wf_seg7_collision_platform),
+    // LOAD_COLLISION_DATA(wf_seg7_collision_platform),
     CALL_NATIVE(load_object_static_model),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_wf_solid_tower_platform_loop),
@@ -4185,7 +4185,7 @@ const BehaviorScript bhvLllDrawbridge[] = {
 const BehaviorScript bhvSmallBomp[] = {
     BEGIN(OBJ_LIST_SURFACE),
     OR_INT(oFlags, (OBJ_FLAG_MOVE_XZ_USING_FVEL | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
-    LOAD_COLLISION_DATA(wf_seg7_collision_small_bomp),
+    // LOAD_COLLISION_DATA(wf_seg7_collision_small_bomp),
     CALL_NATIVE(bhv_small_bomp_init),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_small_bomp_loop),
@@ -4196,7 +4196,7 @@ const BehaviorScript bhvSmallBomp[] = {
 const BehaviorScript bhvLargeBomp[] = {
     BEGIN(OBJ_LIST_SURFACE),
     OR_INT(oFlags, (OBJ_FLAG_MOVE_XZ_USING_FVEL | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
-    LOAD_COLLISION_DATA(wf_seg7_collision_large_bomp),
+    // LOAD_COLLISION_DATA(wf_seg7_collision_large_bomp),
     CALL_NATIVE(bhv_large_bomp_init),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_large_bomp_loop),
@@ -4207,7 +4207,7 @@ const BehaviorScript bhvLargeBomp[] = {
 const BehaviorScript bhvWfSlidingPlatform[] = {
     BEGIN(OBJ_LIST_SURFACE),
     OR_INT(oFlags, (OBJ_FLAG_MOVE_XZ_USING_FVEL | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
-    LOAD_COLLISION_DATA(wf_seg7_collision_sliding_brick_platform),
+    // LOAD_COLLISION_DATA(wf_seg7_collision_sliding_brick_platform),
     CALL_NATIVE(bhv_wf_sliding_platform_init),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_wf_sliding_platform_loop),
@@ -5217,7 +5217,7 @@ const BehaviorScript bhvWoodenPost[] = {
 
 const BehaviorScript bhvChainChompGate[] = {
     BEGIN(OBJ_LIST_SURFACE),
-    LOAD_COLLISION_DATA(bob_seg7_collision_chain_chomp_gate),
+    // LOAD_COLLISION_DATA(bob_seg7_collision_chain_chomp_gate),
     OR_INT(oFlags, (OBJ_FLAG_COMPUTE_DIST_TO_MARIO | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
     CALL_NATIVE(bhv_chain_chomp_gate_init),
     BEGIN_LOOP(),

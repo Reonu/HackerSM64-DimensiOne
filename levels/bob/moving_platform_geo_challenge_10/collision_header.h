@@ -1,1 +1,0 @@
-extern const Collision moving_platform_geo_challenge_10_collision[];

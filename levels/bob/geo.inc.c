@@ -7,3 +7,8 @@
 #include "levels/bob/area_7/geo.inc.c"
 #include "levels/bob/area_8/geo.inc.c"
 #include "levels/bob/area_9/geo.inc.c"
+
+#include "levels/bob/BulletBillCannon_bob/geo.inc.c"
+#include "levels/bob/moving_platform_geo_bob/geo.inc.c"
+#include "levels/bob/moving_platform_geo_challenge_10_larger_bob/geo.inc.c"
+#include "levels/bob/moving_platform_geo_challenge_10_bob/geo.inc.c"

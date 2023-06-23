@@ -4,4 +4,7 @@
 #include "levels/wf/area_2/collision.inc.c"
 #include "levels/wf/area_2/macro.inc.c"
 #include "levels/wf/area_2/spline.inc.c"
+
+#include "levels/wf/moving_platform_geo_challenge_10_wf_wf/collision.inc.c"
+
 #include "levels/wf/model.inc.c"

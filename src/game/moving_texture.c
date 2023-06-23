@@ -482,7 +482,7 @@ extern Movtex castle_grounds_movtex_water[];
 extern Movtex lll_movtex_volcano_floor_lava[];
 extern Movtex ddd_movtex_area1_water[];
 extern Movtex ddd_movtex_area2_water[];
-extern Movtex wf_movtex_water[];
+// extern Movtex wf_movtex_water[];
 extern Movtex castle_courtyard_movtex_star_statue_water[];
 extern Movtex ttm_movtex_puddle[];
 
@@ -534,7 +534,7 @@ void *get_quad_collection_from_id(u32 id) {
         case DDD_MOVTEX_AREA2_WATER:
             return ddd_movtex_area2_water;
         case WF_MOVTEX_WATER:
-            return wf_movtex_water;
+            return NULL;
         case CASTLE_COURTYARD_MOVTEX_STAR_STATUE_WATER:
             return castle_courtyard_movtex_star_statue_water;
         case TTM_MOVTEX_PUDDLE:
